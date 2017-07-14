@@ -1,6 +1,6 @@
 ﻿# Various scripts
 
-At old times I not formatted my scripts, so now I see how much wrong programistic convention it is.
+At old times I did not format my scripts, so now I see how much wrong programistic convention it is.
 
 ## 3D Graphics
 

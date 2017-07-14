@@ -1,0 +1,175 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+</head>
+<style>
+body{margin:0px}
+</style>
+<body scroll=auto>
+<canvas id="canvas" style="width:100%;height:100%">
+</canvas>
+<script>
+bench=new Object();
+bench.fps=0;
+bench.decFPS=function() {bench.fps=bench.fps<0?0:bench.fps-1}
+init();
+function $(id) {return (document.all[id]?document.all[id]:document.getElementById(id))}
+function cls(canvas,color) {
+if (color==null||color==undefined||color=="") {color="white"}
+ctx = canvas.getContext("2d");
+ctx.fillStyle=color;
+ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+function init() {
+this.ctx=canvas.getContext("2d");
+canvas.width=document.body.clientWidth;
+canvas.height=document.body.clientHeight;
+this.w=canvas.width;
+this.h=canvas.height;
+this.points3D=new Array();
+}
+function line(x1,y1,x2,y2,color,lineWidth) {
+if (x1==null||x1==undefined||isNaN(x1)) {return}
+if (y1==null||y1==undefined||isNaN(y1)) {return}
+if (x2==null||x2==undefined||isNaN(x2)) {return}
+if (y2==null||y2==undefined||isNaN(y2)) {return}
+if (color==null||color==undefined||color=="") {color="black"}
+if (lineWidth==null||lineWidth==undefined||isNaN(lineWidth)) {lineWidth=1}
+ctx=canvas.getContext("2d");
+ctx.strokeStyle=color;
+ctx.lineWidth=lineWidth;
+ctx.beginPath();
+ctx.moveTo(x1,y1);
+ctx.lineTo(x2,y2);
+ctx.stroke();
+ctx.closePath();
+}
+function point3D(x,y,z) {
+if (!points3D) {this.points3D=new Array()}
+this.points3D.push({x:x,y:y,z:z,t:"P"});
+}
+function line3D(x1,y1,z1,x2,y2,z2) {
+if (!points3D) {this.points3D=new Array()}
+this.points3D.push({x:x1,y:y1,z:z1,t:"B"});
+this.points3D.push({x:x2,y:y2,z:z2,t:"E"});
+}
+function polyLine3D(com) {
+if (!points3D) {this.points3D=new Array()}
+a=points3D.length;
+com+=";";
+while(com.indexOf(";")!=-1) {
+comX=eval(com.substring(0,com.indexOf(",")));
+com=com.substring(com.indexOf(",")+1);
+comY=eval(com.substring(0,com.indexOf(",")));
+com=com.substring(com.indexOf(",")+1);
+comZ=eval(com.substring(0,com.indexOf(";")));
+this.points3D.push({x:comX,y:comY,z:comZ,t:""});
+com=com.substring(com.indexOf(";")+1);
+}
+b=points3D.length-1;
+points3D[a]={x:points3D[a].x,y:points3D[a].y,z:points3D[a].z,t:"B"};
+points3D[b]={x:points3D[b].x,y:points3D[b].y,z:points3D[b].z,t:"E"};
+}
+function cube(x1,y1,z1,x2,y2,z2) {
+if (!points3D) {this.points3D=new Array()}
+this.x1=x1;
+this.y1=y1;
+this.z1=z1;
+this.x2=x2;
+this.y2=y2;
+this.z2=z2;
+polyLine3D("x2,y1,z1;x2,y2,z1;x1,y2,z1;x1,y1,z1");
+polyLine3D("x1,y1,z1;x2,y1,z1;x2,y1,z2;x1,y1,z2;x1,y1,z1");
+polyLine3D("x1,y1,z2;x1,y2,z2;x1,y2,z1");
+polyLine3D("x1,y2,z2;x2,y2,z2;x2,y2,z1");
+polyLine3D("x2,y2,z2;x2,y1,z2");
+}
+function draw(mW,mH,alfa,beta,gama,vx,vy,vz,K,d) {
+cls($("canvas"),"white");
+alfa=(parseFloat(alfa+360)%719)-359;
+beta=(parseFloat(beta+360)%719)-359;
+gama=(parseFloat(gama+360)%719)-359;
+vx=parseFloat(vx);
+vy=parseFloat(vy);
+vz=parseFloat(vz);
+K=parseFloat(K);
+d=parseFloat(d);
+wspolczynniki(alfa,beta,gama);
+points2D=new Array();
+for (i=0; i<this.points3D.length; i++) {
+transform=odwzorowanie(this.points3D[i].x,this.points3D[i].y,this.points3D[i].z);
+points2D.push({x:transform.x,y:transform.y,t:this.points3D[i].t});
+}
+for (i=0; i<points2D.length-1; i++) {
+if (points2D[i].t=="P") {line(points2D[i].x,points2D[i].y,points2D[i].x,points2D[i].y)}
+if (points2D[i].t=="B"||points2D[i].t=="") {line(points2D[i].x,points2D[i].y,points2D[i+1].x,points2D[i+1].y)}
+if (points2D[i].t=="E") {ctx.lineTo(points2D[i].x,points2D[i].y);ctx.stroke();ctx.closePath()}
+}
+function wspolczynniki(alfa,beta,gama) {
+wa=alfa*Math.PI/180;
+ca=Math.cos(wa);
+sa=Math.sin(wa);
+wb=beta*Math.PI/180;
+cb=Math.cos(wb);
+sb=Math.sin(wb);
+wc=gama*Math.PI/180;
+cc=Math.cos(wc);
+sc=Math.sin(wc);
+}
+function odwzorowanie(pX,pY,pZ) {
+x1=pX;
+y1=ca*pY-sa*pZ;
+z1=sa*pY+ca*pZ;
+
+x2=cb*x1-sb*z1;
+y2=y1;
+z2=sb*x1+cb*z1;
+
+x3=cc*x2-sc*y2;
+y3=sc*x2+cc*y2;
+z3=z2;
+
+x4=x3+vx;
+y4=y3+vy;
+z4=z3+vz;
+
+u=-x4/y4*d;
+v=-z4/y4*d;
+kol=mW/2+K*u;
+wiersz=mH/2-K*v;
+return {x:kol,y:wiersz};
+}
+}
+cube(-1,-1,-1,1,1,1);
+ia=0;
+ib=0;
+ig=0;
+ra=Math.round((4*Math.random()-2)*100)/100;
+rb=Math.round((4*Math.random()-2)*100)/100;
+rg=Math.round((4*Math.random()-2)*100)/100;
+start=new Date();
+startTimer=start.getTime();
+draw(w,h,ia,ib,ig,0,10,0,8.5,250);
+setInterval(function() {
+stop=new Date();
+stopTimer=stop.getTime();
+stopTimer-=startTimer;
+timerW=Math.floor(stopTimer/1000/60/60/24/7);
+timerD=Math.floor(stopTimer/1000/60/60/24)%7;
+timerH=Math.floor(stopTimer/1000/60/60)%24;
+timerM=Math.floor(stopTimer/1000/60)%60;
+timerS=Math.floor(stopTimer/1000)%60;
+timerMS=Math.floor(stopTimer)%1000;
+window.status="Czas działania funkcji rysującej:"+(timerW>0?timerW+"t ":"")+(timerD>0?timerD+"d ":"")+(timerH>0?timerH+"h ":"")+(timerM>0?timerM+"m ":"")+(timerS>0?timerS+"s ":"")+timerMS+"ms ("+Math.round((1000/stopTimer)*100)/100+"fps)";
+start=new Date();
+startTimer=start.getTime();
+draw(w,h,ia,ib,ig,0,10,0,8.5,250);
+ia+=ra;
+ib+=rb;
+ig+=rg;
+document.title="FPS: "+bench.fps;
+bench.fps+=1;
+setTimeout("bench.decFPS()",1000);
+},1);
+</script>
+</body>
+</html>

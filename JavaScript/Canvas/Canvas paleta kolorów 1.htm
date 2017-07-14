@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Canvas paleta kolorów</title>
+	</head>
+	<body>
+		<script type="text/javascript" src="../Skrypty/html5.js"></script>
+		<style type="text/css" src="../Skrypty/html5.css"></style>
+		<canvas id="workspaceCanvas" style="position: absolute; left: 0px; top: 0px; height: 100%;" width=1024 height=1024></canvas>
+		<script type="text/javascript">
+			$canv=$("workspaceCanvas");
+			$winW=document.body.clientWidth;
+			$winH=document.body.clientHeight;
+			$canW=$winW;
+			$canH=$winH;
+			$canv.width=$canW;
+			$canv.height=$canH;
+			resizer=setInterval(function() {
+				if (document.body.clientWidth!=$winW || document.body.clientHeight!=$winH) {
+					$winW=document.body.clientWidth;
+					$winH=document.body.clientHeight;
+					$canW=$winW;
+					$canH=$winH;
+					$canv.width=$canW;
+					$canv.height=$canH;
+				};
+			},100);
+			canv=$canv.getContext("2d");
+
+			function $(id) { return document.getElementById(id); };
+			function cls() {
+				canv.beginPath();
+				canv.clearRect(0,0,$canW,$canH);
+				canv.closePath();
+			};
+			function kadr(x1,y1,x2,y2,xl,yg,xp,yd) {
+				dx=x1-x2;
+				dy=y1-y2;
+				det=x1*y2-x2*y1;
+				if (x1 < xl && x2 < xl) return null;					// oba punkty leżą na lewo od lewej granicy
+				if (x1 < xl) { y1 = (xl*dy+det)/dx; x1 = xl };				// jeden punkt leży na lewo od lewej granicy
+				if (x2 < xl) { y2 = (xl*dy+det)/dx; x2 = xl };
+				if (x1 >= xl && x2 >= xl) {						// oba punkty leżą na prawo od lewej granicy
+					if (y1 < yg && y2 < yg) return null;				// oba punkty leżą powyżej górnej granicy
+					if (y1 < yg) { x1 = (yg*dx-det)/dy; y1 = yg };			// jeden punkt leży powyżej górnej granicy
+					if (y2 < yg) { x2 = (yg*dx-det)/dy; y2 = yg };
+					if (y1 >= yg && y2 >= yg)	{				// oba punkty leżą poniżej górnej granicy
+						if (x1 > xp && x2 > xp) return null;			// oba punkty leżą na prawo od prawej granicy
+						if (x1 > xp ) { y1 = (xp*dy+det)/dx; x1 = xp };		// jeden punkt leży na lewo od prawej granicy
+						if (x2 > xp ) { y2 = (xp*dy+det)/dx; x2 = xp };
+						if (x1 <= xp && x2 <= xp) {				// oba punkty leżą na lewo od prawej granicy
+							if (y1 > yd && y2 > yd) return null;		// oba punkty leżą poniżej dolnej granicy
+							if (y1 > yd) { x1 = (yd*dx-det)/dy; y1 = yd};	// jeden punkt leży powyżej dolnej granicy
+							if (y2 > yd) { x2 = (yd*dx-det)/dy; y2 = yd};
+						};
+					};
+				};
+				return {x1: x1, y1: y1, x2: x2, y2: y2};
+			};
+			function line(x1,y1,x2,y2,color) {
+				point=kadr(x1,y1,x2,y2,0,0,$canW,$canH);
+				if (point!=null) {
+					canv=document.getElementById("workspaceCanvas").getContext("2d");
+					canv.strokeStyle=color;
+					canv.lineWidth=0.5;
+					canv.moveTo(point.x1,point.y1);
+					canv.lineTo(point.x2,point.y2);
+					canv.stroke();
+					canv.closePath();
+				};
+			};
+			setInterval(function() {
+				cls();
+				for (i=0; i<256; i++) {
+					var gradient=canv.createLinearGradient(0,0,$canW,1);
+				/*
+					gradient.addColorStop(0,"rgb("+i+",0,0)");
+					gradient.addColorStop(1/3,"rgb(0,"+i+",0)");
+					gradient.addColorStop(2/3,"rgb(0,0,"+i+")");
+					gradient.addColorStop(1,"rgb("+i+",0,0)");
+				*/
+					gradient.addColorStop(0,"rgb("+i+",0,0)");
+					gradient.addColorStop(1/6,"rgb("+i+","+i+",0)");
+					gradient.addColorStop(2/6,"rgb(0,"+i+",0)");
+					gradient.addColorStop(0.5,"rgb(0,"+i+","+i+")");
+					gradient.addColorStop(4/6,"rgb(0,0,"+i+")");
+					gradient.addColorStop(5/6,"rgb("+i+",0,"+i+")");
+					gradient.addColorStop(1,"rgb("+i+",0,0)");
+					canv.fillStyle=gradient;
+					canv.fillRect(0,i*$canH/512,$canW,(i+1)*$canH/512);
+				}
+				for (i=0; i<256; i++) {
+					var gradient=canv.createLinearGradient(0,0,$canW,1);
+				/*
+					gradient.addColorStop(0,"rgb(255,"+i+","+i+")");
+					gradient.addColorStop(1/3,"rgb("+i+",255,"+i+")");
+					gradient.addColorStop(2/3,"rgb("+i+","+i+",255)");
+					gradient.addColorStop(1,"rgb(255,"+i+","+i+")");
+				*/
+					gradient.addColorStop(0,"rgb(255,"+i+","+i+")");
+					gradient.addColorStop(1/6,"rgb(255,255,"+i+")");
+					gradient.addColorStop(2/6,"rgb("+i+",255,"+i+")");
+					gradient.addColorStop(0.5,"rgb("+i+",255,255)");
+					gradient.addColorStop(4/6,"rgb("+i+","+i+",255)");
+					gradient.addColorStop(5/6,"rgb(255,"+i+",255)");
+					gradient.addColorStop(1,"rgb(255,"+i+","+i+")");
+					canv.fillStyle=gradient;
+					canv.fillRect(0,(i+256)*$canH/512,$canW,(i+257)*$canH/512);
+				}
+			},250);
+		</script>
+	</body>
+</html>

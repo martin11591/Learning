@@ -1,0 +1,53 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+</head>
+<style>
+body{margin:0px}
+</style>
+<body scroll=auto>
+<canvas id="canvas" style="width:100%;height:100%">
+</canvas>
+<script>
+ctx=canvas.getContext("2d");
+canvas.width=document.body.clientWidth;
+canvas.height=document.body.clientHeight;
+w=canvas.width;
+h=canvas.height;
+function $(id) {return (document.all[id]?document.all[id]:document.getElementById(id))}
+function cls(canvas,color) {
+if (!color||color==null||color==undefined||color=="") {color="white"}
+ctx = canvas.getContext("2d");
+ctx.fillStyle=color;
+ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+function line(x1,y1,x2,y2,color,lineWidth,canv) {
+if (!x1||x1==null||x1==undefined||isNaN(x1)) {return}
+if (!y1||y1==null||y1==undefined||isNaN(y1)) {return}
+if (!x2||x2==null||x2==undefined||isNaN(x2)) {return}
+if (!y2||y2==null||y2==undefined||isNaN(y2)) {return}
+if (!color||color==null||color==undefined||color=="") {color="black"}
+if (!lineWidth||lineWidth==null||lineWidth==undefined||isNaN(lineWidth)) {lineWidth=1}
+if (!canv||canv==null||canv==undefined||canv=="") {
+  if (!ctx||ctx==null||ctx==undefined||ctx=="") {return} else {canv=ctx}
+}
+
+}
+function lineMoz(x1,y1,x2,y2,color,lineWidth) {
+if (!x1||x1==null||x1==undefined||isNaN(x1)) {return}
+if (!y1||y1==null||y1==undefined||isNaN(y1)) {return}
+if (!x2||x2==null||x2==undefined||isNaN(x2)) {return}
+if (!y2||y2==null||y2==undefined||isNaN(y2)) {return}
+if (!color||color==null||color==undefined||color=="") {color="black"}
+if (!lineWidth||lineWidth==null||lineWidth==undefined||isNaN(lineWidth)) {lineWidth=1}
+ctx=canvas.getContext("2d");
+ctx.strokeStyle=color;
+ctx.lineWidth=lineWidth;
+ctx.beginPath();
+ctx.moveTo(x1,y1);
+ctx.lineTo(x2,y2);
+ctx.stroke();
+ctx.closePath();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Canvas paleta kolorów</title>
+	</head>
+	<body>
+		<script type="text/javascript" src="../Skrypty/html5.js"></script>
+		<style type="text/css" src="../Skrypty/html5.css"></style>
+		<canvas id="workspaceCanvas" style="position: absolute; left: 0px; top: 0px;" width=1536 height=512></canvas>
+		<script type="text/javascript">
+			$canv=$("workspaceCanvas");
+			$winW=1536;
+			$winH=512;
+			$canW=$winW;
+			$canH=$winH;
+			$canv.width=$canW;
+			$canv.height=$canH;
+			canv=$canv.getContext("2d");
+
+			function $(id) { return document.getElementById(id); };
+			function cls() {
+				canv.beginPath();
+				canv.clearRect(0,0,$canW,$canH);
+				canv.closePath();
+			};
+			function kadr(x1,y1,x2,y2,xl,yg,xp,yd) {
+				dx=x1-x2;
+				dy=y1-y2;
+				det=x1*y2-x2*y1;
+				if (x1 < xl && x2 < xl) return null;					// oba punkty leżą na lewo od lewej granicy
+				if (x1 < xl) { y1 = (xl*dy+det)/dx; x1 = xl };				// jeden punkt leży na lewo od lewej granicy
+				if (x2 < xl) { y2 = (xl*dy+det)/dx; x2 = xl };
+				if (x1 >= xl && x2 >= xl) {						// oba punkty leżą na prawo od lewej granicy
+					if (y1 < yg && y2 < yg) return null;				// oba punkty leżą powyżej górnej granicy
+					if (y1 < yg) { x1 = (yg*dx-det)/dy; y1 = yg };			// jeden punkt leży powyżej górnej granicy
+					if (y2 < yg) { x2 = (yg*dx-det)/dy; y2 = yg };
+					if (y1 >= yg && y2 >= yg)	{				// oba punkty leżą poniżej górnej granicy
+						if (x1 > xp && x2 > xp) return null;			// oba punkty leżą na prawo od prawej granicy
+						if (x1 > xp ) { y1 = (xp*dy+det)/dx; x1 = xp };		// jeden punkt leży na lewo od prawej granicy
+						if (x2 > xp ) { y2 = (xp*dy+det)/dx; x2 = xp };
+						if (x1 <= xp && x2 <= xp) {				// oba punkty leżą na lewo od prawej granicy
+							if (y1 > yd && y2 > yd) return null;		// oba punkty leżą poniżej dolnej granicy
+							if (y1 > yd) { x1 = (yd*dx-det)/dy; y1 = yd};	// jeden punkt leży powyżej dolnej granicy
+							if (y2 > yd) { x2 = (yd*dx-det)/dy; y2 = yd};
+						};
+					};
+				};
+				return {x1: x1, y1: y1, x2: x2, y2: y2};
+			};
+			function line(x1,y1,x2,y2,color) {
+				point=kadr(x1,y1,x2,y2,0,0,$canW,$canH);
+				if (point!=null) {
+					canv=document.getElementById("workspaceCanvas").getContext("2d");
+					canv.strokeStyle=color;
+					canv.lineWidth=0.5;
+					canv.moveTo(point.x1,point.y1);
+					canv.lineTo(point.x2,point.y2);
+					canv.stroke();
+					canv.closePath();
+				};
+			};
+			rw=1;
+			rh=1;
+			for (h=0; h<256; h++) {
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+h+","+Math.ceil(h*i/255)+",0)";
+					canv.fillRect(i*rw,h*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+Math.ceil(h*(255-i)/255)+","+h+",0)";
+					canv.fillRect((i+256)*rw,h*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb(0,"+h+","+Math.ceil(h*i/255)+")";
+					canv.fillRect((i+512)*rw,h*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb(0,"+Math.ceil(h*(255-i)/255)+","+h+")";
+					canv.fillRect((i+768)*rw,h*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+Math.ceil(h*i/255)+",0,"+h+")";
+					canv.fillRect((i+1024)*rw,h*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+h+",0,"+Math.ceil(h*(255-i)/255)+")";
+					canv.fillRect((i+1280)*rw,h*rh,rw,rh);
+				};
+			};
+			for (h=0; h<256; h++) {
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb(255,"+(h+Math.ceil((255-h)*i/255))+","+h+")";
+					canv.fillRect(i*rw,(h+256)*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+(h+Math.ceil((255-h)*(255-i)/255))+",255,"+h+")";
+					canv.fillRect((i+256)*rw,(h+256)*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+h+",255,"+(h+Math.ceil((255-h)*i/255))+")";
+					canv.fillRect((i+512)*rw,(h+256)*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+h+","+(h+Math.ceil((255-h)*(255-i)/255))+",255)";
+					canv.fillRect((i+768)*rw,(h+256)*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb("+(h+Math.ceil((255-h)*i/255))+","+h+",255)";
+					canv.fillRect((i+1024)*rw,(h+256)*rh,rw,rh);
+				};
+				for (i=0; i<256; i++) {
+					canv.fillStyle="rgb(255,"+h+","+(h+Math.ceil((255-h)*(255-i)/255))+")";
+					canv.fillRect((i+1280)*rw,(h+256)*rh,rw,rh);
+				};
+			};
+		</script>
+	</body>
+</html>

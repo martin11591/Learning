@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Obszar roboczy 320x200</title>
+<meta http-equiv="content" content-type="text/html; charset=windows-1250">
+</head>
+<body>
+<script>
+function scrObj() {
+this.loRes=new Array();
+this.hiRes=new Array();
+for (x=0; x<40; x++)
+{
+  this.loRes[x]=new Array();
+  for (y=0; y<24; y++)
+  {
+    this.loRes[x][y]={char: 32, color: Color(0)};
+  }
+}
+for (x=0; x<320; x++)
+{
+  this.hiRes[x]=new Array();
+  for (y=0; y<200; y++)
+  {
+    this.hiRes[x][y]={pixel: 0, color: Color(0)};
+  }
+}
+function Color(color) {
+ColorArr=new Array("#000000","#FFFFFF","#933A4C","#B6FAFA","#D27DED","#6ACF6F","#4F44D8","#FBFB8B","#D89C5B","#7F5307","#EF839F","#575753","#A3A7A7","#B7FBBF","#A397FF","#EFE9E7");
+if (color<0||color>ColorArr.length-1) {return ColorArr[0]} else {return ColorArr[color]}
+}
+function make() {
+if (scrHTML) {removeChild(scrHTML)}
+scrHTML=document.createElement("table");
+scrHTML.appendChild(document.createElement("tr"));
+}
+function draw() {
+}
+}
+scr=new scrObj();
+</script>
+</body>
+</html>

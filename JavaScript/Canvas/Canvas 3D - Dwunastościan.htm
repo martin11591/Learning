@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Canvas 3D</title>
+	</head>
+	<body>
+		<script type="text/javascript" src="../Skrypty/html5.js"></script>
+		<style type="text/css" src="../Skrypty/html5.css"></style>
+		<canvas id="workspaceCanvas" style="position: absolute; left: 0px; top: 0px; height: 100%;" width=1024 height=1024></canvas>
+		<script type="text/javascript">
+			$canv=$("workspaceCanvas");
+			$winW=document.body.clientWidth;
+			$winH=document.body.clientHeight;
+			$canW=$winW;
+			$canH=$winH;
+			$canv.width=$canW;
+			$canv.height=$canH;
+			resizer=setInterval(function() {
+				if (document.body.clientWidth!=$winW || document.body.clientHeight!=$winH) {
+					$winW=document.body.clientWidth;
+					$winH=document.body.clientHeight;
+					$canW=$winW;
+					$canH=$winH;
+					$canv.width=$canW;
+					$canv.height=$canH;
+				};
+			},100);
+			canv=$canv.getContext("2d");
+
+			// Dwunastościan
+
+			objX=[0,0.5774,0.9342,0.5774,0,-0.5774,-0.9342,-0.5774,-0.3568,0.3568,0.5774,0.9342,0.5774,0.3568,-0.3568,-0.5774,-0.9342,-0.5774,0,0];
+			objY=[-0.3568,-0.5774,0,0.5774,0.3568,0.5774,0,-0.5774,-0.9342,-0.9342,-0.5774,0,0.5774,0.9342,0.9342,0.5774,0,-0.5774,-0.3568,0.3568];
+			objZ=[0.9342,0.5774,0.3568,0.5774,0.9342,0.5774,0.3568,0.5774,0,0,-0.5774,-0.3568,-0.5774,0,0,-0.5774,-0.3568,-0.5774,-0.9342,-0.9342];
+			objP=[[1,2,3,4,5,1],[1,5,6,7,8,1],[1,8,9,10,2,1],[2,10,11,12,3,2],[3,12,13,14,4,3],[4,14,15,6,5,4],[6,15,16,17,7,6],[7,17,18,9,8,7],[9,18,19,11,10,9],[11,19,20,13,12,11],[13,20,16,15,14,13],[16,20,19,18,17,16]];
+			rX=[];
+			rY=[];
+			xr=[];
+			yr=[];
+			zr=[];
+			obrIX=4*Math.random()-2;
+			obrIY=4*Math.random()-2;
+			obrIZ=4*Math.random()-2;
+			fpsMaxSamples=100;
+			fpsTickIndex=0;
+			fpsTickSum=0;
+			fpsTickList=[];
+			for (fpsI=0; fpsI<=fpsMaxSamples; fpsI++) fpsTickList[fpsI]=0;
+			fpsTimeStart=new Date().getTime();
+			setInterval(function() {
+				cls();
+				//Math.sin(obrIX*Math.PI/180)*6;
+				obracanie(6,6,6,13,Math.min($canW,$canH)*87/1024);
+				for (obrI=0; obrI<objX.length; obrI++) {
+					tmp=transformacja1(objX[obrI],objY[obrI],objZ[obrI],obrIX,obrIY,obrIZ,0,0,0,60);
+					objX[obrI]=tmp.x;
+					objY[obrI]=tmp.y;
+					objZ[obrI]=tmp.z;
+				};
+				fpsTimeStop=new Date().getTime();
+				fpsTickSum-=fpsTickList[fpsTickIndex];
+				fpsTickList[fpsTickIndex]=fpsTimeStop-fpsTimeStart;
+				fpsTickSum+=fpsTickList[fpsTickIndex];
+				fpsTimeStart=fpsTimeStop;
+				if (++fpsTickIndex==fpsMaxSamples) fpsTickIndex=0;
+				document.title="FPS: "+Math.floor(1000/(fpsTickSum/fpsMaxSamples));
+			},1);
+
+			function obracanie(xa,ya,za,fi,k) {
+				for (i=0; i<objX.length; i++) {
+					tmp=transformacja2(objX[i],objY[i],objZ[i],xa,ya,za,0,0,0,fi,60);
+					rX[i]=($canW/2+k*tmp.u);
+					rY[i]=($canH/2-k*tmp.v);
+				};
+				for (i=0; i<12; i++) {
+					for (j=0; j<3; j++) {
+						xr[j]=objX[objP[i][j]-1];
+						yr[j]=objY[objP[i][j]-1];
+						zr[j]=objZ[objP[i][j]-1];
+					};
+					xs=xr[1]-xr[0];
+					xt=xr[2]-xr[0];
+					ys=yr[1]-yr[0];
+					yt=yr[2]-yr[0];
+					zs=zr[1]-zr[0];
+					zt=zr[2]-zr[0];
+					xn=ys*zt-zs*yt;
+					yn=zs*xt-xs*zt;
+					zn=xs*yt-ys*xt;
+					_xr=objX[objP[i][1]-1]-xa;
+					_yr=objY[objP[i][1]-1]-ya;
+					_zr=objZ[objP[i][1]-1]-za;
+					sk=xn*_xr+yn*_yr+zn*_zr;
+					if (sk < 0) { try { continue; } catch (err) { void(null) }; };
+					for (j=0; j<5; j++) {
+						line(rX[objP[i][j]-1],rY[objP[i][j]-1],rX[objP[i][j+1]-1],rY[objP[i][j+1]-1]);
+					};
+				};
+			};
+			function $(id) { return document.getElementById(id); };
+			function cls() {
+				canv.beginPath();
+				canv.clearRect(0,0,$canW,$canH);
+				canv.closePath();
+			};
+			function kadr(x1,y1,x2,y2,xl,yg,xp,yd) {
+				dx=x1-x2;
+				dy=y1-y2;
+				det=x1*y2-x2*y1;
+				if (x1 < xl && x2 < xl) return null;					// oba punkty leżą na lewo od lewej granicy
+				if (x1 < xl) { y1 = (xl*dy+det)/dx; x1 = xl };				// jeden punkt leży na lewo od lewej granicy
+				if (x2 < xl) { y2 = (xl*dy+det)/dx; x2 = xl };
+				if (x1 >= xl && x2 >= xl) {						// oba punkty leżą na prawo od lewej granicy
+					if (y1 < yg && y2 < yg) return null;				// oba punkty leżą powyżej górnej granicy
+					if (y1 < yg) { x1 = (yg*dx-det)/dy; y1 = yg };			// jeden punkt leży powyżej górnej granicy
+					if (y2 < yg) { x2 = (yg*dx-det)/dy; y2 = yg };
+					if (y1 >= yg && y2 >= yg)	{				// oba punkty leżą poniżej górnej granicy
+						if (x1 > xp && x2 > xp) return null;			// oba punkty leżą na prawo od prawej granicy
+						if (x1 > xp ) { y1 = (xp*dy+det)/dx; x1 = xp };		// jeden punkt leży na lewo od prawej granicy
+						if (x2 > xp ) { y2 = (xp*dy+det)/dx; x2 = xp };
+						if (x1 <= xp && x2 <= xp) {				// oba punkty leżą na lewo od prawej granicy
+							if (y1 > yd && y2 > yd) return null;		// oba punkty leżą poniżej dolnej granicy
+							if (y1 > yd) { x1 = (yd*dx-det)/dy; y1 = yd};	// jeden punkt leży powyżej dolnej granicy
+							if (y2 > yd) { x2 = (yd*dx-det)/dy; y2 = yd};
+						};
+					};
+				};
+				return {x1: x1, y1: y1, x2: x2, y2: y2};
+			};
+			function line(x1,y1,x2,y2) {
+				point=kadr(x1,y1,x2,y2,0,0,$canW,$canH);
+				if (point!=null) {
+					canv=document.getElementById("workspaceCanvas").getContext("2d");
+					canv.strokeStyle="black";
+					canv.lineWidth=0.125;
+					canv.moveTo(point.x1,point.y1);
+					canv.lineTo(point.x2,point.y2);
+					canv.stroke();
+					canv.closePath();
+				};
+
+			};
+			function transformacja1(x,y,z,alfa,beta,gamma,vx,vy,vz,d) {
+				// Obroty
+				// Wokół osi X
+				x1=x;
+				y1=Math.cos(alfa*Math.PI/180)*y-Math.sin(alfa*Math.PI/180)*z;
+				z1=Math.sin(alfa*Math.PI/180)*y+Math.cos(alfa*Math.PI/180)*z;
+				// Wokół osi Y
+				x2=Math.cos(beta*Math.PI/180)*x1-Math.sin(beta*Math.PI/180)*z1;
+				y2=y1;
+				z2=Math.sin(beta*Math.PI/180)*x1+Math.cos(beta*Math.PI/180)*z1;
+				// Wokół osi Z
+				x3=Math.cos(gamma*Math.PI/180)*x2-Math.sin(gamma*Math.PI/180)*y2;
+				y3=Math.sin(gamma*Math.PI/180)*x2+Math.cos(gamma*Math.PI/180)*y2;
+				z3=z2;
+				// Przesunięcie
+				x4=x3+vx;
+				y4=y3+vy;
+				z4=z3+vz;
+				u=-x4/y4*d;
+				v=-z4/y4*d;
+				return {x: x4, y: y4, z: z4, u: u, v: v};
+			};
+			function transformacja2(x,y,z,xa,ya,za,xb,yb,zb,fi,d) {
+				//alert(x+","+y+","+z+"\n"+xa+","+ya+","+za+"\n"+xb+","+yb+","+zb+"\n"+fi+","+d);
+				xd=xb-xa;
+				yd=yb-ya;
+				zd=zb-za;
+				d2=Math.sqrt(xd*xd+yd*yd*zd*zd);
+				if (d2 == 0) return null;
+				// Przesunięcie równoległe
+				x1=x-xa;
+				y1=y-ya;
+				z1=z-za;
+				// Obroty
+				// O 90 stopni wokół osi X
+				x2=x1;
+				y2=z1;
+				z2=-y1;
+				// Wokół osi Y
+				xd=xb-xa;
+				yd=yb-ya;
+				zd=zb-za;
+				d1=Math.sqrt(xd*xd+yd*yd);
+				if (d1 != 0) {
+					x3=(yd*x2+xd*z2)/d1;
+					y3=y2;
+					z3=(-xd*x2+yd*z2)/d1;
+				} else { x3=y3=z3=0 };
+				// Wokół osi X
+				d2=Math.sqrt(xd*xd+yd*yd+zd*zd);
+				x4=x3;
+				y4=(d1*y3+zd*z3)/d2;
+				z4=(-zd*y3+d1*z3)/d2;
+				// Wokół osi Z
+				omega=fi*Math.PI/180;
+				x5=Math.cos(omega)*x4+Math.sin(omega)*y4;
+				y5=-Math.sin(omega)*x4+Math.cos(omega)*y4;
+				z5=z4;
+				// Odwrócenie zwrotu osi Z
+				x6=x5;
+				y6=y5;
+				z6=-z5;
+				// Rzut na płaszczyznę obrazu
+				u=x6/z6*d;
+				v=y6/z6*d;
+				return {x: x6, y: y6, z: z6, u: u, v: v};
+			};
+		</script>
+	</body>
+</html>

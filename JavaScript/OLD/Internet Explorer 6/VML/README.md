@@ -13,3 +13,5 @@ Stworzyłem trochę tekstu WordArt oraz linie (używając kanwy rysunku), nastę
 Dzięki temu mogę używać kanw rysunku, aby rysować moje obrazy i teksty WordArt dynamicznie w locie poprzez skrypty.
 
 Działa z **Trybem dokumentu** ustawionym na *5*.
+
+**06.2008**

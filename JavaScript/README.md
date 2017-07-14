@@ -1,4 +1,4 @@
-# Various scripts
+Ôªø# Various scripts
 
 ## 3D Graphics
 
@@ -8,10 +8,10 @@ Next when HTML5, WebGL and canvas was introduced, then I rewrited scripts to sup
 
 Rendering and transforms was rewritten from book [*Rudeger Baumann - Grafika komputerowa* **(Computer graphics)**](http://retrokomputer.pl/grafika-komputerowa-i90814.html), which was programming guide book for Commodore C64 \(good times...\)
 
-# RÛønorakie skrypty
+# R√≥≈ºnorakie skrypty
 
-Grafika 3D utworzona w Word-owskich kanwach obrazÛw \(jeszcze przed kanwami WebGL!\). Tylko IE6.
+Grafika 3D utworzona w Word-owskich kanwach obraz√≥w \(jeszcze przed kanwami WebGL!\). Tylko IE6.
 
-NastÍpnie kiedy HTML5, WebGL i kanwy zosta≥y wprowadzone, przepisa≥em skrypty aby je obs≥ugiwa≥y.
+Nastƒôpnie kiedy HTML5, WebGL i kanwy zosta≈Çy wprowadzone, przepisa≈Çem skrypty aby je obs≈Çugiwa≈Çy.
 
-Renderowanie i transformacje zosta≥y przepisane z ksiπøki [*Rudeger Baumann - Grafika komputerowa* **(Computer graphics)**](http://retrokomputer.pl/grafika-komputerowa-i90814.html), ktÛra by≥a przewodnikiem programowania dla Commodore C64 \(dobre czasy...\)
+Renderowanie i transformacje zosta≈Çy przepisane z ksiƒÖ≈ºki [*Rudeger Baumann - Grafika komputerowa* **(Computer graphics)**](http://retrokomputer.pl/grafika-komputerowa-i90814.html), kt√≥ra by≈Ça przewodnikiem programowania dla Commodore C64 \(dobre czasy...\)

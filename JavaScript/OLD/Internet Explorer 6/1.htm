@@ -1,0 +1,10 @@
+<html>
+<script>
+okno=window.open();
+okno.document.write("<html><font style=\"font-size:72px\">");
+for (var i=1; i<=10000; i++) {
+ev="okno.document.write(\"&amp;#\"+i+\" - &#\"+i+\"<br>\")";
+eval(ev);
+}
+okno.document.write("</font></html>");
+</script>

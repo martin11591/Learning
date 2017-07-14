@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1250" />
+  <title>Obliczanie wymiarów ekranu</title>
+</head>
+<body>
+<table>
+<tr><td>Przekątna ekranu</td><td><input id="przekatna" value=19 style="width: 100%"/></td><td style="text-align: right"><input name="przekatnaJednostka" id="przekatnaCale" type="radio" checked />cale<input name="przekatnaJednostka" id="przekatnaCm" type="radio" />centymetry</td></tr>
+<tr><td>Proporcje ekranu</td><td><input id="propSzer" value=5 />:<input id="propWys" value=4 /></td><td>Wynik w <input name="wynikJednostka" id="wynikCale" type="radio" />cale<input name="wynikJednostka" id="wynikCm" type="radio" checked />centymetry</td></tr>
+<tr><td>Zaokrągl do</td><td colspan=2><input id="zaokr" value=1 /> miejsc</td></tr>
+<tr><td>Szerokość</td><td colspan=2><input id="szerokosc" /></td></tr>
+<tr><td>Wysokość</td><td colspan=2><input id="wysokosc" /></td></tr>
+</table>
+</body>
+<script language="JavaScript">
+function $(id) {
+  return document.all?document.all[id]:document.getElementById(id);
+}
+function obliczWymiaryEkranuZPrzekatnej(przekatna,propSzer,propWys) {
+  if (propWys==0) return 0;
+  przekatna=parseFloat(przekatna);
+  propSzer=parseFloat(propSzer);
+  propWys=parseFloat(propWys);
+  prop=propSzer/propWys;
+  // |a^2 + b^2 =  c^2
+  // |  a /   b = prop
+  // a - szerokosc, b - wysokosc, c - przekatna, prop - proporcje
+  c2=przekatna*przekatna;
+  prop2=prop*prop;
+  b2=c2/(prop2+1);
+  a2=c2-b2;
+  a=Math.sqrt(a2);
+  b=Math.sqrt(b2);
+  return {szerokosc:a,wysokosc:b,przekatna:przekatna};
+}
+function obliczWymiaryEkranuZSzerokosci(szerokosc,propSzer,propWys) {
+  if (propWys==0) return 0;
+  szerokosc=parseFloat(szerokosc);
+  propSzer=parseFloat(propSzer);
+  propWys=parseFloat(propWys);
+  b=(szerokosc/propSzer)*propWys;
+  c=Math.sqrt(szerokosc*szerokosc+b*b);
+  return {szerokosc:szerokosc,wysokosc:b,przekatna:c};
+}
+function obliczWymiaryEkranuZWysokosci(wysokosc,propSzer,propWys) {
+  if (propWys==0) return 0;
+  wysokosc=parseFloat(wysokosc);
+  propSzer=parseFloat(propSzer);
+  propWys=parseFloat(propWys);
+  a=(wysokosc/propWys)*propSzer;
+  c=Math.sqrt(wysokosc*wysokosc+a*a);
+  return {szerokosc:a,wysokosc:wysokosc,przekatna:c};
+}
+function zaokraglDo(liczba,liczbaMiejsc) {
+  liczba=parseFloat(liczba);
+  liczbaMiejsc=parseInt(liczbaMiejsc);
+  return Math.round(liczba*Math.pow(10,liczbaMiejsc))/Math.pow(10,liczbaMiejsc);
+}
+function caleNaCm(liczba) {
+  liczba=parseFloat(liczba);
+  return liczba*2.54;
+}
+function cmNaCale(liczba) {
+  liczba=parseFloat(liczba);
+  return liczba/2.54;
+}
+function liczZPrzekatnej() {
+  try {
+    przekatna=parseFloat($("przekatna").value);
+    if ($("przekatnaCale").checked) {
+      if ($("wynikCm").checked) przekatna=caleNaCm(przekatna);
+    } else if ($("wynikCale").checked) przekatna=cmNaCale(przekatna);
+    wyniki=obliczWymiaryEkranuZPrzekatnej(przekatna,$("propSzer").value,$("propWys").value);
+    if ($("wynikCm").checked) wyniki.jednostkaWynik="cm"; else wyniki.jednostkaWynik="in";
+    wyniki=zaokraglanie(wyniki);
+    $("szerokosc").value=wyniki.szerokosc+wyniki.jednostkaWynik;
+    $("wysokosc").value=wyniki.wysokosc+wyniki.jednostkaWynik;
+  } catch(err) {alert(err)};
+  return true;
+}
+function liczZSzerokosci() {
+  try {
+    szerokosc=parseFloat($("szerokosc").value);
+    wyniki=obliczWymiaryEkranuZSzerokosci(szerokosc,$("propSzer").value,$("propWys").value);
+    if ($("przekatnaCm").checked) wyniki.jednostkaPrzekatna="cm"; else wyniki.jednostkaPrzekatna="in";
+    wyniki=zaokraglanie(wyniki);
+    if ($("wynikCm").checked) {
+      if ($("przekatnaCale").checked) wyniki.przekatna=cmNaCale(wyniki.przekatna);
+    } else if ($("przekatnaCm").checked) wyniki.przekatna=caleNaCm(wyniki.przekatna);
+    wyniki=zaokraglanie(wyniki);
+    $("wysokosc").value=wyniki.wysokosc;
+    $("przekatna").value=wyniki.przekatna;
+  } catch(err) {alert(err)};
+  return true;
+}
+function liczZWysokosci() {
+  try {
+    wysokosc=parseFloat($("wysokosc").value);
+    wyniki=obliczWymiaryEkranuZWysokosci(wysokosc,$("propSzer").value,$("propWys").value);
+    if ($("przekatnaCm").checked) wyniki.jednostkaPrzekatna="cm"; else wyniki.jednostkaPrzekatna="in";
+    wyniki=zaokraglanie(wyniki);
+    if ($("wynikCm").checked) {
+      if ($("przekatnaCale").checked) wyniki.przekatna=cmNaCale(wyniki.przekatna);
+    } else if ($("przekatnaCm").checked) wyniki.przekatna=caleNaCm(wyniki.przekatna);
+    wyniki=zaokraglanie(wyniki);
+    $("szerokosc").value=wyniki.szerokosc;
+    $("przekatna").value=wyniki.przekatna;
+  } catch(err) {alert(err)};
+  return true;
+}
+function zaokraglanie(wynik) {
+  liczbaMiejsc=parseInt($("zaokr").value);
+  liczbaMiejsc=liczbaMiejsc<0?0:liczbaMiejsc;
+  wynik.szerokosc=zaokraglDo(wynik.szerokosc,liczbaMiejsc);
+  wynik.wysokosc=zaokraglDo(wynik.wysokosc,liczbaMiejsc);
+  wynik.przekatna=zaokraglDo(wynik.przekatna,liczbaMiejsc);
+  return wynik;
+}
+$("przekatna").onkeyup=$("propSzer").onkeyup=$("propWys").onkeyup=$("zaokr").onkeyup=liczZPrzekatnej;
+$("szerokosc").onkeyup=liczZSzerokosci;
+$("wysokosc").onkeyup=liczZWysokosci;
+$("przekatnaCale").onclick=$("przekatnaCm").onclick=$("wynikCale").onclick=$("wynikCm").onclick=liczZPrzekatnej;
+document.body.onload=liczZPrzekatnej;
+</script>
+<noscript>
+  JavaScript wyłączony lub nieobsługiwany!
+</noscript>
+</html>

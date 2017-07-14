@@ -1,0 +1,20 @@
+<html>
+<body onload="Extender()">
+<head>
+<script src="Extender.js" type="text/javascript"></script>
+</head>
+<script>
+function main() {
+lay.a1.pos(lay.a1.style.pixelLeft+10,lay.a1.style.pixelTop+10);
+lay.a2.alpha(10);
+lay.a3.clip(100,1000,1000,100);
+setTimeout("lay.a1.write(\"fdsgfsfgh\",\"txt\")",1000);
+setTimeout("lay.a2.write(\"<marquee>fdsfs</marquee>\",\"html\")",2000);
+setTimeout("lay.a3.disp(\"ukryj\")",3000);
+setTimeout("lay.a3.disp(\"pokaz\")",4000);
+}
+</script>
+<div id="a1" style="position:absolute">FDSFSFSDSGfdsg</div>
+<span id="a2" style="position:absolute">FDSFSgfdsgds</span><br/>
+<a href="javascript:main()">main()</a>
+<img id="a3" style="position:absolute" src="Obrazy\WiedŸmin 2.png"/>

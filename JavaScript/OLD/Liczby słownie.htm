@@ -1,0 +1,164 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=WINDOWS-1250" />
+<title>Liczby słownie</title>
+<head>
+<body>
+<div id="liczba"></div>
+<div id="slownie"></div>
+<script type="text/javascript">
+function $(id)
+{
+  return document.all?document.all[id]:document.getElementById(id);
+}
+function slownie(liczba,m,flaga,num)
+{
+  function odmiana(liczba,m)
+  {
+    if (m==0) return nazwy[liczba][0]; else
+    {
+      if (m==1) m="y";
+      if (m==2) m="a";
+      if (m==3) m="e";
+      if ((liczba==2||liczba==3)&&m=="y") return nazwy[liczba][1]+"i";
+      if ((liczba==2||liczba==3)&&m=="e") return nazwy[liczba][1]+"ie";
+      if (liczba==3&&m=="a") return nazwy[liczba][1]+"ia";
+      return nazwy[liczba][1]+m;
+    }
+  }
+  if (isNaN(num)) num=0; else num++;
+  liczba=parseInt(liczba.toString().replace(/[^0-9]/gi,""));
+  if (isNaN(m)) m=0;
+  if (m<0) m=0;
+  if (m>3) m=3;
+  potegi={
+  100:new Array("centylion","","y","ów",""),
+   12:new Array("duodecylion","","y","ów",""),
+   11:new Array("undecylion","","y","ów",""),
+   10:new Array("decylion","","y","ów",""),
+    9:new Array("nonylion","","y","ów",""),
+    8:new Array("oktylion","","y","ów",""),
+    7:new Array("septylion","","y","ów",""),
+    6:new Array("sekstylion","","y","ów",""),
+  5.5:new Array("kwintyliard","","y","ów",""),
+    5:new Array("kwintylion","","y","ów",""),
+  4.5:new Array("kwadryliard","","y","ów",""),
+    4:new Array("kwadrylion","","y","ów",""),
+  3.5:new Array("tryliard","","y","ów",""),
+    3:new Array("trylion","","y","ów",""),
+  2.5:new Array("biliard","","y","ów",""),
+    2:new Array("bilion","","y","ów",""),
+  1.5:new Array("miliard","","y","ów",""),
+    1:new Array("milion","","y","ów",""),
+  0.5:new Array("tysi","ąc","ące","ęcy","")};
+  nazwy={
+  900:new Array("dziewięćset","dziewięćsetn"),
+  800:new Array("osiemset","osiemsetn"),
+  700:new Array("siedemset","siedemsetn"),
+  600:new Array("sześćset","sześćsetn"),
+  500:new Array("pięćset","pięćsetn"),
+  400:new Array("czterysta","czterysetn"),
+  300:new Array("trzysta","trzysetn"),
+  200:new Array("dwieście","dwusetn"),
+  100:new Array("sto","setn"),
+  90:new Array("dziewięćdziesiąt","dziewięćdziesiąt"),
+  80:new Array("osiemdziesiąt","osiemdziesiąt"),
+  70:new Array("siedemdziesiąt","siedemdziesiąt"),
+  60:new Array("sześćdziesiąt","sześćdziesiąt"),
+  50:new Array("pięćdziesiąt","pięćdziesiąt"),
+  40:new Array("czterdzieści","czterdziest"),
+  30:new Array("trzydzieści","trzydziest"),
+  20:new Array("dwadzieścia","dwudziest"),
+  19:new Array("dziewiętnaście","dziewiętnast"),
+  18:new Array("osiemnaście","osiemnast"),
+  17:new Array("siedemnaście","siedemnast"),
+  16:new Array("szesnaście","szesnast"),
+  15:new Array("piętnaście","piętnast"),
+  14:new Array("czternaście","czternast"),
+  13:new Array("trzynaście","trzynast"),
+  12:new Array("dwanaście","dwunast"),
+  11:new Array("jedenaście","jedenast"),
+  10:new Array("dziesięć","dziesiąt"),
+  9:new Array("dziewięć","dziewiąt"),
+  8:new Array("osiem","ósm"),
+  7:new Array("siedem","siódm"),
+  6:new Array("sześć","szóst"),
+  5:new Array("pięć","piąt"),
+  4:new Array("cztery","czwart"),
+  3:new Array("trzy","trzec"),
+  2:new Array("dwa","drug"),
+  1:new Array("jeden","pierwsz"),
+  0:new Array("zero","zerow")};
+  for (i in potegi)
+  {
+    if (liczba>=Math.pow(10,6*i))
+    {
+      liczba2=Math.floor(liczba/Math.pow(10,6*i));
+      if (liczba2==0) liczba2=1;
+      liczba-=liczba2*Math.pow(10,6*i);
+      potega=(m==0)?liczebnik(liczba2,potegi[i][0],potegi[i][1],potegi[i][2],potegi[i][3],potegi[i][4]):liczebnik(1,potegi[i][0],potegi[i][1],potegi[i][2],potegi[i][3],potegi[i][4])+"owy";
+      if (liczba2!=1) potega=" "+potega;
+      if (liczba>0) potega+=" ";
+      return slownie(liczba2,m,true,num)+potega+slownie(liczba,m,false,num);
+    }
+  }
+  if (liczba>=900&&liczba<1000) return odmiana(900,m)+(liczba-900>0?" ":"")+slownie(liczba-900,m,true,num);
+  if (liczba>=800&&liczba<900) return odmiana(800,m)+(liczba-800>0?" ":"")+slownie(liczba-800,m,true,num);
+  if (liczba>=700&&liczba<800) return odmiana(700,m)+(liczba-700>0?" ":"")+slownie(liczba-700,m,true,num);
+  if (liczba>=600&&liczba<700) return odmiana(600,m)+(liczba-600>0?" ":"")+slownie(liczba-600,m,true,num);
+  if (liczba>=500&&liczba<600) return odmiana(500,m)+(liczba-500>0?" ":"")+slownie(liczba-500,m,true,num);
+  if (liczba>=400&&liczba<500) return odmiana(400,m)+(liczba-400>0?" ":"")+slownie(liczba-400,m,true,num);
+  if (liczba>=300&&liczba<400) return odmiana(300,m)+(liczba-300>0?" ":"")+slownie(liczba-300,m,true,num);
+  if (liczba>=200&&liczba<300) return odmiana(200,m)+(liczba-200>0?" ":"")+slownie(liczba-200,m,true,num);
+  if (liczba>=100&&liczba<200) return odmiana(100,m)+(liczba-100>0?" ":"")+slownie(liczba-100,m,true,num);
+  if (liczba>=90&&liczba<100) return odmiana(90,m)+(liczba-90>0?" ":"")+slownie(liczba-90,m,true,num);
+  if (liczba>=80&&liczba<90) return odmiana(80,m)+(liczba-80>0?" ":"")+slownie(liczba-80,m,true,num);
+  if (liczba>=70&&liczba<80) return odmiana(70,m)+(liczba-70>0?" ":"")+slownie(liczba-70,m,true,num);
+  if (liczba>=60&&liczba<70) return odmiana(60,m)+(liczba-60>0?" ":"")+slownie(liczba-60,m,true,num);
+  if (liczba>=50&&liczba<60) return odmiana(50,m)+(liczba-50>0?" ":"")+slownie(liczba-50,m,true,num);
+  if (liczba>=40&&liczba<50) return odmiana(40,m)+(liczba-40>0?" ":"")+slownie(liczba-40,m,true,num);
+  if (liczba>=30&&liczba<40) return odmiana(30,m)+(liczba-30>0?" ":"")+slownie(liczba-30,m,true,num);
+  if (liczba>=20&&liczba<30) return odmiana(20,m)+(liczba-20>0?" ":"")+slownie(liczba-20,m,true,num);
+  if (liczba==19) return odmiana(19,m);
+  if (liczba==18) return odmiana(18,m);
+  if (liczba==17) return odmiana(17,m);
+  if (liczba==16) return odmiana(16,m);
+  if (liczba==15) return odmiana(15,m);
+  if (liczba==14) return odmiana(14,m);
+  if (liczba==13) return odmiana(13,m);
+  if (liczba==12) return odmiana(12,m);
+  if (liczba==11) return odmiana(11,m);
+  if (liczba==10) return odmiana(10,m);
+  if (liczba==9) return odmiana(9,m);
+  if (liczba==8) return odmiana(8,m);
+  if (liczba==7) return odmiana(7,m);
+  if (liczba==6) return odmiana(6,m);
+  if (liczba==5) return odmiana(5,m);
+  if (liczba==4) return odmiana(4,m);
+  if (liczba==3) return odmiana(3,m);
+  if (liczba==2) return odmiana(2,m);
+  if (liczba==1&&!flaga) return odmiana(1,m);
+  if (liczba==0&&num==0) return odmiana(0,m);
+  return "";
+}
+function liczebnik(liczebnikliczba,liczebnikrdzen,liczebnikjeden,liczebnikdwaCztery,liczebnikszescWGore,liczebnikpoprzecinku)
+{
+  liczebnikproba=liczebnikliczba.toString();
+  if (liczebnikproba.indexOf(".")!=-1) 
+    {return liczebnikrdzen+liczebnikpoprzecinku;}
+  liczebnikliczba=Math.floor(Math.abs(liczebnikliczba));
+  liczebnikjed=liczebnikliczba%10;
+  liczebnikdwa=liczebnikliczba%100;
+  if (liczebnikliczba==1)
+    {return liczebnikrdzen+liczebnikjeden;}
+  if (liczebnikjed>=2&&liczebnikjed<=4)
+  {
+    if (liczebnikdwa>=10&&liczebnikdwa<=20) {return liczebnikrdzen+liczebnikszescWGore}
+    return liczebnikrdzen+liczebnikdwaCztery;
+  }
+  return liczebnikrdzen+liczebnikszescWGore;
+}
+alert("Godzina "+slownie(new Date().getHours(),2)+" minut "+slownie(new Date().getMinutes())+" sekund "+slownie(new Date().getSeconds()));
+</script>
+</body>
+</html>

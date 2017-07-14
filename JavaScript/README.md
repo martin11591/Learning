@@ -14,6 +14,8 @@ Rendering and transforms was rewritten from book [*Rudeger Baumann - Grafika kom
 
 Dawniej nie formatowałem skryptów, przez co widzę teraz jak bardzo jest to złą praktyką programistyczną.
 
+## Grafika 3D
+
 Grafika 3D utworzona w Word-owskich kanwach obrazów \(jeszcze przed kanwami WebGL!\). Tylko IE6.
 
 Następnie kiedy HTML5, WebGL i kanwy zostały wprowadzone, przepisałem skrypty aby je obsługiwały.

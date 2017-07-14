@@ -16,7 +16,7 @@ I don't remove it - they are my programming souvenirs and proof of my learning.
 
 Wszystko wewnątrz folderu *Internet Explorer 6* działa tylko z IE6 - to była moja pierwsza docelowa przeglądarka.
 
-Wszystko tutaj poza foldere *Internet Explorer 6* działa na Mozilli Firefox i Google Chrome.
+Wszystko tutaj poza folderem *Internet Explorer 6* działa na Mozilli Firefox i Google Chrome.
 
 ## Praktyki programistyczne
 

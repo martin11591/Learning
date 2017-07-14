@@ -1,0 +1,843 @@
+<html>
+<body scroll=auto>
+<style>
+body{background-color:black;color:white;font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+td{border:solid 1px}
+td.field{width:125px;height:80px;padding:7px}
+.dateButton{width:100%;height:100%}
+.dayNumber{font-family:Lucida Handwriting}
+</style>
+<title>Kalendarz v1.1</title>
+<span id="calHTML"></span>
+<table id="alertWindow" style="position:absolute;left:0px;top:0px;display:none;border:solid 3px #FFFF00" cellspacing=0 cellpadding=0>
+<tr><td style="background-color:black;border:none;padding:16px;filter:alpha(opacity=85);font-family:Tahoma;font-size:8pt"></td><td style="position:absolute;border:none;padding:16px;font-family:Tahoma;font-size:8pt">&nbsp;</td></tr>
+</table>
+<script>
+//
+// Skrypt utworzony przez Marcina Podraza
+//
+// Skrypt uzupe≥nia dane w tabeli (kalendarzu)
+//
+// Moøliwe sπ opcje wprowadzania w≥asnej daty
+//
+// Lub przeskakiwania rok lub miesiπc wczeúniej\dalej
+//
+//
+//
+// Adres e-mail:martinpodraza@interia.pl
+//
+// Jeøeli ktoú siÍ zastanawia dlaczego piszÍ angielskie nazwy
+// To niech nie myúli, øe skopiowa≥em bπdü podrobi≥em skrypt
+// Ja poprostu LUBI  pisaÊ angielskie nazwy!
+//
+dc=document;
+dca=document.all;
+spanCalHTML='<table id="calendar" style="text-align:center;vertical-align:middle;border:solid 1px white" cellspacing=2 cellpadding=0><tr><td><button class="dateButton" onclick="previousYear()" title="Rok wstecz (strza≥ka do gÛry na klawiaturze)">&lt;-- Rok wstecz<\/button><\/td><td><button class="dateButton" onclick="previousMonth()" title="Miesiπc wstecz (strza≥ka w lewo na klawiaturze)">&lt;- Miesiπc wstecz<\/button><\/td><td id="monthNameAndYear" onclick="customDate()" colspan=3 style="font-size:12pt" title="Dowolna data (ENTER lub SPACJA na klawiaturze)">&nbsp;<\/td><td><button class="dateButton" onclick="nextMonth()" title="Miesiπc dalej (strza≥ka w prawo na klawiaturze)">Miesiπc dalej -&gt;<\/button><\/td><td><button class="dateButton" onclick="nextYear()" title="Rok dalej (strza≥ka w dÛ≥ na klawiaturze)">Rok dalej --&gt;<\/button><\/td><\/tr><tr class="dayOfWeekName"><td>Poniedzia≥ek<\/td><td>Wtorek<\/td><td>åroda<\/td><td>Czwartek<\/td><td>Piπtek<\/td><td>Sobota<\/td><td style="color:red">Niedziela<\/td></tr>';
+for (var j=2; j<=7; j++) {
+spanCalHTML+='<tr class="dayNumber">';
+for (var i=0; i<=6; i++) {
+spanCalHTML+='<td class="field">&nbsp;<\/td>';
+}
+spanCalHTML+='<\/tr>';
+}
+spanCalHTML+='<\/table>';
+dca.calHTML.innerHTML=spanCalHTML;
+cal=document.getElementById("calendar");
+cal.oncontextmenu=function () {return false}
+document.onkeydown=keyboard;
+okno=document.getElementById("alertWindow");
+centerWindow();
+wczytajUroczystosci();
+wczytajImieniny();
+wczytajSentencje();
+updateTime();
+day=todayDay;
+month=todayMonth;
+year=todayYear;
+setDayInCalendar(day,month,year);
+function hoverCellInTable(hoverTable,hoverK,hoverW,hoverEval) {
+hoverTableTemp=document.getElementById(hoverTable);
+hoverK=Math.floor(parseFloat(hoverK));
+hoverW=Math.floor(parseFloat(hoverW));
+if (hoverK<0) {hoverK=0}
+if (hoverW<0) {hoverW=0}
+if (hoverW>hoverTableTemp.rows.length-1) {hoverW=hoverTableTemp.rows.length-1}
+if (hoverK>hoverTableTemp.rows[hoverW].cells.length-1) {hoverK=hoverTableTemp.rows[hoverW].cells.length-1}
+eval("with(hoverTableTemp.rows["+hoverW+"].cells["+hoverK+"]){"+hoverEval+"}");
+}
+function hover(hoverK,hoverW,hoverOnOff) {
+hoverOnOff=hoverOnOff.toLowerCase().substring(0,5);
+if (hoverOnOff=="on") {hoverCellInTable("calendar",hoverK,hoverW,"style.border='outset 6px';style.padding='1px'")}
+if (hoverOnOff=="off") {hoverCellInTable("calendar",hoverK,hoverW,"style.border='solid 1px';style.padding='7px'")}
+if (hoverOnOff=="click") {hoverCellInTable("calendar",hoverK,hoverW,"style.border='inset 6px';style.padding='1px'")}
+}
+function updateTime() {
+today=new Date();
+this.todayYear=today.getFullYear();
+this.todayMonth=today.getMonth()+1;
+this.todayDay=today.getDate();
+setTimeout("updateTime()",1);
+}
+function setDayInCalendar(calDay,calMon,calYear) {
+for (var j=2; j<cal.rows.length; j++) {
+for (var i=0; i<cal.rows[j].cells.length; i++) {
+cal.rows[j].cells[i].innerHTML="&nbsp;";
+cal.rows[j].cells[i].style.backgroundColor=document.body.style.backgroundColor;
+cal.rows[j].cells[i].style.color=document.body.style.color;
+cal.rows[j].cells[i].style.fontSize="36pt";
+cal.rows[j].cells[i].onclick=null;
+cal.rows[j].cells[i].oncontextmenu=null;
+cal.rows[j].cells[i].onmouseover=null;
+cal.rows[j].cells[i].onmouseout=null;
+}
+}
+if (calMon==1) {monthName="StyczeÒ"}
+if (calMon==2) {monthName="Luty"}
+if (calMon==3) {monthName="Marzec"}
+if (calMon==4) {monthName="KwiecieÒ"}
+if (calMon==5) {monthName="Maj"}
+if (calMon==6) {monthName="Czerwiec"}
+if (calMon==7) {monthName="Lipiec"}
+if (calMon==8) {monthName="SierpieÒ"}
+if (calMon==9) {monthName="WrzesieÒ"}
+if (calMon==10) {monthName="Paüdziernik"}
+if (calMon==11) {monthName="Listopad"}
+if (calMon==12) {monthName="GrudzieÒ"}
+leapYear=calYear%4;
+if (leapYear==0) {leapYear=1} else {leapYear=0}
+numDaysInMonths=new Array(31,28+leapYear,31,30,31,30,31,31,30,31,30,31);
+dca.monthNameAndYear.innerText=monthName+" "+calYear;
+dca.monthNameAndYear.title=monthName+" w "+calYear+" roku ma "+numDaysInMonths[calMon-1]+" dni.";
+importantDaysTitle(calMon,calYear);
+dca.monthNameAndYear.title+=titleTxt;
+calX=0;
+calY=2;
+for (var i=1; i<=numDaysInMonths[calMon-1]; i++) {
+temp=new Date(calYear,calMon-1,i);
+tempDay=temp.getDay();
+txtSize=36;
+importantDateColor=checkDate(i,calMon,calYear);
+if (tempDay==0) {
+calX=6;
+calTxt="<span style=\"font-size:"+txtSize+"pt;color:red\">"+i+"</span>";
+cal.rows[calY].cells[calX].style.backgroundColor=importantDateColor.substring(0,importantDateColor.indexOf("|"));
+} else {
+calX=tempDay-1;calTxt="<span style=\"font-size:"+txtSize+"pt\">"+i+"</span>";
+cal.rows[calY].cells[calX].style.backgroundColor=importantDateColor.substring(0,importantDateColor.indexOf("|"));
+cal.rows[calY].cells[calX].style.color=importantDateColor.substring(importantDateColor.indexOf("|")+1);
+}
+if (i==todayDay&&calMon==todayMonth&&calYear==todayYear) {
+cal.rows[calY].cells[calX].style.backgroundColor="#FFFFFF";
+cal.rows[calY].cells[calX].style.color="#000000";
+}
+cal.rows[calY].cells[calX].innerHTML=calTxt;
+eval("calM=function() {hover("+calX+","+calY+",\"on\")}");
+cal.rows[calY].cells[calX].onmouseover=calM;
+eval("calM=function() {hover("+calX+","+calY+",\"off\")}");
+cal.rows[calY].cells[calX].onmouseout=calM
+eval("calM=function() {hover("+calX+","+calY+",\"click\");odczytajInformacjeODniu("+calX+","+calY+")}");
+cal.rows[calY].cells[calX].onclick=calM;
+eval("calM=function() {hover("+calX+","+calY+",\"click\");edytujInformacjeODniu("+calX+","+calY+")}");
+cal.rows[calY].cells[calX].oncontextmenu=calM;
+if (tempDay==0) {calY+=1}
+}
+}
+function previousYear() {
+year-=1;
+if (year<1) {year=1}
+setDayInCalendar(day,month,year);
+}
+function previousMonth() {
+month-=1;
+if (month<1) {month+=12;year-=1}
+if (year<1) {year=1}
+setDayInCalendar(day,month,year);
+}
+function customDate() {
+dateTemp=prompt('Miesiπc',Math.round(11*Math.random()+1));
+if (dateTemp==null||dateTemp=="") {return} else {
+month=dateTemp.toString().toLowerCase();
+if (month=="styczen"||month=="styczeÒ"||month=="sty"||month=="january"||month=="jan") {month=1}
+if (month=="luty"||month=="lut"||month=="february"||month=="feb") {month=2}
+if (month=="marzec"||month=="mar"||month=="march") {month=3}
+if (month=="kwiecien"||month=="kwiecieÒ"||month=="kwi"||month=="april"||month=="apr") {month=4}
+if (month=="maj"||month=="may") {month=5}
+if (month=="czerwiec"||month=="cze"||month=="juni"||month=="jun") {month=6}
+if (month=="lipiec"||month=="lip"||month=="july"||month=="jul") {month=7}
+if (month=="sierpien"||month=="sierpieÒ"||month=="sie"||month=="august"||month=="aug") {month=8}
+if (month=="wrzesien"||month=="wrzesieÒ"||month=="wrz"||month=="september"||month=="sep") {month=9}
+if (month=="pazdziernik"||month=="paüdziernik"||month=="paz"||month=="paü"||month=="october"||month=="oct") {month=10}
+if (month=="listopad"||month=="lis"||month=="november"||month=="nov") {month=11}
+if (month=="grudzien"||month=="grudzieÒ"||month=="gru"||month=="december"||month=="dec") {month=12}
+month=Math.floor(parseInt(month));
+}
+dateTemp=prompt('Rok',Math.round(((todayYear-1)*2)*Math.random()+1));
+if (dateTemp==null||dateTemp=="") {return} else {year=Math.floor(parseInt(dateTemp))}
+if (month<1) {month=1}
+if (month>12) {month=12}
+if (year<1) {year=1}
+setDayInCalendar(day,month,year);
+}
+function nextMonth() {
+month+=1;
+if (month>12) {month-=12;year+=1}
+if (year<1) {year=1}
+setDayInCalendar(day,month,year);
+}
+function nextYear() {
+year+=1;
+if (year<1) {year=1}
+setDayInCalendar(day,month,year);
+}
+function keyboard() {
+pressedKey=event.keyCode;
+if (pressedKey==37) {previousMonth()}
+if (pressedKey==38) {previousYear()}
+if (pressedKey==39) {nextMonth()}
+if (pressedKey==40) {nextYear()}
+if (pressedKey==13||pressedKey==32) {customDate()}
+return false;
+}
+function importantDaysTitle(impTitleMonth,impTitleYear) {
+titleTxt="\n";
+for (impI in importantDates) {
+impDat=importantDates[impI];
+impDatType=impDat.substring(0,impDat.indexOf(";")).toLowerCase();
+impDat=impDat.substring(impDat.indexOf(";")+1);
+impDatDay=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))));
+if (impDatDay<10) {impDatDay="0"+impDatDay}
+impDat=impDat.substring(impDat.indexOf(".")+1);
+if (impDatType=="holiday") {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))} else {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))))}
+if (impDatMonth<10) {impDatMonth="0"+impDatMonth}
+if (impDatType=="holiday") {impDat=impDat.substring(impDat.indexOf(";")+1)} else {impDat=impDat.substring(impDat.indexOf(".")+1)}
+if (impDatType=="mybirthday") {impDatYear=Math.floor(parseFloat(impDat))} else {impDatYear=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))}
+impDat=impDat.substring(impDat.indexOf(";")+1);
+impDatTxt="";
+if (impDatType=="birthday"&&impDatMonth==impTitleMonth) {
+impDatHowMany=impTitleYear-impDatYear;
+if (impDatHowMany==0) {impDatTxt+="\n"+impDatDay+"."+impDatMonth+"."+impTitleYear+" - Na"+impDat.substring(1)}
+if (impDatHowMany>0) {impDatTxt+="\n"+impDatDay+"."+impDatMonth+"."+impTitleYear+" - "+impDatHowMany+" "+impDat}
+}
+if (impDatType=="mybirthday"&&impDatMonth==impTitleMonth) {
+impDatHowMany=impTitleYear-impDatYear;
+if (impDatHowMany==0) {impDatTxt+="\n"+impDatDay+"."+impDatMonth+"."+impTitleYear+" - Moje narodziny"}
+if (impDatHowMany>0) {impDatTxt+="\n"+impDatDay+"."+impDatMonth+"."+impTitleYear+" - Moje "+impDatHowMany+" urodziny"}
+}
+if (impDatType=="holiday"&&impDatMonth==impTitleMonth) {impDatTxt+="\n"+impDatDay+"."+impDatMonth+"."+impTitleYear+" - "+impDat}
+titleTxt+=impDatTxt;
+}
+impDatTempTxt=titleTxt.substring(titleTxt.indexOf("\n")+2);
+impDatTempTxt=impDatTempTxt.split("\n");
+for (i in impDatTempTxt) {
+impDatTempTxt[i]=impDatTempTxt[i].replace(/0/g,"A0A").replace(/1/g,"B1B").replace(/2/g,"C2C").replace(/3/g,"D3D").replace(/4/g,"E4E").replace(/5/g,"F5F").replace(/6/g,"G6G").replace(/7/g,"H7H").replace(/8/g,"I8I").replace(/9/g,"J9J");
+}
+impDatTempTxt.sort();
+for (i in impDatTempTxt) {
+impDatTempTxt[i]=impDatTempTxt[i].replace(/A0A/g,"0").replace(/B1B/g,"1").replace(/C2C/g,"2").replace(/D3D/g,"3").replace(/E4E/g,"4").replace(/F5F/g,"5").replace(/G6G/g,"6").replace(/H7H/g,"7").replace(/I8I/g,"8").replace(/J9J/g,"9");
+}
+impDatTxt=impDatTempTxt.join("\n");
+titleTxt="\n\nWaøne dni w tym miesiπcu:\n"+impDatTxt;
+}
+function checkDate(checkDay,checkMonth,checkYear) {
+checkTxt="";
+for (impI in importantDates) {
+impDat=importantDates[impI];
+impDatType=impDat.substring(0,impDat.indexOf(";")).toLowerCase();
+impDat=impDat.substring(impDat.indexOf(";")+1);
+impDatDay=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))));
+impDat=impDat.substring(impDat.indexOf(".")+1);
+if (impDatType=="holiday") {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))} else {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))))}
+impDat=impDat.substring(impDat.indexOf(".")+1);
+if (impDatType=="mybirthday") {impDatYear=Math.floor(parseFloat(impDat))} else {
+impDatYear=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))}
+impDat=impDat.substring(impDat.indexOf(";")+1);
+if (impDatDay==checkDay&&impDatMonth==checkMonth) {
+if (impDatType=="holiday") {checkTxt="#00DD00|#000000"}
+if (impDatType=="birthday") {
+impDatHowMany=checkYear-impDatYear;
+if (impDatHowMany==0) {checkTxt="#FFFF44|#000000"}
+if (impDatHowMany>0) {checkTxt="#44FFFF|#000000"}
+}
+if (impDatType=="mybirthday") {
+impDatHowMany=checkYear-impDatYear;
+if (impDatHowMany==0) {checkTxt="#770000|#FFFFFF"}
+if (impDatHowMany>0) {checkTxt="#990099|#000000"}
+}
+}
+}
+return checkTxt;
+}
+function anuluj() {return false}
+function wczytajUroczystosci() {
+temp1=window.open("uroczystosci.txt");
+temp=temp1.document.body.outerText+" \n";
+temp1.close();
+this.importantDates=new Array();
+while(temp.lastIndexOf("\n")!=-1) {
+importantDates.push(temp.substring(0,temp.indexOf("\n")-1).replace(/[^A-Za-z0-9πÊÍ≥ÒÛúüø•∆ £—”åèØ;,. \'()\"]/g,''));
+temp=temp.substring(temp.indexOf("\n")+1);
+}
+}
+function wczytajImieniny() {
+temp1=window.open("imieniny.txt");
+temp=temp1.document.body.outerText+"\n[13]\n";
+temp1.close();
+this.imieniny=new Array();
+while(temp.lastIndexOf("]")!=-1) {
+mies=Math.floor(parseFloat(temp.substring(temp.indexOf("[")+1,temp.indexOf("]"))));
+miesS="["+mies+"]";
+miesL=miesS.length;
+temp2=temp.substring(temp.indexOf("]")+3);
+temp1=temp2.substring(0,temp2.indexOf("[")-1)+"\n";
+this.imieniny[mies]=new Array();
+while(temp1.lastIndexOf("\n")!=-1) {
+i=temp1.substring(0,temp1.indexOf("="));
+temp1=temp1.substring(temp1.indexOf("=")+1);
+this.imieniny[mies][i]=temp1.substring(0,temp1.indexOf("\n")).replace(/[^A-Za-z0-9πÊÍ≥ÒÛúüø•∆ £—”åèØ, ]/g,"");
+temp1=temp1.substring(temp1.indexOf("\n")+1);
+}
+temp=temp.substring(temp.indexOf("]")+2);
+}
+}
+function wczytajSentencje() {
+temp1=window.open("sentencje.txt");
+temp=temp1.document.body.outerText+"&#13;[13]\n";
+temp1.close();
+this.sentencje=new Array();
+while(temp.lastIndexOf("]")!=-1) {
+mies=Math.floor(parseFloat(temp.substring(temp.indexOf("[")+1,temp.indexOf("]"))));
+miesS="["+mies+"]";
+miesL=miesS.length;
+temp2=temp.substring(temp.indexOf("]")+3);
+temp1=temp2.substring(0,temp2.indexOf("[")-1)+"\n\n";
+this.sentencje[mies]=new Array();
+while(temp1.lastIndexOf("\n")!=-1) {
+i=temp1.substring(0,temp1.indexOf("="));
+temp1=temp1.substring(temp1.indexOf("=")+1);
+this.sentencje[mies][i]="\""+temp1.substring(0,temp1.indexOf("\n"));
+this.sentencje[mies][i]=this.sentencje[mies][i].replace(/ \(/g,"\" \(");
+this.sentencje[mies][i]=this.sentencje[mies][i].substring(0,this.sentencje[mies][i].length-1).replace(/[^A-Za-z0-9πÊÍ≥ÒÛúüø•∆ £—”åèØ,.!&()\[\]\\\/? \'\";:-]/g,'');
+temp1=temp1.substring(temp1.indexOf("\n")+1);
+}
+temp=temp.substring(temp.indexOf("]")+2);
+}
+}
+function odczytajInformacjeODniu(infK,infW) {
+infDzien=Math.floor(parseFloat(cal.rows[infW].cells[infK].outerText));
+if (isNaN(infDzien)) {return false}
+if (okno.style.display=="block") {return false}
+infMiesiac=month;
+infRok=year;
+infTxt="<center>"+infDzien+" "+monthName.toLowerCase()+" "+infRok+"<br>"+dataSlownie(infDzien,infMiesiac,infRok,"str")+"<\/center><br><br>";
+infDate=new Date(infRok,infMiesiac-1,infDzien,0,0,0,0);
+infWybrana=infDate.getTime()/(1000*60*60*24);
+infDate=new Date();
+infDate=new Date(infDate.getFullYear(),infDate.getMonth(),infDate.getDate(),0,0,0,0);
+infTeraz=infDate.getTime()/(1000*60*60*24);
+infIle2=Math.floor(infWybrana-infTeraz);
+infIle=Math.abs(infIle2);
+infIleLat=Math.floor(infIle/365.25);
+infIle-=Math.floor(infIleLat*365.25);
+infIleMiesiecy=Math.floor(infIle/30.4375);
+infIle-=Math.floor(infIleMiesiecy*30.4375);
+infIleTygodni=Math.floor(infIle/7);
+infIle-=Math.floor(infIleTygodni*7);
+infIleDni=Math.floor(infIle);
+leapYear=infRok%4;
+if (leapYear==0) {leapYear=1} else {leapYear=0}
+numDaysInMonths=new Array(31,28+leapYear,31,30,31,30,31,31,30,31,30,31);
+if (infIle2<0) {
+infTxt+="Od tego dnia ";
+if (infIleLat==1&&infIleMiesiecy==0&&infIleTygodni==0&&infIleDni==0) {infTxt+="up≥ynπ≥ "} else {
+if (infIleLat==0&&infIleMiesiecy==1&&infIleTygodni==0&&infIleDni==0) {infTxt+="up≥ynπ≥ "} else {
+if (infIleLat==0&&infIleMiesiecy==0&&infIleTygodni==1&&infIleDni==0) {infTxt+="up≥ynπ≥ "} else {
+if (infIleLat==0&&infIleMiesiecy==0&&infIleTygodni==0&&infIleDni==1) {infTxt+="up≥ynπ≥ "} else {infTxt+="up≥ynÍ≥o "}
+}
+}
+}
+}
+if (infIle2==0) {infTxt+="Dziú jest ten dzieÒ "}
+if (infIle2>0) {
+infTxt+="Do tego dnia ";
+if (infIleLat==1&&infIleMiesiecy==0&&infIleTygodni==0&&infIleDni==0) {infTxt+="pozosta≥ "} else {
+if (infIleLat==0&&infIleMiesiecy==1&&infIleTygodni==0&&infIleDni==0) {infTxt+="pozosta≥ "} else {
+if (infIleLat==0&&infIleMiesiecy==0&&infIleTygodni==1&&infIleDni==0) {infTxt+="pozosta≥ "} else {
+if (infIleLat==0&&infIleMiesiecy==0&&infIleTygodni==0&&infIleDni==1) {infTxt+="pozosta≥ "} else {infTxt+="pozosta≥o "}
+}
+}
+}
+}
+if (infIleLat>0) {infTxt+=infIleLat+" "+liczebnik(infIleLat,"","rok","lata","lat")+" "}
+if (infIleMiesiecy>0) {infTxt+=infIleMiesiecy+" "+liczebnik(infIleMiesiecy,"miesi","πc","πce","Ícy")+" "}
+if (infIleTygodni>0) {infTxt+=infIleTygodni+" "+liczebnik(infIleTygodni,"ty","dzieÒ","godnie","godni")+" "}
+if (infIleDni>0) {
+infTxt+=infIleDni+" ";
+if (infIleDni==1) {infTxt+="dzieÒ "} else {infTxt+="dni "}
+}
+infTxt=infTxt.substring(0,infTxt.length-1)+" ("+Math.abs(infIle2)+" "+liczebnik(Math.abs(infIle2),"d","zieÒ","ni","ni")+")<br><br>";
+infTXT="";
+for (impI in importantDates) {
+impDat=importantDates[impI];
+impDatType=impDat.substring(0,impDat.indexOf(";")).toLowerCase();
+impDat=impDat.substring(impDat.indexOf(";")+1);
+impDatDay=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))));
+if (impDatDay<10) {impDatDay="0"+impDatDay}
+impDat=impDat.substring(impDat.indexOf(".")+1);
+if (impDatType=="holiday") {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))} else {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))))}
+if (impDatMonth<10) {impDatMonth="0"+impDatMonth}
+if (impDatType=="holiday") {impDat=impDat.substring(impDat.indexOf(";")+1)} else {impDat=impDat.substring(impDat.indexOf(".")+1)}
+if (impDatType=="mybirthday") {impDatYear=Math.floor(parseFloat(impDat))} else {impDatYear=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))}
+impDat=impDat.substring(impDat.indexOf(";")+1);
+impDatTxt="";
+if (impDatType=="birthday"&&infDzien==Math.floor(parseFloat(impDatDay))&&infMiesiac==impDatMonth) {
+impDatHowMany=infRok-impDatYear;
+if (impDatHowMany==0) {impDatTxt+="<br>Na"+impDat.substring(1)}
+if (impDatHowMany>0) {impDatTxt+="<br>"+impDatHowMany+" "+impDat}
+}
+if (impDatType=="mybirthday"&&infDzien==Math.floor(parseFloat(impDatDay))&&infMiesiac==impDatMonth) {
+impDatHowMany=infRok-impDatYear;
+if (impDatHowMany==0) {impDatTxt+="<br>Moje narodziny"}
+if (impDatHowMany>0) {impDatTxt+="<br>Moje "+impDatHowMany+" urodziny"}
+}
+if (impDatType=="holiday"&&infDzien==Math.floor(parseFloat(impDatDay))&&infMiesiac==impDatMonth) {impDatTxt+="<br>"+impDat}
+infTXT+=impDatTxt;
+}
+impDatTempTxt=infTXT.substring(infTXT.indexOf("<br>")+4);
+impDatTempTxt=impDatTempTxt.split("<br>");
+for (i in impDatTempTxt) {
+impDatTempTxt[i]=impDatTempTxt[i].replace(/0/g,"A0A").replace(/1/g,"B1B").replace(/2/g,"C2C").replace(/3/g,"D3D").replace(/4/g,"E4E").replace(/5/g,"F5F").replace(/6/g,"G6G").replace(/7/g,"H7H").replace(/8/g,"I8I").replace(/9/g,"J9J");
+}
+impDatTempTxt.sort();
+for (i in impDatTempTxt) {
+impDatTempTxt[i]=impDatTempTxt[i].replace(/A0A/g,"0").replace(/B1B/g,"1").replace(/C2C/g,"2").replace(/D3D/g,"3").replace(/E4E/g,"4").replace(/F5F/g,"5").replace(/G6G/g,"6").replace(/H7H/g,"7").replace(/I8I/g,"8").replace(/J9J/g,"9");
+}
+impDatTxt=impDatTempTxt.join("<br>");
+if (infTXT!="") {infTXT="Waøne wydarzenia w tym dniu:<span style=\"font-weight:bold;color:red\">"+infTXT+"<\/span><br><br>"}
+infTxt+=infTXT;
+infTxt+="Imieniny: <span style=\"font-weight:bold;color:red\">"+imieniny[month][infDzien]+"<\/span><br>";
+infTxt+="Sentencja: <span style=\"font-weight:bold;color:red\">"+sentencje[month][infDzien]+"<\/span><br><br>";
+infTxt+="Znak zodiaku przypadajπcy na ten dzieÒ: <span style=\"font-weight:bold;color:red\">";
+if (month==1) {
+if (infDzien<=20) {infTxt+="Kozioroøec"}
+if (infDzien>=21) {infTxt+="Wodnik"}
+}
+if (month==2) {
+if (infDzien<=19) {infTxt+="Wodnik"}
+if (infDzien>=20) {infTxt+="Ryby"}
+}
+if (month==3) {
+if (infDzien<=20) {infTxt+="Ryby"}
+if (infDzien>=21) {infTxt+="Baran"}
+}
+if (month==4) {
+if (infDzien<=20) {infTxt+="Baran"}
+if (infDzien>=21) {infTxt+="Byk"}
+}
+if (month==5) {
+if (infDzien<=21) {infTxt+="Byk"}
+if (infDzien>=22) {infTxt+="BliüniÍta"}
+}
+if (month==6) {
+if (infDzien<=21) {infTxt+="BliüniÍta"}
+if (infDzien>=22) {infTxt+="Rak"}
+}
+if (month==7) {
+if (infDzien<=22) {infTxt+="Rak"}
+if (infDzien>=23) {infTxt+="Lew"}
+}
+if (month==8) {
+if (infDzien<=23) {infTxt+="Lew"}
+if (infDzien>=24) {infTxt+="Panna"}
+}
+if (month==9) {
+if (infDzien<=23) {infTxt+="Panna"}
+if (infDzien>=24) {infTxt+="Waga"}
+}
+if (month==10) {
+if (infDzien<=23) {infTxt+="Waga"}
+if (infDzien>=24) {infTxt+="Skorpion"}
+}
+if (month==11) {
+if (infDzien<=22) {infTxt+="Skorpion"}
+if (infDzien>=23) {infTxt+="Strzelec"}
+}
+if (month==12) {
+if (infDzien<=22) {infTxt+="Strzelec"}
+if (infDzien>=23) {infTxt+="Kozioroøec"}
+}
+infTxt+="<\/span><br>";
+infTxt2=infTxt;
+infTxt+="<br><br><center><button id=\"closeAlertWindow\" style=\"width:75px;height:23px\" onclick=\"okno.style.display='none';document.onkeydown=keyboard\">OK<\/button><\/center>";
+infTxt2+="<br><br><center><button style=\"width:75px;height:23px\">OK<\/button><\/center>";
+okno.rows[0].cells[1].innerHTML=infTxt;
+okno.rows[0].cells[0].innerHTML="<span style=\"visibility:hidden\">"+infTxt2+"<\/span>";
+with(okno.rows[0].cells[1].style) {
+left=okno.rows[0].cells[0].style.pixelLeft;
+top=okno.rows[0].cells[0].style.pixelTop;
+}
+document.onkeydown=function() {
+if (event.keyCode==13||event.keyCode==27||event.keyCode==32) {okno.style.display="none";document.onkeydown=keyboard}
+}
+okno.style.display="block";
+return false;
+}
+function edytujInformacjeODniu(infK,infW) {
+infDzien=Math.floor(parseFloat(cal.rows[infW].cells[infK].outerText));
+if (isNaN(infDzien)) {return false}
+if (okno.style.display=="block") {return false}
+infMiesiac=month;
+infRok=year;
+infTxt="<center>"+infDzien+" "+monthName.toLowerCase()+" "+infRok+"<br>"+dataSlownie(infDzien,infMiesiac,infRok,"str")+"<\/center><br><br>";
+infTxt2=infTxt;
+infTXT1="<select id=\"listaUroczystosciEdycja\" style=\"background-color:transparent;color:black\">";
+infTXT2="<select id=\"listaUroczystosciEdycja\" style=\"background-color:transparent;color:black\">";
+infTXT="";
+for (impI in importantDates) {
+impDat=importantDates[impI];
+impDatType=impDat.substring(0,impDat.indexOf(";")).toLowerCase();
+impDat=impDat.substring(impDat.indexOf(";")+1);
+impDatDay=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))));
+if (impDatDay<10) {impDatDay="0"+impDatDay}
+impDat=impDat.substring(impDat.indexOf(".")+1);
+if (impDatType=="holiday") {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))} else {impDatMonth=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf("."))))}
+if (impDatMonth<10) {impDatMonth="0"+impDatMonth}
+if (impDatType=="holiday") {impDat=impDat.substring(impDat.indexOf(";")+1)} else {impDat=impDat.substring(impDat.indexOf(".")+1)}
+if (impDatType=="mybirthday") {impDatYear=Math.floor(parseFloat(impDat))} else {impDatYear=Math.floor(parseFloat(impDat.substring(0,impDat.indexOf(";"))))}
+impDat=impDat.substring(impDat.indexOf(";")+1);
+impDatTxt="";
+if (impDatType=="birthday"&&infDzien==Math.floor(parseFloat(impDatDay))&&infMiesiac==impDatMonth) {
+impDatHowMany=infRok-impDatYear;
+if (impDatHowMany==0) {impDatTxt+="<br>Na"+impDat.substring(1)}
+if (impDatHowMany>0) {impDatTxt+="<br>"+impDatHowMany+" "+impDat}
+}
+if (impDatType=="mybirthday"&&infDzien==Math.floor(parseFloat(impDatDay))&&infMiesiac==impDatMonth) {
+impDatHowMany=infRok-impDatYear;
+if (impDatHowMany==0) {impDatTxt+="<br>Moje narodziny"}
+if (impDatHowMany>0) {impDatTxt+="<br>Moje "+impDatHowMany+" urodziny"}
+}
+if (impDatType=="holiday"&&infDzien==Math.floor(parseFloat(impDatDay))&&infMiesiac==impDatMonth) {impDatTxt+="<br>"+impDat}
+infTXT+=impDatTxt;
+}
+impDatTempTxt=infTXT.substring(infTXT.indexOf("<br>")+4);
+impDatTempTxt=impDatTempTxt.split("<br>");
+for (i in impDatTempTxt) {
+impDatTempTxt[i]=impDatTempTxt[i].replace(/0/g,"A0A").replace(/1/g,"B1B").replace(/2/g,"C2C").replace(/3/g,"D3D").replace(/4/g,"E4E").replace(/5/g,"F5F").replace(/6/g,"G6G").replace(/7/g,"H7H").replace(/8/g,"I8I").replace(/9/g,"J9J");
+}
+impDatTempTxt.sort();
+for (i in impDatTempTxt) {
+impDatTempTxt[i]=impDatTempTxt[i].replace(/A0A/g,"0").replace(/B1B/g,"1").replace(/C2C/g,"2").replace(/D3D/g,"3").replace(/E4E/g,"4").replace(/F5F/g,"5").replace(/G6G/g,"6").replace(/H7H/g,"7").replace(/I8I/g,"8").replace(/J9J/g,"9");
+}
+for (i in impDatTempTxt) {
+infTXT1+="<option value=\"\">"+impDatTempTxt[i]+"<\/option>";
+infTXT2+="<option value=\"\">"+impDatTempTxt[i]+"<\/option>";
+}
+infTXT1+="<\/select>";
+infTXT2+="<\/select>";
+if (infTXT1.lastIndexOf("\"\"\>\<")!=-1) {infTXT1="";infTXT2=""}
+infTxt+=infTXT1;
+infTxt2+=infTXT2;
+infTxt+="<br><br><center><button id=\"closeAlertWindow\" style=\"width:75px;height:23px\" onclick=\"okno.style.display='none';document.onkeydown=keyboard\">OK<\/button><\/center>";
+infTxt2+="<br><br><center><button style=\"width:75px;height:23px\">OK<\/button><\/center>";
+okno.rows[0].cells[1].innerHTML=infTxt;
+okno.rows[0].cells[0].innerHTML="<span style=\"visibility:hidden\">"+infTxt2+"<\/span>";
+with(okno.rows[0].cells[1].style) {
+left=okno.rows[0].cells[0].style.pixelLeft;
+top=okno.rows[0].cells[0].style.pixelTop;
+}
+document.onkeydown=function() {
+if (event.keyCode==13||event.keyCode==32) {okno.style.display="none";document.onkeydown=keyboard}
+}
+okno.style.display="block";
+return false;
+}
+function centerWindow() {
+with(okno.style) {
+left=document.body.clientWidth/2-okno.clientWidth/2+document.body.scrollLeft;
+top=document.body.clientHeight/2-okno.clientHeight/2+document.body.scrollTop;
+}
+setTimeout("centerWindow()",1);
+}
+function dataSlownie(dataDzien,dataMiesiac,dataRok,dataJak) {
+data=new Date();
+if (dataDzien==""||dataDzien==undefined||dataDzien==null||isNaN(dataDzien)||!dataDzien) {dataDzien=data.getDate()}
+if (dataDzien==""||dataDzien==undefined||dataDzien==null||isNaN(dataDzien)||!dataDzien) {dataDzien=data.getDate()}
+if (!dataJak||dataJak==null||dataJak==undefined||(dataJak!="num"&&dataJak!="str")) {dataNak="num"}
+dataJak=dataJak.toString().toLowerCase().substring(0,3);
+czasTeraz=new Date(dataRok,dataMiesiac-1,dataDzien);
+dataDzienTyg=czasTeraz.getDay();
+switch (dataDzienTyg) {
+case 1: {dataDzienTygS="Poniedzia≥ek";break}
+case 2: {dataDzienTygS="Wtorek";break}
+case 3: {dataDzienTygS="åroda";break}
+case 4: {dataDzienTygS="Czwartek";break}
+case 5: {dataDzienTygS="Piπtek";break}
+case 6: {dataDzienTygS="Sobota";break}
+case 0: {dataDzienTygS="Niedziela";break}
+}
+if (dataJak=="num") {
+data=dataDzien+"."+dopiszZera(dataMiesiac,2)+"."+dataRok+" ("+dataDzienTygS+")";
+}
+if (dataJak=="str") {
+dataDzienS=slownie(dataDzien,1,"");
+switch (dataMiesiac) {
+case 01: {dataMiesiacS="styczeÒ";break}
+case 02: {dataMiesiacS="luty";break}
+case 03: {dataMiesiacS="marzec";break}
+case 04: {dataMiesiacS="kwiecieÒ";break}
+case 05: {dataMiesiacS="maj";break}
+case 06: {dataMiesiacS="czerwiec";break}
+case 07: {dataMiesiacS="lipiec";break}
+case 08: {dataMiesiacS="sierpieÒ";break}
+case 09: {dataMiesiacS="wrzesieÒ";break}
+case 10: {dataMiesiacS="paüdziernik";break}
+case 11: {dataMiesiacS="listopad";break}
+case 12: {dataMiesiacS="grudzieÒ";break}
+}
+dataRokS=slownie(dataRok,1,"");
+switch (dataRokS) {
+case "tysiπc": {dataRokS="tysiÍczny";break}
+case "dwa tysiπce": {dataRokS="dwutysiÍczny";break}
+case "trzy tysiπce": {dataRokS="trzytysiÍczny";break}
+case "cztery tysiπce": {dataRokS="czterotysiÍczny";break}
+case "piÍÊ tysiÍcy": {dataRokS="piÍciotysiÍczny";break}
+case "szeúÊ tysiÍcy": {dataRokS="szeúciotysiÍczny";break}
+case "siedem tysiÍcy": {dataRokS="siedmiotysiÍczny";break}
+case "osiem tysiÍcy": {dataRokS="oúmiotysiÍczny";break}
+case "dziewiÍÊ tysiÍcy": {dataRokS="dziewiÍciotysiÍczny";break}
+case "dziesiÍÊ tysiÍcy": {dataRokS="dziesiÍciotysiÍczny";break}
+case "milion": {dataRokS="milionowy";break}
+case "dwa miliony": {dataRokS="dwumilionowy";break}
+case "trzy miliony": {dataRokS="trzymilionowy";break}
+case "cztery milionÛw": {dataRokS="czteromilionowy";break}
+case "piÍÊ milionÛw": {dataRokS="piÍciomilionowy";break}
+case "szeúÊ milionÛw": {dataRokS="szeúciomilionowy";break}
+case "siedem milionÛw": {dataRokS="siedmiomilionowy";break}
+case "osiem milionÛw": {dataRokS="oúmiomilionowy";break}
+case "dziewiÍÊ milionÛw": {dataRokS="dziewiÍciomilionowy";break}
+case "dziesiÍÊ milionÛw": {dataRokS="dziesiÍciomilionowy";break}
+}
+data=dataDzienS+" "+dataMiesiacS+" "+dataRokS+" rok ("+dataDzienTygS+")";
+}
+return data.charAt(0).toUpperCase()+data.substring(1);
+}
+function slownie(liczba,typ,kodDoWykonania) {
+tempTXT="";
+liczba=Math.floor(parseFloat(liczba));
+if (Math.floor(liczba%10000000000/1000000000)==1) {tempTXT+="miliard "}
+if (Math.floor(liczba%10000000000/1000000000)>1) {tempTXT+=slownie(Math.floor(liczba%10000/1000),0)+" "+liczebnik(Math.floor(liczba%10000/1000),"miliard","","y","Ûw")+" "}
+if (Math.floor(liczba%10000000/1000000)==1) {tempTXT+="milion "}
+if (Math.floor(liczba%10000000/1000000)>1) {tempTXT+=slownie(Math.floor(liczba%10000/1000),0)+" "+liczebnik(Math.floor(liczba%10000/1000),"milion","","y","Ûw")+" "}
+if (Math.floor(liczba%10000/1000)==1) {tempTXT+="tysiπc "}
+if (Math.floor(liczba%10000/1000)>1) {tempTXT+=slownie(Math.floor(liczba%10000/1000),0)+" "+liczebnik(Math.floor(liczba%10000/1000),"tysi","πc","πce","Ícy")+" "}
+switch (Math.floor(liczba%1000/100)) {
+case 1: {tempTXT+="sto ";break}
+case 2: {tempTXT+="dwieúcie ";break}
+case 3: {tempTXT+="trzysta ";break}
+case 4: {tempTXT+="czterysta ";break}
+case 5: {tempTXT+="piÍÊset ";break}
+case 6: {tempTXT+="szeúÊset ";break}
+case 7: {tempTXT+="siedemset ";break}
+case 8: {tempTXT+="osiemset ";break}
+case 9: {tempTXT+="dziewiÍÊset ";break}
+}
+switch (Math.floor(liczba%100/10)) {
+case 2: {
+if (typ==0) {tempTXT+="dwadzieúcia "}
+if (typ==1) {tempTXT+="dwudziesty "}
+if (typ==2) {tempTXT+="dwudziestego "}
+break;
+}
+case 3: {
+if (typ==0) {tempTXT+="trzydzieúci "}
+if (typ==1) {tempTXT+="trzydziesty "}
+if (typ==2) {tempTXT+="trzydziestego "}
+break;
+}
+case 4: {
+if (typ==0) {tempTXT+="czterdzieúci "}
+if (typ==1) {tempTXT+="czterdziesty "}
+if (typ==2) {tempTXT+="czterdziestego "}
+break;
+}
+case 5: {
+if (typ==0) {tempTXT+="piÍÊdziesiπt "}
+if (typ==1) {tempTXT+="piÍÊdziesiπty "}
+if (typ==2) {tempTXT+="piÍÊdziesiπtego "}
+break;
+}
+case 6: {
+if (typ==0) {tempTXT+="szeúÊdziesiπt "}
+if (typ==1) {tempTXT+="szeúÊdziesiπty "}
+if (typ==2) {tempTXT+="szeúÊdziesiπtego "}
+break;
+}
+case 7: {
+if (typ==0) {tempTXT+="siedemdziesiπt "}
+if (typ==1) {tempTXT+="siedemdziesiπty "}
+if (typ==2) {tempTXT+="siedemdziesiπtego "}
+break;
+}
+case 8: {
+if (typ==0) {tempTXT+="osiemdziesiπt "}
+if (typ==1) {tempTXT+="osiemdziesiπty "}
+if (typ==2) {tempTXT+="osiemdziesiπtego "}
+break;
+}
+case 9: {
+if (typ==0) {tempTXT+="dziewiÍÊdziesiπt "}
+if (typ==1) {tempTXT+="dziewiÍÊdziesiπty "}
+if (typ==2) {tempTXT+="dziewiÍÊdziesiπtego "}
+break;
+}
+}
+if (liczba<10||liczba>19) {
+liczba2=liczba.toString();
+liczba2=Math.floor(liczba2.charAt(liczba2.length-1));
+switch (liczba2) {
+case 0: {
+if (liczba==0) {tempTXT+="zero "}
+break;
+}
+case 1: {
+if (typ==0) {tempTXT+="jeden "}
+if (typ==1) {tempTXT+="pierwszy "}
+if (typ==2) {tempTXT+="pierwszego "}
+break;
+}
+case 2: {
+if (typ==0) {tempTXT+="dwa "}
+if (typ==1) {tempTXT+="drugi "}
+if (typ==2) {tempTXT+="drugiego "}
+break;
+}
+case 3: {
+if (typ==0) {tempTXT+="trzy "}
+if (typ==1) {tempTXT+="trzeci "}
+if (typ==2) {tempTXT+="trzeciego "}
+break;
+}
+case 4: {
+if (typ==0) {tempTXT+="cztery "}
+if (typ==1) {tempTXT+="czwarty "}
+if (typ==2) {tempTXT+="czwartego "}
+break;
+}
+case 5: {
+if (typ==0) {tempTXT+="piÍÊ "}
+if (typ==1) {tempTXT+="piπty "}
+if (typ==2) {tempTXT+="piπtego "}
+break;
+}
+case 6: {
+if (typ==0) {tempTXT+="szeúÊ "}
+if (typ==1) {tempTXT+="szÛsty "}
+if (typ==2) {tempTXT+="szÛstego "}
+break;
+}
+case 7: {
+if (typ==0) {tempTXT+="siedem "}
+if (typ==1) {tempTXT+="siÛdmy "}
+if (typ==2) {tempTXT+="siÛdmego "}
+break;
+}
+case 8: {
+if (typ==0) {tempTXT+="osiem "}
+if (typ==1) {tempTXT+="Ûsmy "}
+if (typ==2) {tempTXT+="Ûsmego "}
+break;
+}
+case 9: {
+if (typ==0) {tempTXT+="dziewiÍÊ "}
+if (typ==1) {tempTXT+="dziewiπty "}
+if (typ==2) {tempTXT+="dziewiπtego "}
+break;
+}
+}
+} else {
+switch (liczba) {
+case 10: {
+if (typ==0) {tempTXT+="dziesiÍÊ "}
+if (typ==1) {tempTXT+="dziesiπty "}
+if (typ==2) {tempTXT+="dziesiπtego "}
+break;
+}
+case 11: {
+if (typ==0) {tempTXT+="jedenaúcie "}
+if (typ==1) {tempTXT+="jedenasty "}
+if (typ==2) {tempTXT+="jedenastego "}
+break;
+}
+case 12: {
+if (typ==0) {tempTXT+="dwanaúcie "}
+if (typ==1) {tempTXT+="dwunasty "}
+if (typ==2) {tempTXT+="dwunastego "}
+break;
+}
+case 13: {
+if (typ==0) {tempTXT+="trzynaúcie "}
+if (typ==1) {tempTXT+="trzynasty "}
+if (typ==2) {tempTXT+="trzynastego "}
+break;
+}
+case 14: {
+if (typ==0) {tempTXT+="czternaúcie "}
+if (typ==1) {tempTXT+="czternasty "}
+if (typ==2) {tempTXT+="czternastego "}
+break;
+}
+case 15: {
+if (typ==0) {tempTXT+="piÍtnaúcie "}
+if (typ==1) {tempTXT+="piÍtnasty "}
+if (typ==2) {tempTXT+="piÍtnastego "}
+break;
+}
+case 16: {
+if (typ==0) {tempTXT+="szesnaúcie "}
+if (typ==1) {tempTXT+="szesnasty "}
+if (typ==2) {tempTXT+="szesnastego "}
+break;
+}
+case 17: {
+if (typ==0) {tempTXT+="siedemnaúcie "}
+if (typ==1) {tempTXT+="siedemnasty "}
+if (typ==2) {tempTXT+="siedemnastego "}
+break;
+}
+case 18: {
+if (typ==0) {tempTXT+="osiemnaúcie "}
+if (typ==1) {tempTXT+="osiemnasty "}
+if (typ==2) {tempTXT+="osiemnastego "}
+break;
+}
+case 19: {
+if (typ==0) {tempTXT+="dziewiÍtnaúcie "}
+if (typ==1) {tempTXT+="dziewiÍtnasty "}
+if (typ==2) {tempTXT+="dziewiÍtnastego "}
+break;
+}
+}
+}
+tempTXT=tempTXT.substring(0,tempTXT.length-1);
+if (kodDoWykonania!=undefined&&(kodDoWykonania!=""||kodDoWykonania!=null)) {kodDoWykonania="tempTXT=tempTXT"+kodDoWykonania;eval(kodDoWykonania)}
+return tempTXT;
+}
+function liczebnik(liczebnikliczba,liczebnikrdzen,liczebnikjeden,liczebnikdwaCztery,liczebnikszescWGore,liczebnikpoprzecinku) {
+liczebnikproba=liczebnikliczba.toString();
+if (liczebnikproba.indexOf(".")!=-1) {return liczebnikrdzen+liczebnikpoprzecinku}
+liczebnikliczba=Math.floor(Math.abs(liczebnikliczba));
+liczebnikjed=liczebnikliczba%10;
+liczebnikdwa=liczebnikliczba%100;
+if (liczebnikliczba==1) {return liczebnikrdzen+liczebnikjeden}
+if (liczebnikjed>=2&&liczebnikjed<=4) {
+if (liczebnikdwa>=10&&liczebnikdwa<=20) {return liczebnikrdzen+liczebnikszescWGore}
+return liczebnikrdzen+liczebnikdwaCztery;
+}
+return liczebnikrdzen+liczebnikszescWGore;
+}
+function dopiszZera(dopiszZeraLiczba,dopiszZeraDlugoscLiczby) {
+dopiszZeraLiczba=dopiszZeraLiczba.toString();
+dopiszZeraLiczbaZer=dopiszZeraDlugoscLiczby-dopiszZeraLiczba.length;
+for (var i=1; i<=dopiszZeraLiczbaZer; i++) {dopiszZeraLiczba="0"+dopiszZeraLiczba}
+return dopiszZeraLiczba;
+}
+</script>

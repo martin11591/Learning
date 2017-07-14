@@ -1,0 +1,102 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//HTML 4.01//Strict" "http://www.w3.org/TR/en/strict.dtd">
+<html>
+<head>
+<title>Kalkulator</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<textarea id="program" rows=1 cols=79></textarea><br/>
+<button onclick="document.getElementById('wynik').innerHTML+=eval(document.getElementById('program').value)+'<br/>'">Wykonaj</button>
+<div id="wynik" style="font-family: Tahoma; font-size: 8pt"></div>
+<script type="text/javascript">
+/*
+
+Latency:
+
+  64	 1ms	  64/ 1=64
+ 128	 2ms	 128/ 2=64
+ 256	 5ms	 256/ 5=51.2
+ 512	11ms	 512/11=46.(54)
+1024	23ms	1024/23=44.(5217391304347826086956)
+2048	46ms	2048/46=44.(5217391304347826086956)
+
+*/
+
+document.getElementById('program').onkeypress=function(e) {
+  if (e.which) {
+    if (e.keyCode==13) {
+        document.getElementById('wynik').innerHTML="";
+      try {
+        document.getElementById('wynik').innerHTML=eval(document.getElementById('program').value);
+      } catch(err) {
+        document.getElementById('wynik').innerHTML="ERROR: "+err;
+      }
+    return false;
+    }
+  }
+  return true;
+}
+
+function clr() {
+  document.getElementById('wynik').innerHTML="";
+}
+
+Math.liczbaZCyfr=function(cyfra,ile) {
+  cyfra=cyfra.toString();
+  cyfra=cyfra.replace(/[^0-9]/g,"");
+  ile=ile.toString();
+  ile=ile.replace(/[^0-9]/g,"");
+  cyfra=eval(cyfra);
+  ile=eval(ile);
+  wynikowa="";
+  for (i=1; i<=ile; i++) {wynikowa=wynikowa+cyfra}
+  wynikowa=wynikowa.replace(/[^0-9]/g,"");
+  return eval(wynikowa);
+};
+
+// kLiczba(liczba)
+//
+// pow(a:podstawa,b:wykładnik);
+// root(a:liczba,b:stopień);
+// log(a:podstawa,b:liczba);
+
+function kLiczba(num) {
+  this.pow=function(dane) {
+    if (dane.a) {
+    };
+    if (dane.b) {
+      wynik={a:Math.round(Math.pow(num,1/dane.b)),b:dane.b};
+    };
+    return wynik?wynik:NaN;
+  };
+  this.root=function(dane) {
+    if (dane.a) {
+    };
+    if (dane.b) {
+      wynik={a:Math.pow(num,dane.b),b:dane.b};
+    };
+    return wynik?wynik:NaN;
+  };
+  this.log=function(dane) {
+    if (dane.a) {
+      wynik={a:dane.a,b:Math.pow(dane.a,num)};
+    };
+    if (dane.b) {
+    };
+    return wynik?wynik:NaN;
+  };
+};
+
+Math.num=function(num) {return new kLiczba(num)};
+
+Math.pierwiastek=function(liczba,stopien) {
+  return Math.pow(liczba,1/stopien);
+};
+
+i=47;
+j=2;
+while(i%j!=0&&j<i){j++};
+alert(j);
+</script>
+</body>
+</html>

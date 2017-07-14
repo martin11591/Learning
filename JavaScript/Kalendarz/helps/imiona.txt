@@ -1,0 +1,103 @@
+Ada		Ady		da->dy
+Adela		Adeli		la->li
+Agata		Agaty		ta->ty
+Agnieszka	Agnieszki	ka->ki
+Aldona		Aldony		na->ny
+Aleksandra	Aleksandry	ra->ry
+Alicja		Alicji		ja->ji
+Alina		Aliny		na->ny
+Anastazja	Anastazji
+Aneta		Anety
+Angelika	Angeliki
+Aniela		Anieli
+Anita		Anity
+Anna		Anny
+Antonina	Antoniny
+Apolonia	Apolonii	ia->ii
+Balbina		Balbiny
+Barbara		Barbary
+Beata		Beaty
+Berenika	Bereniki
+Bernadeta	Bernadety
+Berta		Berty
+Blanka		Blanki
+Bogumi³a	Bogumi³y	³a->³y
+Bogus³awa	Bogus³awy	wa->wy
+Bo¿ena		Bo¿eny
+Brygida		Brygidy
+Cecylia		Cecylii
+celina		Celiny
+Czes³awa	Czes³awy
+Dagmara		Dagmary
+Daniela		Danieli
+Danuta		Danuty
+Daria		Darii
+Eliza		Elizy		za->zy
+Genowefa	Genowefy	fa->fy
+Iga		Igi		ga->gi
+Kim		Kim		BEZ ZMIANY
+Ró¿a		Ró¿y		¿a->¿y
+Salomea		Salomei		ea->ei
+
+Adam		Adama		m->ma
+Adrian		Adriana		n->na
+Adolf		Adolf		f->fa
+Albert		Alberta		t->ta
+Albin		Albina		n->na
+Aleksander	Aleksandra	er->ra
+Aleksy		Aleksego	y->ego
+Alfons		Alfonsa		s->sa
+Alfred		Alfreda		d->da
+Alojzy		Alojzego
+Anatol		Anatola
+Andrzej		Andrzeja	j->ja
+Antoni		Antoniego	i->iego
+Arkadiusz	Arkadiusza	z->za
+Bogus³aw	Bogus³awa	w->wa
+Dominik		Dominka		k->ka
+Emil		Emila		l->la
+Filip		Filipa		p->pa
+Harry		Harrego		y->ego
+Ignacy		Ignacego
+Jakub		Jakuba		b->ba
+Lech		Lecha		h->ha
+Micha³		Micha³a		³->³a
+Miko³aj		Miko³aja	j->ja
+Sylwek		Sylwka		ek->ka
+Wawrzyniec	Wawrzyñca	niec->ñca
+
+da->dy
+ea->ei
+ek->ka
+er->ra
+fa->fy
+ga->gi
+ia->ii
+ja->ji
+ka->ki
+la->li
+³a->³y
+na->ny
+ra->ry
+ta->ty
+wa->wy
+za->zy
+¿a->¿y
+
+b->ba
+d->da
+f->fa
+h->ha
+i->iego
+j->ja
+k->ka
+l->la
+³->³a
+m->ma
+n->na
+p->pa
+s->sa
+t->ta
+w->wa
+y->ego
+z->za

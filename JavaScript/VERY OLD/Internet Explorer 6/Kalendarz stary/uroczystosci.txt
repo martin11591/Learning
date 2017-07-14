@@ -1,0 +1,350 @@
+Birthday;13.1.1951;urodziny Anieli Jezierskiej
+Birthday;19.12.1965;urodziny Stanis³awa Podrazy
+Birthday;7.1.1976;urodziny Józefa Jezierskiego
+Birthday;13.6.1981;urodziny Andrzeja Jezierskiego
+Birthday;15.2.1984;urodziny Piotra Jezierskiego
+Birthday;9.6.1990;urodziny S³awomira Podrazy
+Birthday;27.2.1982;urodziny Danuty Malinowskiej
+Birthday;7.4.1963;urodziny Stanis³awy Podrazy
+Birthday;6.1.1987;urodziny Mariusza Podrazy
+Birthday;6.2.1964;urodziny Ryszarda Podrazy
+Birthday;17.11.1986;urodziny Anny Podrazy
+Birthday;2.10.1991;urodziny Wiolety Podrazy
+Birthday;20.1.1995;urodziny Agnieszki Podrazy
+Birthday;4.12.1988;urodziny Ewy Podrazy
+Birthday;29.2.1992;urodziny £ukasza Mazura
+Birthday;25.10.1993;urodziny Katarzyny Mazur
+Birthday;14.7.1981;urodziny Moniki Bieñ
+Birthday;7.6.1993;urodziny Klaudii Jamki
+Birthday;19.11.1991;urodziny Mariusza Jamki
+Birthday;23.7.1992;urodziny Adriana Cha³upnika
+Birthday;4.7.1991;urodziny Jakuba Niedzielko
+Birthday;3.3.1991;urodziny Adriana Wójtowicza
+Birthday;23.10.1991;urodziny Justyny Helizanowicz
+Birthday;14.3.1991;urodziny Katarzyny Kosowskiej
+Birthday;19.6.1991;urodziny Agnieszki Galas
+Birthday;12.5.1991;urodziny Marcela Nowaka
+Birthday;7.8.1991;urodziny Marceliny Paw³owicz
+Birthday;20.2.1991;urodziny Justyny Paw³owicz
+Birthday;16.1.1991;urodziny Katarzyny Joanny Paw³owicz
+Birthday;28.8.1991;urodziny £ukasza Dziatkiewicza
+Birthday;24.12.1988;urodziny Ewy Helizanowicz
+Birthday;14.9.1982;urodziny Anny Kosowskiej
+Birthday;26.2.1991;urodziny S³awomira Lisowskiego
+Birthday;16.6.1993;urodziny Moniki Or³ów
+Birthday;9.12.1993;urodziny Eweliny Œwinionogi
+Birthday;5.10.1983;urodziny Mariusza Chaima
+Birthday;27.3.1991;urodziny £ukasza Wajdy
+Birthday;12.1.1993;urodziny Ewy Radek
+Birthday;12.1.1993;urodziny Wojtka Kuœ
+Birthday;24.1.1993;urodziny Paw³a Kuœ
+Birthday;17.12.1989;urodziny Eweliny £abno
+MyBirthday;15.10.1991
+Holiday;21.3;Pierwszy dzieñ kalendarzowej wiosny
+Holiday;22.6;Pierwszy dzieñ kalendarzowego lata
+Holiday;23.9;Pierwszy dzieñ kalendarzowej jesieni
+Holiday;22.12;Pierwszy dzieñ kalendarzowej zimy
+Holiday;1.1;Nowy Rok (miêdzynarodowe)
+Holiday;1.1;Œwiatowy Dzieñ Pokoju
+Holiday;1.1;Œwiêto Najœwiêtszej Marii Panny Rodzicielki (katolickie) 
+Holiday;6.1;Dzieñ Filatelisty
+Holiday;6.1;Trzech Króli (katolickie) 
+Holiday;7.1;Bo¿e Narodzenie (prawos³awne) 
+Holiday;8.1;Dzieñ Sprz¹tania Biurka
+Holiday;8.1;Bo¿e Narodzenie (prawos³awne) 
+Holiday;15.1;Dzieñ Wikipedii 
+Holiday;17.1;Dzieñ Dialogu z Judaizmem (katolickie) 
+Holiday;21.1;Dzieñ Babci 
+Holiday;22.1;Dzieñ Dziadka 
+Holiday;26.1;Œwiatowy Dzieñ Celnictwa 
+Holiday;27.1;Dzieñ Dialogu z Islamem
+Holiday;27.1;Dzieñ Pamiêci Ofiar Nazizmu 
+Holiday;28.1;Miêdzynarodowy Dzieñ Mobilizacji przeciwko Wojnie Nuklearnej 
+Holiday;31.1;Dzieñ Jana Bosko (katolickie) 
+Holiday;2.2;Œwiatowy Dzieñ Obszarów Wodno-B³otnych
+Holiday;2.2;Dzieñ Handlowca
+Holiday;2.2;Dzieñ Œwistaka
+Holiday;2.2;Ofiarowanie Pañskie (katolickie) 
+Holiday;4.2;Œwiatowy Dzieñ Walki z Rakiem 
+Holiday;8.2;Dzieñ Bezpiecznego Internetu 
+Holiday;10.2;Œwiatowy Dzieñ Chorego 
+Holiday;11.2;Œwiatowy Dzieñ Chorego 
+Holiday;14.2;Walentynki
+Holiday;14.2;Dzieñ Chorego na Padaczkê 
+Holiday;15.2;Œwiatowy Dzieñ M³odzie¿y Prawos³awnej 
+Holiday;17.2;Œwiatowy Dzieñ Kota 
+Holiday;21.2;Dzieñ Jêzyka Ojczystego 
+Holiday;22.2;Europejski Dzieñ Ofiar Przestêpstw
+Holiday;22.2;Dzieñ Myœli Braterskiej (œwiêto skautowe) 
+Holiday;23.2;Ogólnopolski Dzieñ Walki z Depresj¹ 
+Holiday;1.3;Miêdzynarodowy Dzieñ Walki przeciwko Zbrojeniom Atomowym 
+Holiday;2.3;Miêdzynarodowy Dzieñ Obrony Cywilnej 
+Holiday;3.3;Miêdzynarodowy Dzieñ Pisarzy 
+Holiday;5.3;Dzieñ Teœciowej
+Holiday;5.3;Dzieñ Dentysty 
+Holiday;8.3;Dzieñ Kobiet
+Holiday;8.3;Œwiatowy Dzieñ Nerek 
+Holiday;10.3;Dzieñ Mê¿czyzn 
+Holiday;11.3;Dzieñ So³tysa
+Holiday;11.3;Miêdzynarodowy Dzieñ Chorego 
+Holiday;14.3;Dzieñ Liczby Pi
+Holiday;14.3;Miêdzynarodowy Dzieñ Sprzeciwu Wobec Tam 
+Holiday;15.3;Miêdzynarodowy Dzieñ Konsumenta 
+Holiday;17.3;Œwiatowy Dzieñ Morza 
+Holiday;18.3;Miêdzynarodowy Dzieñ S³oñca 
+Holiday;19.3;Dzieñ Wêdkarza 
+Holiday;20.3;Miêdzynarodowy Dzieñ Astrologii
+Holiday;20.3;Miêdzynarodowy Dzieñ Frankofonii
+Holiday;20.3;Dzieñ bez Miêsa 
+Holiday;21.3;Jare (etniczne s³owiañskie)
+Holiday;21.3;Miêdzynarodowy Dzieñ Poezji
+Holiday;21.3;Miêdzynarodowy Dzieñ Walki z Dyskryminacj¹ Rasow¹
+Holiday;21.3;Dzieñ Wierzby
+Holiday;21.3;Miêdzynarodowy Dzieñ Lasu 
+Holiday;22.3;Dzieñ Ochrony Ba³tyku
+Holiday;22.3;Miêdzynarodowy Dzieñ Wody 
+Holiday;23.3;Œwiatowy Dzieñ Meteorologii
+Holiday;23.3;Œwiatowy Dzieñ Lasu 
+Holiday;24.3;Œwiatowy Dzieñ Walki z GruŸlic¹
+Holiday;24.3;Narodowy Dzieñ ¯ycia 
+Holiday;25.3;Dzieñ Œwiêtoœci ¯ycia (katolickie) 
+Holiday;27.3;Miêdzynarodowy Dzieñ Teatru
+Holiday;27.3;Ogólnopolski Dzieñ Wolnej Konkurencji 
+Holiday;29.3;Dzieñ Metalowca 
+Holiday;1.4;Prima aprilis
+Holiday;1.4;Miêdzynarodowy Dzieñ Ptaków 
+Holiday;2.4;Miêdzynarodowy Dzieñ Ksi¹¿ki dla Dzieci 
+Holiday;4.4;Dzieñ Mê¿czyzn (polskie)
+Holiday;4.4;Œwiêto Wojskowej S³u¿by Zdrowia 
+Holiday;5.4;Dzieñ Leœnika i Drzewiarza 
+Holiday;7.4;Œwiatowy Dzieñ Zdrowia
+Holiday;7.4;Dzieñ Pamiêci o Holocauœcie 
+Holiday;8.4;Miêdzynarodowy Dzieñ Romów 
+Holiday;10.4;Dzieñ S³u¿by Zdrowia 
+Holiday;11.4;Œwiatowy Dzieñ Osób z Chorob¹ Parkinsona
+Holiday;11.4;Dzieñ Radia
+Holiday;11.4;Ogólnopolski Dzieñ Walki z Bezrobociem 
+Holiday;12.4;Miêdzynarodowy Dzieñ Lotnictwa i Kosmonautyki
+Holiday;12.4;Dzieñ czekolady 
+Holiday;13.4;Œwiatowy Dzieñ Pamiêci Ofiar Katynia 
+Holiday;14.4;Dzieñ Ludzi Bezdomnych 
+Holiday;15.4;Miêdzynarodowy Dzieñ Kombatanta 
+Holiday;16.4;Œwiêto Sapera 
+Holiday;18.4;Miêdzynarodowy Dzieñ Ochrony Zabytków 
+Holiday;20.4;Miêdzynarodowy Dzieñ Wolnej Prasy 
+Holiday;22.4;Dzieñ Ziemi 
+Holiday;23.4;Œwiatowy Dzieñ Ksi¹¿ki i Praw Autorskich 
+Holiday;24.4;Miêdzynarodowy Dzieñ Solidarnoœci M³odzie¿y 
+Holiday;25.4;Miêdzynarodowy Dzieñ Œwiadomoœci Zagro¿enia Ha³asem
+Holiday;25.4;Miêdzynarodowy Dzieñ Sekretarki
+Holiday;25.4;Œwiêto polskiej S³u¿by Wiêziennej 
+Holiday;26.4;Dzieñ Drogowca i Transportowca 
+Holiday;28.4;Œwiatowy Dzieñ Pamiêci Ofiar Wypadków przy Pracy 
+Holiday;29.4;Miêdzynarodowy Dzieñ Tañca 
+Holiday;1.5;Œwiêto Pracy (miêdzynarodowe, wywodz¹ce siê z ruchu socjalistycznego) 
+Holiday;2.5;Dzieñ Flagi Rzeczypospolitej Polskiej (polskie, nie jest dniem wolnym od pracy) 
+Holiday;3.5;Œwiêto Narodowe Trzeciego Maja
+Holiday;3.5;Najœwiêtszej Marii Panny Królowej Polski (katolickie)
+Holiday;3.5;Miêdzynarodowy Dzieñ Wolnoœci Prasy
+Holiday;3.5;Miêdzynarodowy Dzieñ Astmy i Alergii 
+Holiday;4.5;Dzieñ Stra¿aka i Hutnika
+Holiday;4.5;Dzieñ Kominiarza 
+Holiday;5.5;Dzieñ Europy
+Holiday;5.5;Dzieñ Godnoœci Osoby z Niepe³nosprawnoœci¹ Intelektualn¹
+Holiday;5.5;Dzieñ Leœnika i Drzewiarza 
+Holiday;6.5;Miêdzynarodowy Dzieñ Paris Hilton 
+Holiday;8.5;Dzieñ Zwyciêstwa
+Holiday;8.5;Dzieñ Bibliotekarzy i Bibliotek
+Holiday;8.5;Œwiatowy Dzieñ Czerwonego Krzy¿a i Czerwonego Pó³ksiê¿yca 
+Holiday;9.5;Dzieñ Unii Europejskiej 
+Holiday;12.5;Miêdzynarodowy Dzieñ Pielêgniarek i Po³o¿nych
+Holiday;12.5;Dzieñ Œrodków Spo³ecznego Przekazu (katolickie)
+Holiday;12.5;Œwiatowy Dzieñ Ptaków Wêdrownych 
+Holiday;14.5;Dzieñ Farmaceuty 
+Holiday;15.5;Miêdzynarodowy Dzieñ Rodziny
+Holiday;15.5;Œwiêto Polskiej Muzyki i Plastyki
+Holiday;15.5;Dzieñ Polskiej Niezapominajki
+Holiday;15.5;Dzieñ Geja 
+Holiday;16.5;Œwiêto Stra¿y Granicznej 
+Holiday;17.5;Œwiatowy Dzieñ Telekomunikacji 
+Holiday;18.5;Miêdzynarodowy Dzieñ Muzeów 
+Holiday;19.5;Miêdzynarodowy Dzieñ Pamiêci ofiar AIDS
+Holiday;19.5;Dzieñ Dobrych Uczynków 
+Holiday;20.5;Miêdzynarodowy Dzieñ P³ynów do Mycia Naczyñ 
+Holiday;21.5;Œwiatowy Dzieñ Kosmosu 
+Holiday;22.5;Dzieñ Praw Zwierz¹t 
+Holiday;24.5;Europejski Dzieñ Parków Narodowych 
+Holiday;25.5;Dzieñ Piwowara
+Holiday;25.5;Dzieñ Mleka
+Holiday;25.5;Miêdzynarodowy Dzieñ Dzieci Zaginionych 
+Holiday;26.5;Dzieñ Matki 
+Holiday;27.5;Dzieñ Samorz¹du Terytorialnego 
+Holiday;29.5;Dzieñ Dzia³acza Kultury i Drukarza 
+Holiday;30.5;Dzieñ Rodzicielstwa Zastêpczego 
+Holiday;31.5;Dzieñ bez papierosa
+Holiday;31.5;Œwiatowy Dzieñ Rozwoju Kultury
+Holiday;31.5;Dzieñ Bociana Bia³ego
+Holiday;31.5;Dzieñ Pracownika Przemys³u Spo¿ywczego 
+Holiday;1.6;Dzieñ Dziecka
+Holiday;1.6;Dzieñ bez Alkoholu 
+Holiday;2.6;Dzieñ Leœnika
+Holiday;2.6;Europejski Dzieñ S¹siada
+Holiday;2.6;Dzieñ bez Krawata 
+Holiday;4.6;Miêdzynarodowy Dzieñ Dzieci Bêd¹cych Ofiarami Agresji 
+Holiday;5.6;Œwiatowy Dzieñ Ochrony Œrodowiska Naturalnego 
+Holiday;6.6;Œwiêto Wojsk Chemicznych
+Holiday;6.6;* Œwiatowy Dzieñ Poca³unku 
+Holiday;7.6;Dzieñ Chemika 
+Holiday;9.6;Dzieñ Przyjaciela 
+Holiday;13.6;Œwiêto ¯andarmerii Wojskowej 
+Holiday;14.6;Œwiatowy Dzieñ Honorowego Dawcy Krwi (World Blood Donor Day) 
+Holiday;15.6;Dzieñ Wiatru 
+Holiday;16.6;Miêdzynarodowy Dzieñ Pomocy Dzieciom Afrykañskim 
+Holiday;17.6;Miêdzynarodowy Dzieñ Walki z Pustynnieniem i Suszami 
+Holiday;20.6;Œwiatowy Dzieñ UchodŸcy 
+Holiday;21.6;Œwiêto Muzyki 
+Holiday;22.6;Dzieñ Kultury Fizycznej
+Holiday;22.6;Dzieñ Muzyki Europejskiej 
+Holiday;23.6;Dzieñ Ojca
+Holiday;23.6;Noc Kupa³y (etniczne s³owiañskie)
+Holiday;23.6;Œwiatowy dzieñ Skateboardingu 
+Holiday;24.6;Noc Kupa³y (etniczne s³owiañskie)
+Holiday;24.6;Œwiatowy Dzieñ Chorych na Osteoporozê 
+Holiday;25.6;Dzieñ Stoczniowca 
+Holiday;26.6;Dzieñ Zapobiegania Narkomanii 
+Holiday;27.6;Œwiatowy Dzieñ Rybo³ówstwa
+Holiday;27.6;Œwiatowy Dzieñ Walki z Cukrzyc¹
+Holiday;27.6;Dzieñ Christopher Street (Ulicy Christophera ?) 
+Holiday;28.6;Narodowy Dzieñ Pamiêci Poznañskiego Czerwca 1956 
+Holiday;29.6;Dzieñ Ratownika WOPR 
+Holiday;1.7;Dzieñ Psa
+Holiday;1.7;Œwiatowy Dzieñ Architektury
+Holiday;1.7;Dzieñ Spó³dzielczoœci 
+Holiday;2.7;Dzieñ Dziennikarza Sportowego 
+Holiday;7.7;Dzieñ Spó³dzielczoœci 
+Holiday;11.7;Œwiatowy Dzieñ Ludnoœci 
+Holiday;15.7;Dzieñ bez Telefonu Komórkowego 
+Holiday;19.7;Dzieñ Czerwonego Kapturka 
+Holiday;20.7;Dzieñ Kubusia Puchatka 
+Holiday;23.7;Dzieñ W³óczykija 
+Holiday;24.7;Dzieñ Policjanta 
+Holiday;25.7;Dzieñ Bezpiecznego Kierowcy 
+Holiday;28.7;Dzieñ kultu masy miêœniowej 
+Holiday;1.8;Dzieñ Karmienia Piersi¹ 
+Holiday;2.8;Œwiatowy Dzieñ Pamiêci o Zag³adzie Romów 
+Holiday;12.8;Miêdzynarodowy Dzieñ M³odzie¿y 
+Holiday;13.8;Miêdzynarodowy Dzieñ Osób Leworêcznych 
+Holiday;14.8;Dzieñ Energetyka 
+Holiday;15.8;Œwiêto Wojska Polskiego
+Holiday;15.8;Wniebowziêcie Najœwiêtszej Maryi Panny (katolickie) 
+Holiday;22.8;Œwiêto Pracownika Ochrony 
+Holiday;23.8;Miêdzynarodowy Dzieñ Pamiêci o Handlu Niewolnikami i jego Zniesieniu (ONZ) 
+Holiday;28.8;Œwiêto Lotnictwa 
+Holiday;29.8;Dzieñ Stra¿nika Miejskiego 
+Holiday;31.8;Dzieñ Solidarnoœci i Wolnoœci (polskie, nie jest dniem wolnym od pracy) 
+Holiday;1.9;Miêdzynarodowy Dzieñ Pokoju
+Holiday;1.9;Dzieñ Kombatanta (Dzieñ Weterana)
+Holiday;1.9;Œwiêto Wojsk Obrony Przeciwlotniczej 
+Holiday;3.9;Dzieñ Energetyka 
+Holiday;8.9;Dzieñ Dobrych Wiadomoœci
+Holiday;8.9;Miêdzynarodowy Dzieñ Walki z Analfabetyzmem
+Holiday;8.9;Miêdzynarodowy Dzieñ Piœmiennictwa 
+Holiday;9.9;Miêdzynarodowy Dzieñ Urody 
+Holiday;10.9;Œwiatowy Dzieñ Zapobiegania Samobójstwom 
+Holiday;12.9;Œwiêto Wojsk L¹dowych 
+Holiday;13.9;Dzieñ Kolejarza
+Holiday;13.9;Dzieñ Programisty 
+Holiday;16.9;Miêdzynarodowy Dzieñ Ochrony Warstwy Ozonowej 
+Holiday;17.9;Dzieñ Sybiraka 
+Holiday;18.9;Miêdzynarodowy Dzieñ Geologa 
+Holiday;19.9;Dzieñ Dzikiej Flory, Fauny i Naturalnych Siedlisk 
+Holiday;21.9;Dzieñ S³u¿by Celnej 
+Holiday;21.9;Œwiatowy Dzieñ Osób z Chorob¹ Alzheimera 
+Holiday;22.9;Europejski Dzieñ Bez Samochodu 
+Holiday;23.9;Do¿ynki
+Holiday;23.9;Œwiêto Plonów (etniczne s³owiañskie) 
+Holiday;26.9;Miêdzynarodowy Dzieñ G³uchego 
+Holiday;27.9;Œwiatowy Dzieñ Turystyki
+Holiday;27.9;Dzieñ Podziemnego Pañstwa Polskiego 
+Holiday;29.9;Dzieñ Aptekarza 
+Holiday;30.9;Dzieñ Ch³opaka 
+Holiday;1.10;Miêdzynarodowy Dzieñ Wegetarianizmu
+Holiday;1.10;Miêdzynarodowy Dzieñ Lekarza
+Holiday;1.10;Miêdzynarodowy Dzieñ Ludzi Starszych 
+Holiday;4.10;Œwiatowy Dzieñ Ochrony Zwierz¹t 
+Holiday;5.10;Œwiatowy Dzieñ Nauczycieli 
+Holiday;6.10;Œwiatowy Dzieñ Mieszkalnictwa 
+Holiday;9.10;Œwiatowy Dzieñ Poczty
+Holiday;9.10;Dzieñ Znaczka Pocztowego 
+Holiday;10.10;Œwiatowy Dzieñ Zdrowia Psychicznego 
+Holiday;13.10;Dzieñ Ratownictwa Medycznego 
+Holiday;14.10;Dzieñ Edukacji Narodowej
+Holiday;14.10;Œwiatowy Dzieñ Normalizacji
+Holiday;14.10;Miêdzynarodowy Dzieñ Zmniejszania Skutków Klêsk ¯ywio³owych 
+Holiday;15.10;Miêdzynarodowy Dzieñ Niewidomych 
+Holiday;16.10;Œwiatowy Dzieñ ¯ywnoœci
+Holiday;16.10;Dzieñ Papie¿a Jana Paw³a II (polskie, nie jest dniem wolnym od pracy) 
+Holiday;17.10;Miêdzynarodowy Dzieñ Walki z Ubóstwem 
+Holiday;18.10;Dzieñ £¹cznoœciowca
+Holiday;18.10;Dzieñ Poczty Polskiej 
+Holiday;22.10;Œwiatowy Dzieñ J¹kaj¹cych siê 
+Holiday;24.10;Dzieñ Walki z Oty³oœci¹
+Holiday;24.10;Dzieñ Organizacji Narodów Zjednoczonych
+Holiday;24.10;Œwiatowy Dzieñ Informacji 
+Holiday;27.10;Œwiatowy Dzieñ Modlitwy o Pokój (katolickie) 
+Holiday;31.10;Œwiatowy Dzieñ Oszczêdnoœci
+Holiday;31.10;Halloween 
+Holiday;1.11;Wszystkich Œwiêtych (katolickie) 
+Holiday;2.11;Dziady (etniczne s³owiañskie)
+Holiday;2.11;Zaduszki 
+Holiday;3.11;Œwiêto Myœliwych 
+Holiday;9.11;Œwiatowy Dzieñ Jakoœci
+Holiday;9.11;Miêdzynarodowy Dzieñ Walki z Faszyzmem i Antysemityzmem 
+Holiday;10.11;Dzieñ Przewodników i Ratowników Górskich 
+Holiday;11.11;Narodowe Œwiêto Niepodleg³oœci 
+Holiday;12.11;Dzieñ Drwala 
+Holiday;14.11;Œwiatowy Dzieñ Chorych na Cukrzycê
+Holiday;14.11;Dzieñ Seniora 
+Holiday;15.11;Œwiatowy Dzieñ Systemów Informacji Geograficznej
+Holiday;15.11;Œwiêto Matki Bo¿ej Ostrobramskiej - Matki Mi³osierdzia
+Holiday;15.11;Œwiatowy Dzieñ Rzucania Palenia 
+Holiday;16.11;Dzieñ Tolerancji 
+Holiday;17.11;Dzieñ Studenta 
+Holiday;20.11;Dzieñ Uprzemys³owienia Afryki 
+Holiday;21.11;Dzieñ Pracownika Socjalnego
+Holiday;21.11;Œwiatowy Dzieñ Telewizji
+Holiday;21.11;Œwiatowy Dzieñ ¯yczliwoœci i Pozdrowieñ 
+Holiday;22.11;Dni Honorowego Krwiodawstwa w Polsce 
+Holiday;23.11;Dni Honorowego Krwiodawstwa w Polsce 
+Holiday;24.11;Dni Honorowego Krwiodawstwa w Polsce
+Holiday;24.11;Dzieñ bez Futra 
+Holiday;25.11;Dni Honorowego Krwiodawstwa w Polsce
+Holiday;25.11;Œwiatowy Dzieñ Pluszowego Misia 
+Holiday;26.11;Dni Honorowego Krwiodawstwa w Polsce 
+Holiday;29.11;Dzieñ bez Kupowania
+Holiday;29.11;Dzieñ Podchor¹¿ego
+Holiday;29.11;Miêdzynarodowy Dzieñ Solidarnoœci z Palestyñczykami 
+Holiday;30.11;Andrzejki 
+Holiday;1.12;Dzieñ walki z AIDS 
+Holiday;2.12;Œwiatowy Dzieñ Walki z Uciskiem 
+Holiday;3.12;Miêdzynarodowy Dzieñ Osób Niepe³nosprawnych (ONZ) 
+Holiday;4.12;Dzieñ Górnika i Naftowca
+Holiday;4.12;Barbórka 
+Holiday;5.12;Miêdzynarodowy Dzieñ Wolontariusza 
+Holiday;6.12;Œwiêtego Miko³aja 
+Holiday;7.12;Miêdzynarodowy Dzieñ Lotnictwa Cywilnego 
+Holiday;10.12;Dzieñ Odlewnika
+Holiday;10.12;Miêdzynarodowy Dzieñ Praw Cz³owieka 
+Holiday;13.12;Dzieñ Ksiêgarza
+Holiday;13.12;Œwiatowy Dzieñ Telewizji dla Dzieci 
+Holiday;17.12;Polski Dzieñ bez Przekleñstw 
+Holiday;18.12;Miêdzynarodowy Dzieñ Emigrantów 
+Holiday;20.12;Dzieñ Ryby 
+Holiday;21.12;Œwiêto Godowe (etniczne s³owiañskie) 
+Holiday;22.12;Œwiêto Godowe (etniczne s³owiañskie) 
+Holiday;24.12;Wigilia Bo¿ego Narodzenia (chrzeœcijañskie, koœcio³y zachodnie) 
+Holiday;25.12;Bo¿e Narodzenie (chrzeœcijañskie, koœcio³y zachodnie) 
+Holiday;26.12;Bo¿e Narodzenie (chrzeœcijañskie, koœcio³y zachodnie) 
+Holiday;28.12;Miêdzynarodowy Dzieñ Poca³unku 
+Holiday;29.12;Œwiatowy Dzieñ Ró¿norodnoœci Biologicznej 
+Holiday;31.12;Noc sylwestrowa (miêdzynarodowe)

@@ -1,5 +1,8 @@
 ﻿# Various scripts
 
+OLD - about to 5 years ago
+VERY OLD - more than about 5 years ago
+
 At old times I did not format my scripts, so now I see how much wrong programistic convention it is.
 
 ## 3D Graphics
@@ -11,6 +14,9 @@ Next when HTML5, WebGL and canvas was introduced, then I rewrited scripts to sup
 Rendering and transforms was rewritten from book [*Rudeger Baumann - Grafika komputerowa* **(Computer graphics)**](http://retrokomputer.pl/grafika-komputerowa-i90814.html), which was programming guide book for Commodore C64 \(good times...\)
 
 # Różnorakie skrypty
+
+OLD - do około 5 lat temu
+VERY OLD - starsze niż około 5 lat temu
 
 Dawniej nie formatowałem skryptów, przez co widzę teraz jak bardzo jest to złą praktyką programistyczną.
 

@@ -1,0 +1,162 @@
+<html>
+<body scroll=auto><title>Coœ podobnego do MS Painta</title>
+<style>
+div{font-family:Trebuchet MS;font-size:10pt;font-weight:bold}
+td{width:5px;height:5px;text-align:center;margin:0px;cursor:default}
+td.kolory{width:20px;height:10px}
+hr{width:700px;text-align:left}
+img{position:relative;left:-5px;top:-18px}
+</style>
+<div id="pole_tablicy">Proszê czekaæ...</div>
+<div id="pole_kolorow" style="display:none">
+Lewy klawisz myszki<br>
+<hr><img src="..\Obrazy\Slide.ico" id="ltlor"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="ltlog"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="ltlob"></img><br>
+<table border=1><td id="lmbc" style="width:50px;height:50px"></td></table>
+Prawy klawisz myszki<br>
+<hr><img src="..\Obrazy\Slide.ico" id="ptlor"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="ptlog"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="ptlob"></img><br>
+<table border=1><td id="rmbc" style="width:50px;height:50px"></td></table>
+</div>
+<script src="skrypty\hex_1.js"></script>
+<script>
+tytul=document.title;
+document.all.pole_tablicy.oncontextmenu=anuluj;
+document.all.pole_kolorow.oncontextmenu=anuluj;
+document.all.pole_tablicy.onmousemove=myszStat;
+document.all.pole_tablicy.onmouseout=czysc_stat;
+document.all.ltlor.ondragstart=ltlorscroll;
+document.all.ltlog.ondragstart=ltlogscroll;
+document.all.ltlob.ondragstart=ltlobscroll;
+document.all.ptlor.ondragstart=ptlorscroll;
+document.all.ptlog.ondragstart=ptlogscroll;
+document.all.ptlob.ondragstart=ptlobscroll;
+document.ondragstart=anuluj;
+ltlocr=ltlocg=ltlocb=0;
+ptlocr=ptlocg=ptlocb=255;
+setcolors1();
+mk=143;
+mw=60;
+lewyktlo=document.fgColor;
+prawyktlo=document.bgColor;
+document.title="Jeœli przegl¹darka siê zawiesi, czekaj dalej...";
+utworz_tablice(mk,mw);
+document.title=tytul;
+function pozycja() {
+x=event.clientX-17;
+if(x<-5){x=-5}
+if(x>694){x=694}
+}
+function ltlorscroll() {
+pozycja();
+document.all.ltlor.style.left=x;
+ltlocr=Math.round((x+5)*255/699);
+setcolors();
+return false;
+}
+function ltlogscroll() {
+pozycja();
+document.all.ltlog.style.left=x;
+ltlocg=Math.round((x+5)*255/699);
+setcolors();
+return false;
+}
+function ltlobscroll() {
+pozycja();
+document.all.ltlob.style.left=x;
+ltlocb=Math.round((x+5)*255/699);
+setcolors();
+return false;
+}
+function ptlorscroll() {
+pozycja();
+document.all.ptlor.style.left=x;
+ptlocr=Math.round((x+5)*255/699);
+setcolors();
+return false;
+}
+function ptlogscroll() {
+pozycja();
+document.all.ptlog.style.left=x;
+ptlocg=Math.round((x+5)*255/699);
+setcolors();
+return false;
+}
+function ptlobscroll() {
+pozycja();
+document.all.ptlob.style.left=x;
+ptlocb=Math.round((x+5)*255/699);
+setcolors();
+return false;
+}
+function setcolors1() {
+with(document.all){
+ltlor.style.left=694*ltlocr/255;
+ltlog.style.left=694*ltlocg/255;
+ltlob.style.left=694*ltlocb/255;
+ptlor.style.left=694*ptlocr/255;
+ptlog.style.left=694*ptlocg/255;
+ptlob.style.left=694*ptlocb/255;
+}
+setcolors();
+}
+function setcolors() {
+lewyktlo="#"+licz(ltlocr)+licz(ltlocg)+licz(ltlocb);
+prawyktlo="#"+licz(ptlocr)+licz(ptlocg)+licz(ptlocb);
+document.all.lmbc.style.backgroundColor=lewyktlo;
+document.all.rmbc.style.backgroundColor=prawyktlo;
+}
+function myszStat() {mysz=event.button}
+function zaznacz(tablica,kolumna,wiersz,zazn) {
+tablica=document.getElementById(tablica);
+if (mysz==1) {zazn=2}
+if (mysz==2) {zazn=3}
+window.status=kolumna+","+wiersz;
+if (zazn==0) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor=ktlo[wiersz][kolumna];
+}
+}
+if (zazn==1) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor="Highlight";
+}
+}
+if (zazn==2) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor=lewyktlo;
+}
+ktlo[wiersz][kolumna]=lewyktlo;
+}
+if (zazn==3) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor=prawyktlo;
+}
+ktlo[wiersz][kolumna]=prawyktlo;
+}
+}
+function utworz_tablice(wk,ww) {
+ktlo=new Array();
+this.tabl="<table border=1 id=\"tablica1\" cellspacing=0 cellpadding=0 bordercolor=black bordercolordark=black>";
+for (var w=0; w<=mw; w++) {
+ktlo[w]=new Array();
+for (var k=0; k<=mk; k++) {
+ktlo[w][k]="#FFFFFF";
+}
+}
+for (var w=0; w<=mw; w++) {
+this.tabl+="<tr>";
+for (var k=0; k<=mk; k++) {
+this.tabl+="<td onmouseover=\"zaznacz(\'tablica1\',"+k+","+w+",1)\" onmouseout=\"zaznacz(\'tablica1\',"+k+","+w+",0)\" onclick=\"zaznacz(\'tablica1\',"+k+","+w+",2)\" oncontextmenu=\"zaznacz(\'tablica1\',"+k+","+w+",3)\"></td>";
+}
+this.tabl+="</tr>";
+}
+this.tabl+="</table>";
+pole_tablicy.innerHTML=tabl;
+document.all.pole_kolorow.style.display="block";
+}
+function anuluj() {return false}
+function czysc_stat() {window.status=""}
+</script>

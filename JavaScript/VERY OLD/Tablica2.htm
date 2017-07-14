@@ -1,0 +1,82 @@
+<html><div id="pole_tablicy">Proszê czekaæ...</div>
+<style>
+div{font-family:Trebuchet MS;font-size:10pt;font-weight:bold}
+td{width:13px;height:10px;text-align:center;margin:0px;cursor:default}
+</style>
+<script>
+document.all.pole_tablicy.oncontextmenu=anuluj;
+document.all.pole_tablicy.onmousemove=myszStat;
+document.all.pole_tablicy.onmouseout=czysc_stat;
+document.ondragstart=anuluj;
+mk=140;
+mw=60;
+utworz_tablice(mk,mw);
+function myszStat() {mysz=event.button}
+function zaznacz(tablica,kolumna,wiersz,zazn) {
+tablica=document.getElementById(tablica);
+if (mysz==1) {zazn=2}
+if (mysz==2) {zazn=3}
+window.status=kolumna+","+wiersz;
+if (zazn==0) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor=ktlo[wiersz][kolumna];
+color=ktxt[wiersz][kolumna];
+}
+}
+if (zazn==1) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor="Highlight";
+color="HighlightText";
+}
+}
+if (zazn==2) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor=document.fgColor;
+color=document.bgColor;
+}
+ktlo[wiersz][kolumna]=document.fgColor;
+ktxt[wiersz][kolumna]=document.bgColor;
+}
+if (zazn==3) {
+with (tablica.rows[wiersz].cells[kolumna].style) {
+backgroundColor=document.bgColor;
+color=document.fgColor;
+}
+ktlo[wiersz][kolumna]=document.bgColor;
+ktxt[wiersz][kolumna]=document.fgColor;
+}
+}
+function utworz_tablice(wk,ww) {
+this.tabl="<table border=1 id=\"tablica1\" cellspacing=0 cellpadding=0 bordercolor=black bordercolordark=black style=\"position:absolute;left:0px;top:0px\">";
+this.k=0;
+this.w=0;
+this.wk=wk;
+this.ww=ww;
+ktlo=new Array(ww);
+ktxt=new Array(ww);
+ktlo[0]=new Array(wk);
+ktxt[0]=new Array(wk);
+tworz();
+}
+function tworz() {
+pole_tablicy.innerText="Proszê czekaæ... "+parseInt((w*wk+k)*100/(ww*wk+wk))+"% ("+(w*wk+k)+" pól zrobionych na "+(ww*wk+wk)+")";
+ktlo[w][k]="#FFFFFF";
+ktxt[w][k]="#000000";
+if (w>ww) {tabl+="</tr>"}
+if (k==0) {tabl+="<tr>"}
+tabl+="<td onmouseover=\"zaznacz(\'tablica1\',"+k+","+w+",1)\" onmouseout=\"zaznacz(\'tablica1\',"+k+","+w+",0)\" onclick=\"zaznacz(\'tablica1\',"+k+","+w+",2)\" oncontextmenu=\"zaznacz(\'tablica1\',"+k+","+w+",3)\"></td>";
+k+=1;
+if (k>wk) {k=0;w+=1;ktlo[w]=new Array(wk);ktxt[w]=new Array(wk)}
+if (k==wk&&w==ww) {
+tabl+="<td onmouseover=\"zaznacz(\'tablica1\',"+k+","+w+",1)\" onmouseout=\"zaznacz(\'tablica1\',"+k+","+w+",0)\" onclick=\"zaznacz(\'tablica1\',"+k+","+w+",2)\" oncontextmenu=\"zaznacz(\'tablica1\',"+k+","+w+",3)\"></td>";
+if (w!=ww) {tabl+="</tr>"}
+tabl+="</table>";
+pole_tablicy.innerText="Proszê czekaæ... "+parseInt((w*wk+k)*100/(ww*wk+wk))+"%";
+pole_tablicy.innerHTML=tabl;
+return;
+}
+setTimeout("tworz()",1);
+}
+function anuluj() {return false}
+function czysc_stat() {window.status=""}
+</script>

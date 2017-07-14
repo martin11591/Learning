@@ -1,0 +1,24 @@
+IEKalendarz v1.1
+
+Kalendarz du¿ego formatu dla przegl¹darki Internet Explorer 6+
+Pozwala na wczytywanie, zapisywanie (rêczne), dodawanie i usuwanie uroczystoœci.
+Imieniny i sentencje pochodz¹ z Kalendarz XP v29.85, s¹ zapisane w osobnych plikach, z mo¿liwoœci¹ edycji.
+
+Wersje:
+   -> v1.1m:
+	- zmienione: rozmiar kalendarza jest zmniejszony wzglêdem orygina³u
+   -> v1.1:
+        - nowe: dodano listê osób obchodz¹cych imieniny
+        - nowe: dodano sentencje
+        - nowe: dodano odliczanie lat, miesiêcy, tygodni i dni od/do wybranej daty
+        - nowe: dodano opcjê pokazywania informacji o dniu w okienku
+        - nowe: dodano opcjê edycji uroczystoœci w danym dniu w okienku
+        - nowe: podœwietlanie komórek
+        - zmienione: niewielkie zmiany rozmiarów komórek
+        - zmienione: nazwy uroczystoœci nie s¹ wyœwietlane w komórkach, ale komórki s¹ zaznaczane kolorami:
+                - bia³y - dzisiejszy dzieñ
+                - ¿ó³ty - narodziny
+                - turkusowy - urodziny
+                - ciemnoczerwony - 'moje' narodziny
+                - ciemnofioletowy - 'moje' urodziny
+                - zielony - œwiêto

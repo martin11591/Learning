@@ -1,0 +1,43 @@
+<html>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<script>
+temp=window.open("úwiÍta (do osobnego).txt");
+text=temp.document.body.outerText;
+txt="";
+while (text.lastIndexOf("ï")!=-1) {
+text=text.substring(text.indexOf("ï")+1);
+txt+=text.substring(0,text.indexOf("ï")-1).replace(/ó/gi,"-").replace(/; */gi,";").replace(/ (stycznia|lutego|marca|kwietnia|maja|czerwca|lipca|sierpnia|wrzeúnia|paüdziernika|listopada|grudnia)/,function(x) {return x==" stycznia"?".1":x==" lutego"?".2":x==" marca"?".3":x==" kwietnia"?".4":x==" maja"?".5":x==" czerwca"?".6":x==" lipca"?".7":x==" sierpnia"?".8":x==" wrzeúnia"?".9":x==" paüdziernika"?".10":x==" listopada"?".11":x==" grudnia"?".12":""}).replace(/ \[edytuj\]/gi,"").replace(/	/gi,"")+"<br>";
+}
+text=txt;
+txt="";
+while (text.lastIndexOf("<br>")!=-1) {
+tmp1=text.substring(0,text.indexOf("<br>"));
+dat=tmp1.substring(0,tmp1.indexOf(" - "));
+tmp1=tmp1.substring(tmp1.indexOf(" - ")+3);
+kropki=dat.match(/\./g);
+if (kropki) {kropki=kropki.length}
+while (tmp1.lastIndexOf(";")!=-1) {
+tmp2=tmp1.substring(0,tmp1.indexOf(";"));
+if (kropki) {
+if (kropki==1) {txt+="Holiday;"}
+if (kropki==2) {txt+="Birthday;"}
+txt+=dat+";";
+txt+=tmp2+"<br>";
+}
+tmp1=tmp1.substring(tmp1.indexOf(";")+1);
+}
+if (kropki) {
+if (kropki==1) {txt+="Holiday;"}
+if (kropki==2) {txt+="Birthday;"}
+txt+=dat+";";
+txt+=tmp1+"<br>";
+}
+text=text.substring(text.indexOf("<br>")+4);
+}
+temp.document.close();
+temp.window.close();
+document.write(txt);
+</script>

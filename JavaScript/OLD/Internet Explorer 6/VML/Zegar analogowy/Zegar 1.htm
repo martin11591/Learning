@@ -1,0 +1,118 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1250">
+<link rel=File-List href="indexpliki/filelist.xml">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+b\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+td{position:absolute;text-align:center;vertical-align:center}
+</style>
+</head>
+
+<body scroll=no link="#0066FF" vlink="#6633CC" style='margin:0'>
+
+<div style='position:absolute;width:7.9319in;height:1.0048in'>
+<!--[if gte vml 1]><v:rect id="hours" style='position:absolute;left:320pt;
+ top:120pt;width:9px;height:226px;z-index:1;
+ mso-wrap-distance-left:2.88pt;mso-wrap-distance-top:2.88pt;
+ mso-wrap-distance-right:2.88pt;mso-wrap-distance-bottom:2.88pt'
+ filled="f" fillcolor="white [7]" stroked="f"
+ o:cliptowrap="t">
+ <v:imagedata src="img\hours.png" o:title="up"/>
+</v:rect><![endif]--><![if !vml]><![endif]>
+</div>
+<div style='position:absolute;width:7.9319in;height:1.0048in'>
+<!--[if gte vml 1]><v:rect id="mins" style='position:absolute;left:320pt;
+ top:120pt;width:9px;height:226px;z-index:2;
+ mso-wrap-distance-left:2.88pt;mso-wrap-distance-top:2.88pt;
+ mso-wrap-distance-right:2.88pt;mso-wrap-distance-bottom:2.88pt'
+ filled="f" fillcolor="white [7]" stroked="f"
+ o:cliptowrap="t">
+ <v:imagedata src="img\mins.png" o:title="up"/>
+</v:rect><![endif]--><![if !vml]><![endif]>
+</div>
+<div style='position:absolute;width:7.9319in;height:1.0048in'>
+<!--[if gte vml 1]><v:rect id="secs" style='position:absolute;left:320pt;
+ top:120pt;width:9px;height:226px;z-index:3;
+ mso-wrap-distance-left:2.88pt;mso-wrap-distance-top:2.88pt;
+ mso-wrap-distance-right:2.88pt;mso-wrap-distance-bottom:2.88pt'
+ filled="f" fillcolor="white [7]" stroked="f"
+ o:cliptowrap="t">
+ <v:imagedata src="img\secs.png" o:title="up"/>
+</v:rect><![endif]--><![if !vml]><![endif]>
+</div>
+<input type=radio name="licznik" id="typczas" onclick="document.all.stoper.style.display='none';clearTimeout(timer);czas()" checked>Czas<br>
+<input type=radio name="licznik" id="typstoper" onclick="stoperinit()">Stoper<br>
+<div id="stoper" style="display:none"><button onclick="cz=new Date();startStoper=cz.getTime();clearTimeout(timer);stoper()">Start</button><button onclick="zatrzymajstoper()" id="zstoper">Zatrzymaj</button><div id="stoperstat">00:00:00.000</div></div>
+<script>
+var timer;
+ws=document.all.secs.style;
+wm=document.all.mins.style;
+wh=document.all.hours.style;
+rx=9;
+ry=226;
+mx=document.body.clientWidth/2-rx/2;
+my=document.body.clientHeight/2-ry/2;
+setInterval("mx=document.body.clientWidth/2-rx/2;my=document.body.clientHeight/2-ry/2;ws.left=mx;ws.top=my;wm.left=mx;wm.top=my;wh.left=mx;wh.top=my",1);
+czas();
+function czas() {
+cz=new Date();
+hour=cz.getHours()%12;
+minute=cz.getMinutes();
+second=cz.getSeconds();
+wh.rotation=360*hour/12;
+wm.rotation=360*minute/60;
+ws.rotation=360*second/60;
+timer=setTimeout("czas()",1);
+}
+function stoperinit() {
+wh.rotation=0;
+wm.rotation=0;
+ws.rotation=0;
+this.ssh=0;
+clearTimeout(timer);
+stoperstat.innerText="00:00:00.000";
+document.all.zstoper.value="Zatrzymaj";
+document.all.zstoper.onclick=zatrzymajstoper;
+document.all.stoper.style.display='block';
+}
+function stoper() {
+cz=new Date();
+czasNow=cz.getTime();
+czasStoper=parseInt(czasNow-startStoper);
+if(ssh==0){ws.rotation=360*czasStoper/60000}
+if(ssh==0){wm.rotation=360*czasStoper/3600000}
+if(ssh==0){wh.rotation=360*czasStoper}
+s=parseInt(czasStoper/1000%60);
+m=parseInt(czasStoper/60000%60);
+h=parseInt(czasStoper/3600000%60);
+if(s<10){s="0"+s}
+if(m<10){m="0"+m}
+if(h<10){h="0"+h}
+czasStoper/=1000;
+czasStoper=czasStoper.toString();
+len=czasStoper.length;
+czasStoper=czasStoper.substring(czasStoper.indexOf(".")+1,len);
+if(len==1){czasStoper="00"+czasStoper}
+if(len==2){czasStoper="0"+czasStoper}
+stoperstat.innerText=h+":"+m+":"+s+"."+czasStoper;
+timer=setTimeout("stoper()",1);
+}
+function zatrzymajstoper() {
+clearTimeout(timer);
+document.all.zstoper.value="Kontynuuj";
+document.all.zstoper.onclick=kontynuujstoper;
+}
+function kontynuujstoper() {
+stoper();
+document.all.zstoper.value="Zatrzymaj";
+document.all.zstoper.onclick=zatrzymajstoper;
+}
+</script>
+</body>
+</html>

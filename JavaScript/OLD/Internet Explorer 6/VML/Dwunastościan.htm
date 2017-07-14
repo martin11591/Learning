@@ -1,0 +1,186 @@
+<html>
+<head>
+<style type=text/css>v\:* { behavior: url(#default#VML); }</style>
+</head>
+<body>
+<table>
+<tr>
+<td><div id="graphdiv" class="graph"></div></td>
+<td style="vertical-align:top">
+<input id="ALFA" value=6 />,<input id="BETA" value=4 />,<input id="GAMA" value=6 /> - obrót wokó³ osi X, Y i Z<br>
+<input id="VX" value=0 />,<input id="VY" value=0 />,<input id="VZ" value=0 /> - przesuniêcie poziome, wg³¹b obrazu i pionowe<br>
+<input id="warK" value=15 /> - wspó³czynnik powiêkszenia<br>
+<input id="warD" value=60 /> - odleg³oœæ obserwator-ekran<br>
+<button onclick="bryla(1)">Rysuj</button><br>
+<button onclick="krokX=-1">Obracaj oœ X w lewo</button><button onclick="krokX=1">Obracaj oœ X w prawo</button><br><button onclick="krokY=-1">Obracaj oœ Y w lewo</button><button onclick="krokY=1">Obracaj oœ Y w prawo</button><br><button onclick="krokZ=-1">Obracaj oœ Z w lewo</button><button onclick="krokZ=1">Obracaj oœ Z w prawo</button><br>
+<button onclick="krokX=0">Zatrzymaj obracanie osi X</button><br><button onclick="krokY=0">Zatrzymaj obracanie osi Y</button><br><button onclick="krokZ=0">Zatrzymaj obracanie osi Z</button>
+</td>
+</tr>
+</table>
+<script>
+czysc(1);
+cds=document.all.oknoRysowania.coordsize;
+this.mK=Math.floor(parseFloat(cds));
+this.mW=mK;
+czysc();
+function czysc(czyNieokreslono) {
+txtS="<v:group id=\"oknoRysowania\" style=\"antialias:true; width=600px; height=600px\" coordsize=\"10000,10000\" coordorigin=\"0,0\">";
+txtL=new Array();
+txtK="<\/v:group>";
+if (czyNieokreslono!=1) {line(0,0,mK,mW,"0px","white",-1)}
+draw();
+}
+function draw() {document.all.graphdiv.innerHTML=txtS+txtL.join("")+txtK}
+function line(x1,y1,x2,y2,sw,col,aa) {
+if (aa==-1) {aa=""}
+if (aa==0) {aa="style=\"antialias: false\" "} else {aa="style=\"antialias: true\" "}
+txtL.push("<v:line "+aa+"from=\""+x1+","+y1+"\" to=\""+x2+","+y2+"\"><v:stroke weight=\""+sw+"\"; color=\""+col+"\";\/><\/v:line>");
+}
+function read(arg) {
+arg=arg.split(",");
+readI+=1;
+return arg[readI-1];
+}
+bryla(1);
+function bryla(aa) {
+x=new Array();
+y=new Array();
+z=new Array();
+x.push(0);
+y.push(0);
+z.push(0);
+kol=new Array();
+wiersz=new Array();
+kol.push(0);
+wiersz.push(0);
+p=new Array();
+p.push(0);
+for (var j=1; j<=12; j++) {
+p[j]=new Array();
+p[j].push(0);
+for (var i=1; i<=6; i++) {
+p[j][i]=0;
+}
+}
+readI=0;
+wierzcholki="0,-0.3568,0.9342,0.5774,-0.5774,0.5774,0.9342,0,0.3568,0.5774,0.5774,0.5774,0,0.3568,0.9342,-0.5774,0.5774,0.5774,-0.9342,0,0.3568,-0.5774,-0.5774,0.5774,-0.3568,-0.9342,0,0.3568,-0.9342,0,0.5774,-0.5774,-0.5774,0.9342,0,-0.3568,0.5774,0.5774,-0.5774,0.3568,0.9342,0,-0.3568,0.9342,0,-0.5774,0.5774,-0.5774,-0.9342,0,-0.3568,-0.5774,-0.5774,-0.5774,0,-0.3568,-0.9342,0,0.3568,-0.9342";
+for (var i=1; i<=20; i++) {
+x[i]=read(wierzcholki);
+y[i]=read(wierzcholki);
+z[i]=read(wierzcholki);
+}
+this.x=x;
+this.y=y;
+this.z=z;
+readI=0;
+powierzchnie="1,2,3,4,5,1,1,5,6,7,8,1,1,8,9,10,2,1,2,10,11,12,3,2,3,12,13,14,4,3,4,14,15,6,5,4,6,15,16,17,7,6,7,17,18,9,8,7,9,18,19,11,10,9,11,19,20,13,12,11,13,20,16,15,14,13,16,20,19,18,17,16";
+for (var i=1; i<=12; i++) {
+for (var j=1; j<=6; j++) {
+p[i][j]=read(powierzchnie);
+}
+}
+xa=6;
+ya=4;
+za=6;
+
+xb=0;
+yb=0;
+zb=0;
+
+fi=13;
+k=15;
+d=60;
+
+wspolczynniki();
+if (ret==1) {return}
+function wspolczynniki() {
+xd=xb-xa;
+yd=yb-ya;
+zd=zb-za;
+d1=Math.sqrt(xd*xd+yd*yd);
+if (d1==0) {d1=0.001}
+d2=Math.sqrt(xd*xd+yd*yd+zd*zd);
+if (d2==0) {alert("Punkt zerowy niedozwolony!");ret=1} else {ret=0}
+omega=fi*Math.PI/180;
+co=Math.cos(omega);
+so=Math.sin(omega);
+}
+for (var i=1; i<=20; i++) {
+X=x[i];
+Y=y[i];
+Z=z[i];
+transformacja();
+function transformacja() {
+x1=X-xa;
+y1=Y-ya;
+z1=Z-za;
+x2=x1;
+y2=z1;
+z2=-y1;
+x3=(yd*x2+xd*z2)/d1;
+y3=y2;
+z3=(-xd*x2+yd*z2)/d1;
+x4=x3;
+y4=(d1*y3+zd*z3)/d2;
+z4=(-zd*y3+d1*z3)/d2;
+x5=co*x4+so*y4;
+y5=-so*x4+co*y4;
+z5=z4;
+x6=x5;
+y6=y5;
+z6=-z5;
+u=x6/z6*d;
+v=y6/z6*d;
+Kol=mK+k*u;
+if (Kol<0) {Kol=0}
+if (Kol>mK) {Kol=mK}
+Wiersz=mW-k*v;
+if (Wiersz<0) {Wiersz=0}
+if (Wiersz>mW) {Wiersz=0}
+}
+kol[i]=Kol;
+wiersz[i]=Wiersz;
+}
+for (var i=1; i<=12; i++) {
+xr=new Array();
+yr=new Array();
+zr=new Array();
+xr.push(0);
+yr.push(0);
+zr.push(0);
+for (var j=1; j<=3; j++) {
+xr[j]=x[p[i][j]];
+yr[j]=y[p[i][j]];
+zr[j]=z[p[i][j]];
+ilWektorowy();
+function ilWektorowy() {
+xs=xr[2]-xr[1];
+xt=xr[3]-xr[1];
+ys=yr[2]-yr[1];
+yt=yr[3]-yr[1];
+zs=zr[2]-zr[1];
+zt=zr[3]-zr[1];
+xn=yd*zt-zs*yt;
+yn=zs*xt-xs*zt;
+zn=xs*yt-ys*xt;
+}
+}
+xr=x[p[i][1]]-xa;
+yr=y[p[i][1]]-ya;
+zr=z[p[i][1]]-za;
+ilSkalarny();
+function ilSkalarny() {
+sk=xn*xr+yn*yr+zn*zr;
+}
+if (sk>=0) {
+for (var j=1; j<=5; j++) {
+line(kol[p[i][j]],wiersz[p[i][j]],kol[p[i][j+1]],wiersz[p[i][j+1]],"1px","black",aa);
+}
+}
+}
+alert(txtL);
+draw();
+}
+</script>
+</body>
+</html>

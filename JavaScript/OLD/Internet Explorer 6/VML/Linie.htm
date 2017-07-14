@@ -1,0 +1,157 @@
+<html>
+<head>
+<style type=text/css>v\:* { behavior: url(#default#VML); }</style>
+</head>
+<body>
+<div id="graphdiv" class="graph"></div>
+<script>
+var timer;
+this.com3D="";
+init();
+function init() {
+txtS="<v:shape id=\"drawField\" style=\"position:absolute; left:0px; top:0px; antialias:true;\" coordsize=\"1024,768\" coordorigin=\"0,0\">";
+txtL1="<v:path id=\"drawFieldPath\" v=\"";
+txtL2="\"\/><\/v:path>";
+txtP="";
+txtK="<\/v:shape>";
+draw();
+drawed=0;
+nLines=0;
+clearTimeout(timer);
+timer=setInterval(function() {
+ratio=document.all.drawField.coordsize;
+mmx=document.body.clientWidth;
+mmy=document.body.clientHeight;
+if (mmx<mmy) {mmy=(mmx/ratio.x)*ratio.y}
+if (mmx>mmy) {mmx=(mmy/ratio.y)*ratio.x}
+document.all.drawField.style.width=mmx-2;
+document.all.drawField.style.height=mmy-2;
+document.all.drawField.style.left=document.body.clientWidth/2-mmx/2;
+document.all.drawField.style.top=document.body.clientHeight/2-mmy/2;
+},1);
+}
+function draw() {document.all.graphdiv.innerHTML=txtS+txtL1+txtP+txtL2+txtK}
+function line(x1,y1,x2,y2) {
+x1=Math.round(parseFloat(x1));
+y1=Math.round(parseFloat(y1));
+x2=Math.round(parseFloat(x2));
+y2=Math.round(parseFloat(y2));
+txtP+="m"+x1+","+y1+"l"+x2+","+y2+"x";
+}
+function point3D(x,y,z) {
+com3D+=parseFloat(x)+","+parseFloat(y)+","+parseFloat(z)+"|";
+}
+function line3D(x1,y1,z1,x2,y2,z2) {
+com3D+=parseFloat(x1)+","+parseFloat(y1)+","+parseFloat(z1)+";"+parseFloat(x2)+","+parseFloat(y2)+","+parseFloat(z2)+"|";
+nLines+=1;
+}
+function polyLine3D(com) {
+com3D+=com+"|";
+tmp=com.split("|").length;
+nLines+=tmp;
+}
+function draw3D(mX,mY,alfa,beta,gama,vx,vy,vz,K,d) {
+com3DCopy=com3D;
+mK=Math.floor(parseFloat(mX));
+mW=Math.floor(parseFloat(mY));
+alfa=(parseFloat(alfa+360)%719)-359;
+beta=(parseFloat(beta+360)%719)-359;
+gama=(parseFloat(gama+360)%719)-359;
+vx=parseFloat(vx);
+vy=parseFloat(vy);
+vz=parseFloat(vz);
+K=parseFloat(K);
+d=parseFloat(d);
+function wspolczynniki(alfa,beta,gama) {
+wa=alfa*Math.PI/180;
+ca=Math.cos(wa);
+sa=Math.sin(wa);
+wb=beta*Math.PI/180;
+cb=Math.cos(wb);
+sb=Math.sin(wb);
+wc=gama*Math.PI/180;
+cc=Math.cos(wc);
+sc=Math.sin(wc);
+}
+wspolczynniki(alfa,beta,gama);
+while (com3DCopy.lastIndexOf("|")!=-1) {
+temp=com3DCopy.substring(0,com3DCopy.indexOf("|")).split(";");
+j=0;
+x=new Array();
+y=new Array();
+z=new Array();
+kol=new Array();
+wiersz=new Array();
+ile=temp.length;
+for (var i=0; i<ile; i++) {
+ttemp=temp[i];
+x[i]=parseFloat(ttemp.substring(0,ttemp.indexOf(",")));
+ttemp=ttemp.substring(ttemp.indexOf(",")+1);
+y[i]=parseFloat(ttemp.substring(0,ttemp.indexOf(",")));
+ttemp=ttemp.substring(ttemp.indexOf(",")+1);
+z[i]=parseFloat(ttemp);
+// Odwzorowanie punktów
+function odwzorowanie(pX,pY,pZ) {
+x1=pX;
+y1=ca*pY-sa*pZ;
+z1=sa*pY+ca*pZ;
+
+x2=cb*x1-sb*z1;
+y2=y1;
+z2=sb*x1+cb*z1;
+
+x3=cc*x2-sc*y2;
+y3=sc*x2+cc*y2;
+z3=z2;
+
+x4=x3+vx;
+y4=y3+vy;
+z4=z3+vz;
+
+u=-x4/y4*d;
+v=-z4/y4*d;
+kol[j]=mK/2+K*u;
+if (kol[j]<0) {kol[j]=0}
+if (kol[j]>mK) {kol[j]=mK}
+kol[j]=Math.round(parseFloat(kol[j]));
+wiersz[j]=mW/2-K*v;
+if (wiersz[j]<0) {wiersz[j]=0}
+if (wiersz[j]>mW) {wiersz[j]=mW}
+wiersz[j]=Math.round(parseFloat(wiersz[j]));
+}
+odwzorowanie(x[i],y[i],z[i]);
+j+=1;
+}
+com3DCopy=com3DCopy.substring(com3DCopy.indexOf("|")+1);
+if (drawed==0) {
+for (var i=0; i<kol.length-1; i++) {
+line(kol[i],wiersz[i],kol[i+1],wiersz[i+1]);
+}
+}
+if (drawed==1) {
+txtP="";
+for (var i=0; i<kol.length-1; i++) {
+txtP+="m"+kol[i]+","+wiersz[i]+"l"+kol[i+1]+","+wiersz[i+1]+"x";
+window.status=i+"  "+kol.length;
+}
+//document.all.drawFieldPath.v=txtP;
+}
+}
+if (drawed==0) {draw()}
+drawed=1;
+}
+krok=20;
+ratio=document.all.drawField.coordsize;
+mmx=ratio.x;
+mmy=ratio.y;
+ratio=mmx/mmy;
+for (var i=0; i<=mmy; i+=krok) {
+line(0,0,mmx-i*ratio,mmy);
+line(0,0,mmx,mmy-i);
+line(mmx,mmy,0,i);
+line(mmx,mmy,i*ratio,0);
+}
+draw();
+</script>
+</body>
+</html>

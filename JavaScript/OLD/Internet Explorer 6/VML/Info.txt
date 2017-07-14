@@ -1,0 +1,26 @@
+Wymagane do rysowania w VML
+
+{
+
+<style type=text/css>v\:* { behavior: url(#default#VML); }</style>
+
+}
+
+Aby móc rysowaæ kod nale¿y wpisywaæ do tagu <SPAN> lub <DIV> z odpowiednim identyfikatorem (id) np. <span id="pole1"></span> za pomoc¹ odpowiedniej komendy:
+
+document.all.identyfikator.innerHTML=kod;
+
+Gdzie kod:
+
+	- zaczyna siê od "<v:group style=\"antialias:true*; width=320px; height=240px;**\" coordsize=\"800,600\"*** coordorigin=\"0,0\">"
+	- koñczy siê na "<\/v:group>"
+
+Komendy:
+
+	Linia od punktu X1,Y1 do X2,Y2 o gruboœci SW i kolorze COL - "<v:line from=\""+x1+","+y1+"\" to=\""+x2+","+y2+"\"><v:stroke weight=\""+sw+"\"; color=\""+col+"\"; \/><\/v:line>"
+
+
+
+* - antialiasing (wyg³adzanie linii) - true lub false
+** - rozmiar na stronie (coordsize ma wp³yw)
+*** - coœ, jak granice (ma wp³yw na rozmiar na ekranie) - w,h

@@ -1,0 +1,95 @@
+
+<html>
+<head>
+<title>Prosty rysunek z u¿yciem VMLa</title>
+
+
+<!-- This style behavior tag is required to show the VML and must appear in the document HEAD -->
+<style type=text/css>v\:* { behavior: url(#default#VML); }</style>
+
+<!-- Reference the javascript code -->
+
+<!-- IE7 renders differently from IE6 and may need alternate positioning -->
+<!--[if IE 7]><style>div.graph {position:relative;}</style><![endif]-->
+
+</head>
+<body>
+
+
+<table><tr><td><div id="graphdiv" class="graph"></div></td><td style="vertical-align:top"><textarea id="poleKomend" rows=30 cols=50></textarea><br><button onclick="rysuj(document.all.poleKomend.value)">Wykonaj</button></td></table>
+
+<script>
+txtS="<v:group style=\"antialias:true; width=500px; height=500px\" coordsize=\"1000,1000\" coordorigin=\"0,0\">";
+txtL="";
+txtK="<\/v:group>";
+draw();
+line(0,0,1000,1000,"0px","white",0);
+draw();
+x1=500;
+y1=500;
+x2=500;
+y2=500;
+kat=0;
+dx=0;
+dy=0;
+function rysuj(komendyDoWykonania) {
+komendy=komendyDoWykonania+"\n".toLowerCase();
+while(komendy.lastIndexOf("\n")!=-1) {
+komenda=komendy.substring(0,komendy.indexOf("\n"));
+if (komenda.substring(0,8)=="powtórz "||komenda.substring(0,8)=="powtorz ") {
+powtorzIle=Math.floor(parseFloat(eval(komenda.substring(7,komenda.indexOf("[")))));
+komendy2=komendy;
+komenda2=komenda;
+kom=komenda.substring(komenda.indexOf("[")+1,komenda.lastIndexOf("]")).replace(/;/g,"\n");
+for (var powtorzI=1; powtorzI<=powtorzIle; powtorzI++) {
+rysuj(kom);
+}
+komendy=komendy2;
+komenda=komenda2;
+}
+if (komenda.substring(0,2)=="cz") {txtL="";draw();line(0,0,1000,1000,"0px","white",0);draw()}
+if (komenda.substring(0,3)=="lz ") {
+ile=parseFloat(eval(komenda.substring(3)));
+kat-=ile;
+while (kat<=360) {kat+=360}
+}
+if (komenda.substring(0,3)=="pz ") {
+ile=parseFloat(eval(komenda.substring(3)));
+kat+=ile;
+while (kat>=360) {kat-=360}
+}
+if (komenda.substring(0,3)=="np ") {
+ile=parseFloat(eval(komenda.substring(3)));
+dx=Math.sin(kat*Math.PI/180)*ile;
+dy=-Math.cos(kat*Math.PI/180)*ile;
+x2=x1+dx;
+y2=y1+dy;
+line(x1,y1,x2,y2,"1px","black",1);
+draw();
+x1=x2;
+y1=y2;
+}
+if (komenda.substring(0,3)=="dt ") {
+ile=parseFloat(eval(komenda.substring(3)));
+dx=Math.sin(kat*Math.PI/180)*ile;
+dy=-Math.cos(kat*Math.PI/180)*ile;
+x2=x1-dx;
+y2=y1-dy;
+line(x1,y1,x2,y2,"1px","black",1);
+draw();
+x1=x2;
+y1=y2;
+}
+komendy=komendy.substring(komendy.indexOf("\n")+1);
+}
+}
+function draw() {document.all.graphdiv.innerHTML=txtS+txtL+txtK}
+function line(x1,y1,x2,y2,sw,col,aa) {
+if (aa==0) {aa="false"} else {aa="true"}
+txtL+="<v:line style=\"antialias: "+aa+"\" from=\""+x1+","+y1+"\" to=\""+x2+","+y2+"\"><v:stroke weight=\""+sw+"\"; color=\""+col+"\";\/><\/v:line>";
+}
+</script>
+</body>
+</html>
+
+

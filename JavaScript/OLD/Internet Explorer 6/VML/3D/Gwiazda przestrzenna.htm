@@ -1,0 +1,131 @@
+<html>
+<head>
+<style type=text/css>v\:* { behavior: url(#default#VML); }</style>
+</head>
+<body>
+<div id="graphdiv" class="graph"></div>
+<script>
+this.com3D="";
+init();
+function init() {
+txtS="<v:group style=\"antialias:true; width=500px; height=500px\" coordsize=\"10000,10000\" coordorigin=\"0,0\">";
+txtL="";
+txtK="<\/v:group>";
+draw();
+}
+function draw() {document.all.graphdiv.innerHTML=txtS+txtL+txtK}
+function line(x1,y1,x2,y2,sw,col,aa) {
+if (aa==0) {aa="false"} else {aa="true"}
+txtL+="<v:line style=\"antialias: "+aa+"\" from=\""+x1+","+y1+"\" to=\""+x2+","+y2+"\"><v:stroke weight=\""+sw+"\"; color=\""+col+"\";\/><\/v:line>";
+}
+function point3D(x,y,z) {
+com3D+=parseFloat(x)+","+parseFloat(y)+","+parseFloat(z)+"|";
+}
+function line3D(x1,y1,z1,x2,y2,z2) {
+com3D+=parseFloat(x1)+","+parseFloat(y1)+","+parseFloat(z1)+";"+parseFloat(x2)+","+parseFloat(y2)+","+parseFloat(z2)+"|";
+}
+function polyLine3D(com) {
+com3D+=com+"|";
+}
+function rect3D(x1,y1,z1,x2,y2,z2) {
+com3D+=parseFloat(x1)+","+parseFloat(y1)+","+parseFloat(z1)+";"+parseFloat(x2)+","+parseFloat(y1)+","+parseFloat(z1)+";"+parseFloat(x2)+","+parseFloat(y2)+","+parseFloat(z1)+";"+parseFloat(x1)+","+parseFloat(y2)+","+parseFloat(z1)+"|";
+com3D+=parseFloat(x1)+","+parseFloat(y1)+","+parseFloat(z1)+";"+parseFloat(x1)+","+parseFloat(y1)+","+parseFloat(z2)+";"+parseFloat(x2)+","+parseFloat(y1)+","+parseFloat(z2)+";"+parseFloat(x2)+","+parseFloat(y2)+","+parseFloat(z2)+";"+parseFloat(x2)+","+parseFloat(y2)+","+parseFloat(z1)+"|";
+com3D+=parseFloat(x1)+","+parseFloat(y1)+","+parseFloat(z2)+";"+parseFloat(x1)+","+parseFloat(y2)+","+parseFloat(z2)+";"+parseFloat(x2)+","+parseFloat(y2)+","+parseFloat(z2)+"|";
+com3D+=parseFloat(x1)+","+parseFloat(y2)+","+parseFloat(z1)+";"+parseFloat(x1)+","+parseFloat(y2)+","+parseFloat(z2)+"|";
+}
+function draw3D(mX,mY,alfa,beta,gama,vx,vy,vz,K,d) {
+com3DCopy=com3D;
+mK=Math.floor(parseFloat(mX));
+mW=Math.floor(parseFloat(mY));
+alfa=(parseFloat(alfa+360)%719)-359;
+beta=(parseFloat(beta+360)%719)-359;
+gama=(parseFloat(gama+360)%719)-359;
+vx=parseFloat(vx);
+vy=parseFloat(vy);
+vz=parseFloat(vz);
+K=parseFloat(K);
+d=parseFloat(d);
+wa=alfa*Math.PI/180;
+ca=Math.cos(wa);
+sa=Math.sin(wa);
+wb=beta*Math.PI/180;
+cb=Math.cos(wb);
+sb=Math.sin(wb);
+wc=gama*Math.PI/180;
+cc=Math.cos(wc);
+sc=Math.sin(wc);
+while (com3DCopy.lastIndexOf("|")!=-1) {
+temp=com3DCopy.substring(0,com3DCopy.indexOf("|")).split(";");
+j=0;
+x=new Array();
+y=new Array();
+z=new Array();
+kol=new Array();
+wiersz=new Array();
+ile=temp.length;
+for (var i=0; i<ile; i++) {
+ttemp=temp[i];
+x[i]=parseFloat(ttemp.substring(0,ttemp.indexOf(",")));
+ttemp=ttemp.substring(ttemp.indexOf(",")+1);
+y[i]=parseFloat(ttemp.substring(0,ttemp.indexOf(",")));
+ttemp=ttemp.substring(ttemp.indexOf(",")+1);
+z[i]=parseFloat(ttemp);
+// Odwzorowanie punktów
+x1=x[i];
+y1=ca*y[i]-sa*z[i];
+z1=sa*y[i]+ca*z[i];
+
+x2=cb*x1-sb*z1;
+y2=y1;
+z2=sb*x1+cb*z1;
+
+x3=cc*x2-sc*y2;
+y3=sc*x2+cc*y2;
+z3=z2;
+
+x4=x3+vx;
+y4=y3+vy;
+z4=z3+vz;
+
+u=-x4/y4*d;
+v=-z4/y4*d;
+kol[j]=mK/2+K*u;
+if (kol[j]<0) {kol[j]=0}
+if (kol[j]>mK) {kol[j]=mK}
+wiersz[j]=mW/2-K*v;
+if (wiersz[j]<0) {wiersz[j]=0}
+if (wiersz[j]>mW) {wiersz[j]=mW}
+j+=1;
+}
+com3DCopy=com3DCopy.substring(com3DCopy.indexOf("|")+1);
+for (var i=0; i<j-1; i++) {
+line(kol[i],wiersz[i],kol[i+1],wiersz[i+1],"1px","black",1);
+}
+}
+draw();
+}
+z1=0;
+krok=10;
+promien=1.5;
+x1=Math.sin(0)*promien;
+y1=-Math.cos(0)*promien;
+for (var i=krok; i<=360; i+=krok) {
+x2=Math.sin(i*Math.PI/180)*promien;
+y2=-Math.cos(i*Math.PI/180)*promien;
+
+line3D(-x1,y1,-1,x2,-y2,1);
+line3D(x1,-y1,1,-x2,y2,-1);
+
+x1=x2;
+y1=y2;
+}
+ia=0;
+ib=0;
+ig=0;
+ra=Math.round((4*Math.random()-2)*100)/100;
+rb=Math.round((4*Math.random()-2)*100)/100;
+rg=Math.round((4*Math.random()-2)*100)/100;
+setInterval("init();draw3D(10000,10000,ia,ib,ig,0,10,0,100,250);ia+=ra;ib+=rb;ig+=rg",1);
+</script>
+</body>
+</html>

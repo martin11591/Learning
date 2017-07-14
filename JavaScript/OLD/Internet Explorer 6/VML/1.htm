@@ -1,0 +1,89 @@
+
+<html>
+<head>
+<title>Prosty rysunek z u¿yciem VMLa</title>
+
+
+<!-- This style behavior tag is required to show the VML and must appear in the document HEAD -->
+<style type=text/css>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold}
+v\:* { behavior: url(#default#VML); }</style>
+
+<!-- Reference the javascript code -->
+
+<!-- IE7 renders differently from IE6 and may need alternate positioning -->
+<!--[if IE 7]><style>div.graph {position:relative;}</style><![endif]-->
+
+</head>
+<body>
+
+
+<input id="ileLinii" value=5></input> - ile linii&nbsp;&nbsp;&nbsp;<input id="gruboscLinii" value=1></input> - gruboœæ linii w pikselach&nbsp;&nbsp;&nbsp;<input type=checkbox id="FSAA" checked onclick="AA()">Antialiasing
+<div id="graphdiv" class="graph" style="width:505px;height:505px;border:solid 1px black"></div>
+
+<script>
+var timer;
+document.all.ileLinii.onkeyup=function() {init(Math.floor(parseFloat(document.all.ileLinii.value)))}
+document.all.gruboscLinii.onkeyup=grubosc;
+function init(ile) {
+clearTimeout(timer);
+this.ile=ile;
+txtS="<v:group style=\"antialias:true; width:500px; height:500px\" coordsize=\"1000,1000\" coordorigin=\"0,0\">";
+txtL="";
+txtK="<\/v:group>";
+draw();
+x=new Array();
+y=new Array();
+dx=new Array();
+dy=new Array();
+for (var i=0; i<ile; i++) {
+x.push(Math.round(Math.random()*1000));
+y.push(Math.round(Math.random()*1000));
+dx.push(Math.random()*20-10);
+dy.push(Math.random()*20-10);
+}
+for (var i=0; i<(ile-1); i++) {
+kol="rgb("+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+")";
+line (x[i],y[i],x[i+1],y[i+1],"1px",kol,1,"linia"+i);
+}
+kol="rgb("+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+")";
+line (x[ile-1],y[ile-1],x[0],y[0],"1px",kol,1,"linia"+(ile-1));
+draw();
+ruch();
+}
+init(5);
+function ruch() {
+for (var i=0; i<ile; i++) {
+if (document.all.FSAA.checked) {document.all["linia"+i].style.antialias="true"} else {document.all["linia"+i].style.antialias="false"}
+document.all["linia"+i].from=x[i]+","+y[i];
+document.all["linia"+i].to=x[(i+1)%ile]+","+y[(i+1)%ile];
+sx=x[i]+dx[i];
+sy=y[i]+dy[i];
+if (sx<0||sx>1000) {dx[i]=-dx[i]}
+if (sy<0||sy>1000) {dy[i]=-dy[i]}
+x[i]+=dx[i];
+y[i]+=dy[i];
+}
+timer=setTimeout("ruch()",1);
+}
+function AA() {
+for (var ii=0; ii<ile; ii++) {
+if (document.all.FSAA.checked) {document.all["linia"+ii].style.antialias="true"} else {document.all["linia"+ii].style.antialias="false"}
+}
+}
+function grubosc() {
+for (var ii=0; ii<ile; ii++) {
+document.all["linia"+ii].stroke.weight=Math.floor(parseFloat(document.all.gruboscLinii.value))+"px";
+}
+}
+function draw() {document.all.graphdiv.innerHTML=txtS+txtL+txtK}
+function line(x1,y1,x2,y2,sw,col,aa,id) {
+if (id) {id="id=\""+id+"\""}
+if (aa==0) {aa="false"} else {aa="true"}
+txtL+="<v:line "+id+" style=\"antialias: "+aa+"\" from=\""+x1+","+y1+"\" to=\""+x2+","+y2+"\"><v:stroke weight=\""+sw+"\"; color=\""+col+"\";\/><\/v:line>";
+}
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,111 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1250">
+<link rel=File-List href="index_pliki/filelist.xml">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+b\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style><xml>
+ <o:shapedefaults v:ext="edit" spidmax="3075" fill="f" fillcolor="black [7]"
+  strokecolor="black [0]">
+  <v:fill color="white [7]" color2="white [7]" on="f"/>
+  <v:stroke color="black [0]" color2="white [7]">
+  </v:stroke>
+  <v:shadow color="#ccc [4]"/>
+  <v:textbox inset="2.88pt,2.88pt,2.88pt,2.88pt"/>
+  <o:colormenu v:ext="edit" fillcolor="blue [1]" strokecolor="black [0]"
+   shadowcolor="#ccc [4]"/>
+ </o:shapedefaults><o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body scroll=no link="#0066FF" vlink="#6633CC" style='margin:0'>
+
+<v:rect id="wr1" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:330">
+<v:imagedata src="wskazowka_r.gif" o:title="up" />
+</v:rect>
+<v:rect id="wr2" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:90">
+<v:imagedata src="wskazowka_r.gif" o:title="up" />
+</v:rect>
+<v:rect id="wr3" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:210">
+<v:imagedata src="wskazowka_r.gif" o:title="up" />
+</v:rect>
+<v:rect id="wg1" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:330">
+<v:imagedata src="wskazowka_g.gif" o:title="up" />
+</v:rect>
+<v:rect id="wg2" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:90">
+<v:imagedata src="wskazowka_g.gif" o:title="up" />
+</v:rect>
+<v:rect id="wg3" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:210">
+<v:imagedata src="wskazowka_g.gif" o:title="up" />
+</v:rect>
+<v:rect id="wb1" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:330">
+<v:imagedata src="wskazowka_b.gif" o:title="up" />
+</v:rect>
+<v:rect id="wb2" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:90">
+<v:imagedata src="wskazowka_b.gif" o:title="up" />
+</v:rect>
+<v:rect id="wb3" style="position:absolute;width:250px;height:25px;filter:alpha(opacity=50)" filled="f" fillcolor="white [7]" stroked="f" style="rotation:210">
+<v:imagedata src="wskazowka_b.gif" o:title="up" />
+</v:rect>
+
+<script>
+document.onmousemove=pos;
+a1=330;
+a2=90;
+a3=210;
+b1=-5;
+b2=0;
+b3=5;
+s1=0;
+s2=0;
+s3=0;
+rx=250;
+ry=20;
+rx=rx/2;
+ry=ry/2;
+setInterval("b1+=s1;b2+=s2;b3+=s3",100);
+setInterval("ruch()",1);
+function ruch() {
+document.all['wr1'].style.rotation=a1.toString();
+document.all['wr2'].style.rotation=(a1+120).toString();
+document.all['wr3'].style.rotation=(a1+240).toString();
+document.all['wg1'].style.rotation=a2.toString();
+document.all['wg2'].style.rotation=(a2+120).toString();
+document.all['wg3'].style.rotation=(a2+240).toString();
+document.all['wb1'].style.rotation=a3.toString();
+document.all['wb2'].style.rotation=(a3+120).toString();
+document.all['wb3'].style.rotation=(a3+240).toString();
+a1+=b1;
+a2+=b2;
+a3+=b3;
+while (a1<0) {a1+=360}
+while (a1>=360) {a1-=360}
+while (a2<0) {a2+=360}
+while (a2>=360) {a2-=360}
+while (a3<0) {a3+=360}
+while (a3>=360) {a3-=360}
+}
+function pos() {
+x=event.clientX-rx;
+y=event.clientY-ry;
+with(document.all['wr1'].style) {left=x;top=y}
+with(document.all['wr2'].style) {left=x;top=y}
+with(document.all['wr3'].style) {left=x;top=y}
+with(document.all['wg1'].style) {left=x;top=y}
+with(document.all['wg2'].style) {left=x;top=y}
+with(document.all['wg3'].style) {left=x;top=y}
+with(document.all['wb1'].style) {left=x;top=y}
+with(document.all['wb2'].style) {left=x;top=y}
+with(document.all['wb3'].style) {left=x;top=y}
+}
+</script>
+</body>
+
+</html>

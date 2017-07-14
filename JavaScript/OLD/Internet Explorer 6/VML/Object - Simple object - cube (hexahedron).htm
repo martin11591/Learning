@@ -1,0 +1,209 @@
+<html>
+<head>
+<style type=text/css>v\:* { behavior: url(#default#VML); }</style>
+</head>
+<body>
+<table>
+<tr>
+<td><div id="graphdiv" class="graph"></div></td>
+<td style="vertical-align:top">
+<input id="ALFA" value=0 />,<input id="BETA" value=0 />,<input id="GAMA" value=0 /> - obrót wokó³ osi X, Y i Z<br>
+<input id="VX" value=0 />,<input id="VY" value=1000 />,<input id="VZ" value=0 /> - przesuniêcie poziome, wg³¹b obrazu i pionowe<br>
+<input id="warK" value=95 /> - wspó³czynnik powiêkszenia<br>
+<input id="warD" value=250 /> - odleg³oœæ obserwator-ekran<br>
+<button onclick="rysuj(FSAA)">Rysuj</button><br>
+<button onclick="krokX-=1">Obracaj oœ X w lewo</button><button onclick="krokX+=1">Obracaj oœ X w prawo</button><br><button onclick="krokY-=1">Obracaj oœ Y w lewo</button><button onclick="krokY+=1">Obracaj oœ Y w prawo</button><br><button onclick="krokZ-=1">Obracaj oœ Z w lewo</button><button onclick="krokZ+=1">Obracaj oœ Z w prawo</button><br>
+<button onclick="krokX=0">Zatrzymaj obracanie osi X</button><br><button onclick="krokY=0">Zatrzymaj obracanie osi Y</button><br><button onclick="krokZ=0">Zatrzymaj obracanie osi Z</button><br>
+<input id="FSAACheckbox" type=checkbox checked onclick="FSAA=document.all.FSAACheckbox.checked?1:-1;bryla(FSAA)"/>Anti-Aliasing
+</td>
+</tr>
+</table>
+<span id="aa1">&nbsp;</span>
+<script>
+var rTimer;
+FSAA=document.all.FSAACheckbox.checked?1:-1;
+czysc(1);
+draw();
+cds=document.all.oknoRysowania.coordsize;
+this.mK=Math.floor(parseFloat(cds));
+this.mW=mK;
+czysc();
+krokX=0;
+krokY=0;
+krokZ=0;
+rysuj(FSAA);
+obracajOsie(krokX,krokY,krokZ);
+function obracajOsie(krokX,krokY,krokZ) {
+clearTimeout(rTimer);
+alfa=(alfa+krokX)%360;
+beta=(beta+krokY)%360;
+gama=(gama+krokZ)%360;
+if(krokX!=0||krokY!=0||krokZ!=0) {bryla(FSAA)}
+rTimer=setTimeout("obracajOsie(krokX,krokY,krokZ)",1);
+}
+function czysc(czyNieokreslono) {
+txtS="<v:group id=\"oknoRysowania\" style=\"antialias:true; width=600px; height=600px\" coordsize=\"10000,10000\" coordorigin=\"0,0\">";
+txtL=new Array();
+txtK="<\/v:group>";
+if (czyNieokreslono!=1) {line(0,0,mK,mW,"0px","white",-1)}
+}
+function draw() {document.all.graphdiv.innerHTML=txtS+txtL.join("")+txtK}
+function line(x1,y1,x2,y2,sw,col,aa) {
+if (aa==-1) {aa=""}
+if (aa==0) {aa="style=\"antialias: false\" "} else {aa="style=\"antialias: true\" "}
+txtL.push("<v:line "+aa+"from=\""+x1+","+y1+"\" to=\""+x2+","+y2+"\"><v:stroke weight=\""+sw+"\"; color=\""+col+"\";\/><\/v:line>");
+}
+function read(arg) {
+arg=arg.split(",");
+readI+=1;
+return arg[readI-1];
+}
+function bryla(aa) {
+readI=0;
+czysc();
+xyz=new Array();
+xyz=new Array(0,0,0,100,100,100,-100,100,100,-100,-100,100,100,-100,100,100,100,-100,-100,100,-100,-100,-100,-100,100,-100,-100);
+kraw="2,1,2,2,2,3,2,3,4,2,4,1,2,1,5,2,5,6,2,6,7,2,7,8,2,8,5,2,2,6,2,3,7,2,4,8";
+/*
+|1| 100,100,100
+|2| -100,100,100
+|3| -100,-100,100
+|4| 100,-100,100
+|5| 100,100,-100
+|6| -100,100,-100
+|7| -100,-100,-100
+|8| 100,-100,-100
+
+|1234156785|
+|26|
+|37|
+|48|
+*/
+ile2=12;
+ile1=2*ile2;
+var X=new Array();
+var Y=new Array();
+var Z=new Array();
+ttxt="";
+j=1;
+for (var i=0; i<xyz.length; i+=3) {
+X.push(xyz[i]);
+Y.push(xyz[i+1]);
+Z.push(xyz[i+2]);
+if (i>0) {
+ttxt+="  x["+j+"]:="+xyz[i]+";\n";
+ttxt+="  y["+j+"]:="+xyz[i+1]+";\n";
+ttxt+="  z["+j+"]:="+xyz[i+2]+";\n";
+j+=1;
+}
+}
+j1=1;
+j2=1;
+L=new Array();
+K=new Array();
+L.push(0);
+K.push(0);
+for (var i=1; i<=ile2; i++) {
+L[i]=read(kraw);
+ttxt+="  l["+j1+"]:="+L[i]+";\n";
+K[i]=new Array();
+K[i][0]=0;
+for (var j=1; j<=L[i]; j++) {
+K[i][j]=read(kraw);
+ttxt+="  k["+j1+","+j2+"]:="+K[i][j]+";\n";
+j2+=1;
+}
+j1+=1;
+j2=1;
+}
+// document.all.aa1.innerText=ttxt;
+this.X=X;
+this.Y=Y;
+this.Z=Z;
+this.L=L;
+this.K=K;
+this.alfa=alfa; // po³o¿enie
+this.beta=beta; // oka
+this.gama=gama; // obserwatora
+
+this.vx=parseFloat(document.all.VX.value); // punkt
+this.vy=parseFloat(document.all.VY.value); // skierowania wzroku
+this.vz=parseFloat(document.all.VZ.value); // obserwatora
+
+this.k=parseFloat(document.all.warK.value); // wspó³czynnik powiêkszenia
+
+this.d=parseFloat(document.all.warD.value); // odleg³oœæ obserwator-ekran
+Kol=new Array();
+Wiersz=new Array();
+Kol.push(0);
+Wiersz.push(0);
+var x,y,z,x1,y1,z1,x2,y2,z2,x3,y3,z3,x4,y4,z4,x5,y5,z5,x6,y6,z6,u,v;
+rysujBryle(mK,mW,aa);
+}
+function rysujBryle(mK,mW,aa) {
+wspolczynniki();
+function wspolczynniki() {
+wa=alfa*Math.PI/180;
+ca=Math.cos(wa);
+sa=Math.sin(wa);
+wb=beta*Math.PI/180;
+cb=Math.cos(wb);
+sb=Math.sin(wb);
+wc=gama*Math.PI/180;
+cc=Math.cos(wc);
+sc=Math.sin(wc);
+}
+for (var i=1; i<=ile1; i++) {
+x=parseFloat(X[i]);
+y=parseFloat(Y[i]);
+z=parseFloat(Z[i]);
+odwzorowanie();
+function odwzorowanie() {
+x1=x;
+y1=ca*y-sa*z;
+z1=sa*y+ca*z;
+
+x2=cb*x1-sb*z1;
+y2=y1;
+z2=sb*x1+cb*z1;
+
+x3=cc*x2-sc*y2;
+y3=sc*x2+cc*y2;
+z3=z2;
+
+x4=x3+vx;
+y4=y3+vy;
+z4=z3+vz;
+
+u=-x4/y4*d;
+v=-z4/y4*d;
+kol=mK/2+k*u;
+if (kol<0) {kol=0}
+if (kol>mK) {kol=mK}
+wiersz=mW/2-k*v;
+if (wiersz<0) {wiersz=0}
+if (wiersz>mW) {wiersz=mW}
+}
+Kol[i]=kol;
+Wiersz[i]=wiersz;
+}
+for (var i=1; i<=ile2; i++) {
+for (var j=1; j<=L[i]-1; j++) {
+k1=Kol[K[i][j]];
+w1=Wiersz[K[i][j]];
+k2=Kol[K[i][j+1]];
+w2=Wiersz[K[i][j+1]];
+line(k1,w1,k2,w2,"1px","black",aa);
+}
+}
+draw();
+}
+function rysuj(aa) {
+this.alfa=parseFloat(document.all.ALFA.value);
+this.beta=parseFloat(document.all.BETA.value);
+this.gama=parseFloat(document.all.GAMA.value);
+bryla(aa);
+}
+</script>
+</body>
+</html>

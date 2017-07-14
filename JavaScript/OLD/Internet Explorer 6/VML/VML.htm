@@ -1,0 +1,19 @@
+<html>
+<head>
+<style type=text/css>v\:* { behavior: url(#default#VML); }</style>
+</head>
+<body>
+<div id="graphdiv" class="graph"></div>
+<script>
+txtS="<v:group style=\"antialias:true; width=500px; height=500px\" coordsize=\"1000,1000\" coordorigin=\"0,0\">";
+txtL="";
+txtK="<\/v:group>";
+draw();
+function draw() {document.all.graphdiv.innerHTML=txtS+txtL+txtK}
+function line(x1,y1,x2,y2,sw,col,aa) {
+if (aa==0) {aa="false"} else {aa="true"}
+txtL+="<v:line style=\"antialias: "+aa+"\" from=\""+x1+","+y1+"\" to=\""+x2+","+y2+"\"><v:stroke weight=\""+sw+"\"; color=\""+col+"\";\/><\/v:line>";
+}
+</script>
+</body>
+</html>

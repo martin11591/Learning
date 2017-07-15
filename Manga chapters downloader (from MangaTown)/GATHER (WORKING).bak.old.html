@@ -1,0 +1,251 @@
+<html>
+<head>
+<title>Gathering addresses of images from MANGATOWN</title>
+<script src="jquery-2.1.4.min.js"></script>
+</head>
+<body>
+<div id="log" style="width: 50%; display: inline-block; float: left"></div>
+<div id="result" style="width: 50%; display: inline-block; float: left"></div>
+<div id="gatherField" style="position: fixed; top: 45%; width: 100%; padding-top: 25px; padding-bottom: 25px; z-index: 1; background: rgba(255,255,255,0.5); text-align: center">
+<input id="mangaURL" value="http://www.mangatown.com/manga/yamada_kun_to_7_nin_no_majo/c176/" style="width: 50%"></input><br />
+<button onclick="gatherManga()" style="width: 50%">GATHER ADDRESSES!</button></div>
+<script type="text/javascript">
+String.prototype.charDiffPos=function(testString2) {
+  testLen=Math.min(this.length,testString2.length);
+  for (testI=0; testI<testLen; testI++) if(this[testI]!=testString2[testI]) return testI;
+  return -1;
+}; 
+String.prototype.charDiff=function(testString2) {
+  testLen=Math.min(this.length,testString2.length);
+  resString=[];
+  for (testI=0; testI<testLen; testI++) if(this[testI]!=testString2[testI]) resString.push(testString2[testI]);
+  if (this.length!=testString2.length) {
+    if (this.length>testString2.length) resString.push(this.substr(testLen)); else resString.push(testString2.substr(testLen));
+  }
+  return resString.length==0?null:resString;
+};
+
+function filenameReplacer(str) {
+  try {
+    return str.toString().replace(new RegExp("\"","gi"),"").replace(new RegExp("[\/:\*\?\"<>|\\\\]+","gi"),"_");
+  } catch(err) {
+    console.log("Wrong data, can't replace.");
+    return str||null;
+  };
+};
+
+function saveFile(textData,filename) {
+  var resultBlob=new Blob([textData.replace(new RegExp("\\n","gi"),"\r\n")],{type: 'text/plain'});
+  resultBlobMouseEvent=document.createEvent('MouseEvents');
+  resultBlobElement=document.createElement('a');
+  resultBlobElement.download=filenameReplacer(filename)+".txt";
+  resultBlobElement.href=window.URL.createObjectURL(resultBlob);
+  resultBlobElement.dataset.downloadurl=['text/plain',resultBlobElement.download,resultBlobElement.href].join(':');
+  resultBlobMouseEvent.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
+  resultBlobElement.dispatchEvent(resultBlobMouseEvent);
+};
+
+log=document.getElementById("log");
+res=document.getElementById("result");
+
+this.isWorking=0;
+requestsLimit=4;
+requestRetryLimit=3;
+requestRetryTimeout=3000;
+
+//http://www.mangatown.com/manga/nisekoi_komi_naoshi/
+//http://www.mangatown.com/manga/yamada_kun_to_7_nin_no_majo/c172/
+
+function gatherManga() {
+  console.log("Gathering manga.");
+  if (this.isWorking==0) {
+  console.log("Idle.");
+  enteredURL=document.getElementById("mangaURL").value.toString();
+  console.log("Entered URL = \""+enteredURL+"\".");
+  check=new RegExp("mangatown.com","gi");
+  if (enteredURL.match(check)!=null) {
+    console.log("MangaTown.com found.");
+    gatherMangaFromMangaTown(enteredURL);
+    return 1;
+  };
+
+  if (!enteredURL) {
+    console.log("Adress is not entered.");
+    document.getElementById("mangaURL").select();
+    return null;
+  };
+  console.log("Found nothing. Wrong adress or something.");
+  alert("Found nothing. Check adress.");
+  document.getElementById("mangaURL").select();
+  return -1;
+  } else alert("Working already!");
+}
+
+function gatherMangaFromMangaTown(URI) {
+
+  console.log("Gathering manga from MangaTown.com.\nNow working.\nGathering adresses.");
+  this.isWorking==1;
+  manga.titlePageURL=enteredURL.slice(0,enteredURL.indexOf("/",enteredURL.indexOf("/manga/")+7))+"/";
+  manga.encodedTitlePageURL=encodeURIComponent(manga.titlePageURL);
+  console.log("Title page URL = \""+manga.titlePageURL+"\".");
+  if (manga.titlePageURL.length+1<=enteredURL.length) {
+    manga.chapterPageURL=enteredURL.slice(0,(enteredURL+"/").indexOf("/",manga.titlePageURL.length+1))+"/";
+    manga.encodedChapterPageURL=encodeURIComponent(manga.chapterPageURL);
+    console.log("Chapter page URL = \""+manga.chapterPageURL+"\".");
+  } else {
+    console.log("Starting chapter not specified.");
+    manga.chapterPageURL="";
+    manga.encodedChapterPageURL="";
+  }
+
+  console.log("Gathering information about manga.");
+  titlePageRequestXPath="//h1[@class='title-top']|//div[@class='detail_info clearfix']/ul/li|//div[@class='chapter_content']/ul[@class='chapter_list']";
+  titlePageRequestXPath="xpath=\""+encodeURIComponent(titlePageRequestXPath)+"\"";
+  req=request("titlePage","https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%27"+manga.encodedTitlePageURL+"%27%20and%20"+titlePageRequestXPath+"&format=json&diagnostics=true&callback=",gatherTitlePageInfo);
+
+  function gatherTitlePageInfo(data) {
+    manga.titlePageData=data;
+    manga.title=data.h1.content;
+    manga.log("Title: "+manga.title+".");
+    manga.rate=parseFloat(data.li[0].span.content.concat(data.li[0].span.em));
+    manga.log("Rate: "+manga.rate+"/5.");
+    altNameRegExp=new RegExp("Alternative Name","gi");
+    demographicRegExp=new RegExp("Demographic","gi");
+    genreRegExp=new RegExp("Genre","gi");
+    authorRegExp=new RegExp("Author","gi");
+    artistRegExp=new RegExp("Artist","gi");
+    statusRegExp=new RegExp("Status","gi");
+    for (dI in data.li) {
+      if (!data.li[dI].b) continue;
+      if (data.li[dI].b.match(altNameRegExp)!=null) {
+        manga.altName=data.li[dI].content.split("; ");
+        manga.log("Alternative name"+(manga.altName.length>1?"s":"")+": "+manga.altName.join("; ")+".");
+      }
+      if (data.li[dI].b.match(demographicRegExp)!=null) {
+        if (!data.li[dI].a[0]) {
+          manga.demographic=data.li[dI].a.content.split(", ");
+        } else {
+          dTmp="";
+          for (dJ in data.li[dI].a) dTmp+=data.li[dI].a[dJ].content+", ";
+          dTmp=dTmp.slice(0,-2);
+          manga.demographic=dTmp.split(", ");
+        };
+        manga.log("Demographic group"+(manga.demographic.length>1?"s":"")+": "+manga.demographic.join(", ")+".");
+      }
+      if (data.li[dI].b.match(genreRegExp)!=null) {
+        if (!data.li[dI].a[0]) {
+          manga.genre=data.li[dI].a.content.split(", ");
+        } else {
+          dTmp="";
+          for (dJ in data.li[dI].a) dTmp+=data.li[dI].a[dJ].content+", ";
+          dTmp=dTmp.slice(0,-2);
+          manga.genre=dTmp.split(", ");
+        };
+        manga.log("Genre"+(manga.genre.length>1?"s":"")+": "+manga.genre.join(", ")+".");
+      }
+      if (data.li[dI].b.match(authorRegExp)!=null) {
+        if (!data.li[dI].a[0]) {
+          manga.author=data.li[dI].a.content.split(", ");
+        } else {
+          dTmp="";
+          for (dJ in data.li[dI].a) dTmp+=data.li[dI].a[dJ].content+", ";
+          dTmp=dTmp.slice(0,-2);
+          manga.author=dTmp.split(", ");
+        };
+        manga.log("Author"+(manga.author.length>1?"s":"")+": "+manga.author.join(", ")+".");
+      }
+      if (data.li[dI].b.match(artistRegExp)!=null) {
+        if (!data.li[dI].a[0]) {
+          manga.artist=data.li[dI].a.content.split(", ");
+        } else {
+          dTmp="";
+          for (dJ in data.li[dI].a) dTmp+=data.li[dI].a[dJ].content+", ";
+          dTmp=dTmp.slice(0,-2);
+          manga.artist=dTmp.split(", ");
+        };
+        manga.log("Artist"+(manga.artist.length>1?"s":"")+": "+manga.artist.join(", ")+".");
+      }
+      if (data.li[dI].b.match(statusRegExp)!=null) {
+        manga.status=data.li[dI].content;
+        manga.log("Status: "+manga.status+".");
+      }
+    }
+
+    console.log("Gathering first page URL.");
+    manga.firstPageURL=data.ul.li[data.ul.li.length-1].a.href;
+    manga.encodedFirstPageURL=encodeURIComponent(manga.firstPageURL);
+    console.log("First page URL: \""+manga.firstPageURL+"\".");
+    firstPageRequestXPath="//select[@id='top_chapter_list']|//div[@class='page_select']/select|//div[@id='viewer']/a|//img[@style='display:none;']";
+    firstPageRequestXPath="xpath=\""+encodeURIComponent(firstPageRequestXPath)+"\"";
+    req=request("firstPage","https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%27"+manga.encodedFirstPageURL+"%27%20and%20"+firstPageRequestXPath+"&format=json&diagnostics=true&callback=",gatherFirstPageInfo);
+
+  };
+
+  function gatherFirstPageInfo(data) {
+    manga.firstPageData=data;
+    console.log("First page data:\n"+data);
+  };
+
+};
+
+manga=new Object(function() {
+  // return manga
+});
+manga.log=function(msg) {
+  if (!this.result) this.result=""; else this.result+="\n";
+  this.result+=msg;
+  console.log(msg);
+};
+
+requests=[];
+requestsHistory={done: [], fail: []};
+
+timer=setInterval(function() {
+  requestsLength=0;
+  for (rI in requests) requestsLength++;
+document.getElementById("log").innerText=requestsLength;
+},10);
+setTimeout(function(){clearInterval(timer)},5000);
+
+function request(name,url,callback,retryNum) {
+  if (!retryNum) retryNum=0;
+  if (retryNum>requestRetryLimit) {
+    console.log("Request reached max "+requestRetryLimit+" retry limit. Request rejected.");
+    requestsHistory.fail[name]="request(\""+name+"\",\""+url+"\","+callback+","+retryNum+");";
+    delete(requests[name]);
+    return -4; // retrying request failed
+  }
+  requestsLength=0;
+  for (rI in requests) requestsLength++;
+  if (requestsLength>=requestsLimit) {
+    console.log("Request named \""+name+"\" can't be requested, because of limited requests to "+requestsLimit+" at once. Next attempt in "+Math.ceil(requestRetryTimeout/1000)+" seconds.");
+    setTimeout(function(){request(name,url,callback)},requestRetryTimeout);
+    return -2; // exceeded requests limit
+  }
+  if (requests[name]) {
+    console.log("Request named \""+name+"\" can't be requested, because it already exists. Next attempt in "+Math.ceil(requestRetryTimeout/1000)+" seconds.");
+    setTimeout(function(){request(name,url,callback)},requestRetryTimeout);
+    return -3; // request already exists
+  }
+  requests[name]=$.ajax({dataType: "json", url: url, cache: false});
+  requests[name].done(function(requestData) {
+    callback(requestData.query.results);
+    requestsHistory.done[name]="request(\""+name+"\",\""+url+"\","+callback+","+retryNum+");";
+    delete(requests[name]);
+  });
+  requests[name].fail(function() {
+    console.log("Request named \""+name+"\" failed. Next attempt ("+(retryNum+1)+") in "+Math.ceil(requestRetryTimeout/1000)+" seconds.");
+    delete(requests[name]);
+    setTimeout(function(){request(name,url,callback,retryNum+1)},requestRetryTimeout);
+    return -1; // request failed
+  });
+}
+
+/*
+req=$.ajax({dataType: "json", url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%27http%3A%2F%2Fwww.mangatown.com%2Fmanga%2Fyamada_kun_to_7_nin_no_majo%2Fc174%2F19.html%27%20and%20xpath%3D%22%2F%2Fdiv%5B%40id%3D%27viewer%27%5D%2Fa%5B%40href%5D%7C%2F%2Fimg%5B%40alt%5D%5Blast()%5D%22&format=json&diagnostics=true&callback=", cache: false});
+req.done(function(msg) {console.log("Request done!\n"+this+"\n"+req.responseText)});
+req.fail(function() {alert("Failed! Retry")});
+*/
+</script>
+</body>
+</html>

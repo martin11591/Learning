@@ -1,0 +1,415 @@
+<html>
+<head>
+<title>Gathering addresses of images from MANGATOWN</title>
+<script src="jquery-2.1.4.min.js"></script>
+</head>
+<body>
+<div id="log" style="width: 50%; display: inline-block; float: left"></div>
+<div id="result" style="width: 50%; display: inline-block; float: left"></div>
+<div id="gatherField" style="position: fixed; top: 45%; width: 100%; padding-top: 25px; padding-bottom: 25px; z-index: 1; background: rgba(255,255,255,0.5); text-align: center">
+<input id="mangaTownURL" value="http://www.mangatown.com/manga/ore_ga_ojou_sama_gakkou_ni_shomin_sample_toshite_rachirareta_ken/c001" style="width: 50%"></input><br />
+<button onclick="gatherManga()" style="width: 50%">GATHER ADDRESSES!</button></div>
+<script type="text/javascript">
+log=document.getElementById("log");
+res=document.getElementById("result");
+
+myField=document.getElementById("gatherField");
+with (myField.style) {
+  //top=window.innerHeight/2-myField.scrollHeight/2;
+}
+
+this.busy=0;
+
+String.prototype.charDiffPos=function(testString2) {
+  testLen=Math.min(this.length,testString2.length);
+  for (testI=0; testI<testLen; testI++) if(this[testI]!=testString2[testI]) return testI;
+  return -1;
+}; 
+String.prototype.charDiff=function(testString2) {
+  testLen=Math.min(this.length,testString2.length);
+  resString=[];
+  for (testI=0; testI<testLen; testI++) if(this[testI]!=testString2[testI]) resString.push(testString2[testI]);
+  if (this.length!=testString2.length) {
+    if (this.length>testString2.length) resString.push(this.substr(testLen)); else resString.push(testString2.substr(testLen));
+  }
+  return resString.length==0?null:resString;
+};
+
+this.queueList=[];
+this.queue.max=16;
+
+function queue(qTime,qCall) {
+  //try { if (this.queueList.length>1) clearTimeout(this.queueList[0]); } catch(err) { console.log("Can't clear timeout!"); };
+  this.queueList.shift();
+  this.queueList.push(arguments);
+  console.log(arguments);
+  if (this.queueList.length>=this.queue.max) {
+    console.log("Queue over MAX: "+this.queueList.length);
+    this.queueList[this.queueList.length-1].push(setInterval(function() {
+      if (this.queueList.length<16) {
+        clearTimeout(this.queueList[this.queueList.length-1][1]);
+        this.queueList.pop();
+        call();
+      };
+    },100));
+  } else {
+    call();
+  };
+  function call() {
+    this.queueList[this.queueList.length-1].push(setTimeout(function() {
+      evCall=qCall.name+"(";
+      try {
+        console.log("!: "+this.queueList[this.queueList.length-1][0]);
+        for (i=2; i<this.queueList[this.queueList.length-1][0].length; i++) {evCall+=(i>2?",":"")+"this.queueList["+(this.queueList.length-1)+"][0]["+i+"]";console.log(this.queueList[this.queueList.length-1][0][i]);};
+      } catch(err) { console.log("No arguments!") };
+      evCall+=");";
+      try {
+        console.log(evCall);
+        eval(evCall);
+      } catch(err) { console.log("Can't evaluate!") };
+    },qTime));
+  };
+};
+
+function filenameReplacer(str) {
+  try {
+    return str.toString().replace(new RegExp("\"","gi"),"").replace(new RegExp("[\/:\*\?\"<>|\\\\]+","gi"),"_");
+  } catch(err) {
+    console.log("Wrong data, can't replace!");
+    return str||null;
+  };
+};
+
+function ajaxGetQuery(query,obj,successCall,queryDataType,queryCache) {
+  if (!query) return -1;
+  obj.ajaxTimer.shift();
+  if (obj.ajaxTimer.length>=obj.ajaxMaxSim) {
+    console.log("AJAX: Over MAX: "+obj.ajaxTimer.length);
+    obj.ajaxTimer.push(setTimeout(function() {
+      ajaxGetQuery(query,obj,successCall,queryDataType||"",queryCache||false);
+    },100));
+    return -1;
+  };
+  return $.ajax({
+    dataType: (queryDataType||"").toString().toLowerCase()=="xml"?"xml":"json",
+    url: query,
+    cache: queryCache||false,
+    success: function(ajaxData) {
+      if (ajaxData.query.results==null||!ajaxData||!ajaxData.query) {
+        console.log("Query result: null. Retry.");
+        obj.ajaxTimer.push(setTimeout(function() {
+          ajaxGetQuery(query,obj,successCall,queryDataType||"",queryCache||false);
+        },100));
+      } else {
+        try {
+          ajaxData.query.results.obj=obj;
+        } catch(err) { console.log("No object specified."); };
+        successCall(ajaxData.query.results);
+      }
+    },
+    error: function() {
+      console.log("Query error. Retry.");
+      obj.ajaxTimer.push(setTimeout(function() {
+        ajaxGetQuery(query,obj,successCall,queryDataType||"",queryCache||false);
+      },100));
+    }
+  });
+};
+
+function MangaTown(URI) {
+  this.name="";
+  this.altNames="";
+  this.authors="";
+  this.genres="";
+  this.bonusChapters=0;
+  this.chapters=0;
+  this.newestChapter=0;
+  this.URI=URI;
+  this.encodedURI=encodeURIComponent(this.URI);
+  this.ajaxMaxSim=16;
+  this.ajaxTimer=[];
+  this.ajaxData=null;
+
+  this.chaptersList=[];
+
+  this.newChapter=function(chapterData) {
+    this.chaptersList.unshift(new Chapter(chapterData));
+  };
+
+  function Chapter(chapterData) {
+    this.number=chapterData.number||0;
+    this.name=(typeof(chapterData.name)=="string"?chapterData.name:"")||"";
+    this.pages=chapterData.pages||0;
+    this.pageOffset=chapterData.pageOffset||0;
+    this.URI=chapterData.URI||"";
+    this.encodedURI=encodeURIComponent(this.URI);
+    this.date=chapterData.date||"";
+    this.pagesList=[];
+
+    this.newPage=function(pageData) {
+      this.pagesList.push(new Page(pageData));
+    }
+
+    function Page(pageData) {
+      this.number=pageData.number||0;
+      this.URI=pageData.URI||"";
+      this.encodedURI=encodeURIComponent(this.URI);
+      this.src="";
+    };
+  };
+ 
+  this.results=function(withChaptersList) {
+    try {
+      resStr=this.name;
+      resStr+="\nAlternative name"+(this.altNames.length>1?"s: "+this.altNames.join(", "):": "+this.altNames.join(", "));
+      resStr+="\nGenre"+(this.genres.length>1?"s: "+this.genres.join(", "):": "+this.genres.join(", "));
+      resStr+="\nAuthor"+(this.authors.length>1?"s: "+this.authors.join(", "):": "+this.authors.join(", "));
+      resStr+="\nArtist"+(this.artists.length>1?"s: "+this.artists.join(", "):": "+this.artists.join(", "));
+      resStr+="\nStatus: "+this.status;
+      resStr+="\nChapters: "+this.newestChapter+(this.bonusChapters>0?" (with "+this.bonusChapters+" bonus chapter"+(this.bonusChapters>1?"s":"")+")":"");
+    } catch(err) {
+      console.log("No basic data!");
+      return null;
+    };
+    if (withChaptersList) {
+      try {
+        resSum1=0;
+        for (resI in this.chaptersList) {
+          resSum1+=this.chaptersList[resI].pages;
+        };
+        resSum2=resSum1-this.chaptersList[this.ch].pages+this.pg;
+        resStr+="\n\nGathered "+resSum2+" page"+(resSum2>1?"s":"")+" of "+resSum1+" documented page"+(resSum1>1?"s":"")+"\n";
+        for (resI in this.chaptersList) {
+          resStr+="\nChapter "+this.chaptersList[resI].number+(this.chaptersList[resI].name!=""?": \""+this.chaptersList[resI].name+"\"":"");
+          try {
+            resStr+=(this.chaptersList[resI].pages>0?" have "+this.chaptersList[resI].pages+" page"+(this.chaptersList[resI].pages>1?"s":""):"")+(this.ch<=this.chapters&&resI==this.ch&&this.pg<this.chaptersList[resI].pages?" (gathering "+this.pg+" page)":"");
+          } catch(err) {
+            console.log("Pages error");
+          };
+        };
+      } catch(err) {
+        console.log("Chapters error");
+      };
+    };
+    return resStr;
+  };
+
+  this.resultsFile=function(withChaptersList) {
+    try {
+      resStr=filenameReplacer(this.name);
+    } catch(err) {
+      console.log("No basic data!");
+      return null;
+    };
+    if (withChaptersList) {
+      for (resI in this.chaptersList) {
+        if (!this.chaptersList[resI].pagesList[0]) continue;
+        try {
+          resLine="Chapter "+"0".repeat(Math.floor(Math.log10(this.newestChapter))-Math.floor(Math.log10(parseInt(this.chaptersList[resI].number))))+this.chaptersList[resI].number+(this.chaptersList[resI].name!=""?" "+this.chaptersList[resI].name:"");
+          resLine=filenameReplacer(resLine).replace(new RegExp(" !","g"),"!");
+          resStr+="\n"+resLine;
+          try {
+            for (resJ in this.chaptersList[resI].pagesList) {
+              resStr+=(this.chaptersList[resI].pagesList[resJ].src?"\n"+this.chaptersList[resI].pagesList[resJ].src:"");
+            };
+          } catch(err) {
+            console.log("Pages error");
+          };
+        } catch(err) {
+          console.log("Chapters error");
+        };
+      };
+    };
+    return resStr;
+  };
+};
+
+function firstStep(obj) {
+  this.busy=1;
+  console.log("First step.");
+  obj.URI=obj.URI.replace(new RegExp("[^:]\/{2,}","gi"),function(x){return x.substr(0,x.indexOf("\/")+1)});
+  URI=obj.URI;
+  try {
+    obj.URI=obj.URI.match(new RegExp("[a-z]+:(\\\\|\/){2}ww[a-z0-9]{1,2}\\.mangatown\\.com\/manga\/[^\\\\\/]+\/","i"))[0];
+  } catch(err) { console.log("First step: No url!"); this.busy=0; return -1 }
+  obj.encodedURI=encodeURIComponent(obj.URI);
+  obj.query="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+obj.encodedURI+"%22%20and%20xpath%3D'%2F%2Fmeta%5B%40property%3D%5C'og%3Atitle%5C'%5D%7C%2F%2Fli'&format=json&diagnostics=true&callback=";
+  try {
+    obj.ch=URI.match(new RegExp("\/c[0-9.]+\/","i"))[0];
+    obj.ch=obj.ch.substr(2,obj.ch.length-3);
+    obj.ch=parseFloat(obj.ch);
+  } catch(err) { obj.ch=0; }
+  obj.startCh=obj.ch;
+  ajaxGetQuery(obj.query,obj,secondStep);
+};
+function secondStep(ajaxData) {
+  obj=ajaxData.obj;
+  obj.ajaxData=ajaxData;
+  console.log("Second step.");
+  console.log(obj.URI);
+  console.log(obj.encodedURI);
+  console.log(obj.query);
+  console.log(obj.ajaxData);
+  obj.name=obj.ajaxData.meta[0]?obj.ajaxData.meta[0].content:obj.ajaxData.meta.content;
+  obj.altNames=obj.ajaxData.li[8].content||"";
+  obj.altNames=obj.altNames.split("; ");
+  obj.genres="";
+  for (i=0; i<obj.ajaxData.li[10].a.length; i++) obj.genres+=(obj.ajaxData.li[10].a[i].content||"")+", ";
+  obj.genres=obj.genres.substr(0,obj.genres.length-2).split(", ");
+  obj.authors="";
+  if (obj.ajaxData.li[11].a.length) {
+    for (i=0; i<obj.ajaxData.li[11].a.length; i++) obj.authors+=(obj.ajaxData.li[11].a[i].content||obj.ajaxData.li[11].a.content||"")+", ";
+    obj.authors=obj.authors.substr(0,obj.authors.length-2);
+  } else {
+    obj.authors=obj.ajaxData.li[11].a.content||"";
+  }
+  obj.authors=obj.authors.split(", ");
+  obj.artists="";
+  if (obj.ajaxData.li[12].a.length) {
+    for (i=0; i<obj.ajaxData.li[12].a.length; i++) obj.artists+=(obj.ajaxData.li[12].a[i].content||obj.ajaxData.li[12].a.content||"")+", ";
+    obj.artists=obj.artists.substr(0,obj.artists.length-2);
+  } else {
+    obj.artists=obj.ajaxData.li[12].a.content||"";
+  }
+  obj.artists=obj.artists.split(", ");
+  obj.status=(obj.ajaxData.li[13].content||"").replace(new RegExp("[  ]{2,}","gi"),", ");
+  obj.offset=0;
+  testFirst=0;
+  for (i in obj.ajaxData.li) {
+    console.log(obj.ajaxData.li[i]);
+    try {
+      testLink=obj.ajaxData.li[i].a.href||obj.ajaxData.li.a.href;
+      console.log("i: "+i+"\tLINK: "+testLink);
+      testLink=testLink.match(new RegExp("[a-z]+:(\\\\|\/){2}ww[a-z0-9]{1,2}\\.mangatown\\.com\/manga\/[^\\\\\/]+\/(c[0-9.]+|v[0-9]+\/c[0-9.]+)\/","i"))[0];
+      console.log("Match result: "+testLink);
+      obj.offset=parseFloat(i);
+      console.log("OFFSET: "+obj.offset);
+      if (testFirst==1) break;
+      testFirst=1;
+    } catch(err) { void(null); };
+  };
+  obj.newestChapter=obj.ajaxData.li[obj.offset].a.href;
+  obj.newestChapter=obj.newestChapter.match(new RegExp("\/c[0-9.]+\/","i")).toString();
+  obj.newestChapter=parseFloat(obj.newestChapter.substr(2,obj.newestChapter.length-2));
+  i=0;
+  do {
+    chapterNumber=obj.ajaxData.li[i+obj.offset].a.href;
+    chapterNumber=chapterNumber.match(new RegExp("\/c[0-9.]+\/","i")).toString();
+    chapterNumber=parseFloat(chapterNumber.substr(2,chapterNumber.length-2));
+    obj.newChapter({name: typeof(obj.ajaxData.li[i+obj.offset].span[0]=="string")?obj.ajaxData.li[i+obj.offset].span[0]:obj.ajaxData.li[i+obj.offset].span.content?obj.ajaxData.li[i+obj.offset].span.content:obj.ajaxData.li[i+obj.offset].span, number: chapterNumber, URI: obj.ajaxData.li[i+obj.offset].a.href, date: (obj.ajaxData.li[i+obj.offset].span[1]?obj.ajaxData.li[i+obj.offset].span[1].content:obj.ajaxData.li[i+obj.offset].span.content)||""});
+    i++;
+    obj.chapters++;
+  } while(obj.newestChapter-chapterNumber<obj.newestChapter-1);
+  obj.bonusChapters=obj.chapters-obj.newestChapter;
+  for (i in obj.chaptersList) if (obj.chaptersList[i].number==obj.ch) {obj.ch=i;break}
+  thirdStep(obj);
+  console.log("Third step.");
+};
+
+function thirdStep(obj) {
+  if (obj.ch>=obj.chapters) {
+    obj.ch-=1;
+    showResults(obj,1,1,1);
+    saveFile(obj.resultsFile(1),obj.name+" ("+obj.startCh+(obj.startCh!=(obj.chapters-obj.bonusChapters)?"-"+(obj.chapters-obj.bonusChapters):"")+")");
+    this.busy=0;
+    return 1;
+  };
+  try {
+    obj.chaptersList[obj.ch].URI=obj.chaptersList[obj.ch].URI.match(new RegExp("[a-z]+:(\\\\|\/){2}ww[a-z0-9]{1,2}\\.mangatown\\.com\/manga\/[^\\\\\/]+\/(c[0-9.]+|v[0-9]+\/c[0-9.]+)\/","i"))[0];
+  } catch(err) { console.log("Third step: No url!"); this.busy=0; return -1 }
+  obj.chaptersList[obj.ch].encodedURI=encodeURIComponent(obj.chaptersList[obj.ch].URI);
+  obj.chaptersList[obj.ch].query="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+obj.chaptersList[obj.ch].encodedURI+"%22%20and%20xpath%3D'%2F%2Fselect%7C%2F%2Fimg'&format=json&diagnostics=true&callback=";
+  console.log(obj.chaptersList[obj.ch].URI);
+  console.log(obj.chaptersList[obj.ch].encodedURI);
+  console.log(obj.chaptersList[obj.ch].query);
+  ajaxGetQuery(obj.chaptersList[obj.ch].query,obj,chapterPages);
+};
+
+function chapterPages(ajaxData) {
+  console.log(ajaxData);
+  obj=ajaxData.obj;
+  obj.chaptersList[obj.ch].ajaxData=ajaxData;
+  obj.chaptersList[obj.ch].pages=parseInt(ajaxData.select[1].option.length||0);
+  obj.pg=0;
+  for (i in ajaxData.select[1].option) {
+    obj.chaptersList[obj.ch].newPage({number: ajaxData.select[1].option[i].content, URI: ajaxData.select[1].option[i].value});
+  };
+  obj.chaptersList[obj.ch].pagesList[obj.pg].src=(ajaxData.img[0]?ajaxData.img[0].src:ajaxData.img.src)||"";
+  obj.pg++;
+  try {
+    obj.chaptersList[obj.ch].pagesList[obj.pg].src=(ajaxData.img[1]?ajaxData.img[1].src:ajaxData.img.src)||"";
+    obj.pg++;
+  } catch(err) {
+    console.log("Chapter pages: Next page not exists.");
+  };
+  restPages(obj);
+};
+
+function restPages(obj) {
+  if (obj.pg>=obj.chaptersList[obj.ch].pages) {
+    obj.ch++;
+    thirdStep(obj);
+    return;
+  };
+  try {
+    obj.chaptersList[obj.ch].pagesList[obj.pg].URI=obj.chaptersList[obj.ch].pagesList[obj.pg].URI.match(new RegExp("[a-z]+:(\\\\|\/){2}ww[a-z0-9]{1,2}\\.mangatown\\.com\/manga\/[^\\\\\/]+\/(c[0-9.]+|v[0-9]+\/c[0-9.]+)\/[0-9]+.htm[l]{0,1}","i"))[0];
+  } catch(err) { console.log("Rest pages: No url!"); return -1 }
+  obj.chaptersList[obj.ch].pagesList[obj.pg].encodedURI=encodeURIComponent(obj.chaptersList[obj.ch].pagesList[obj.pg].URI);
+  obj.chaptersList[obj.ch].pagesList[obj.pg].query="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+obj.chaptersList[obj.ch].pagesList[obj.pg].encodedURI+"%22%20and%20xpath%3D'%2F%2Fselect%7C%2F%2Fimg'&format=json&diagnostics=true&callback=";
+  ajaxGetQuery(obj.chaptersList[obj.ch].pagesList[obj.pg].query,obj,furtherRestPages);
+};
+
+function furtherRestPages(ajaxData) {
+  obj=manga;
+  obj.chaptersList[obj.ch].pagesList[obj.pg].ajaxData=ajaxData;
+  obj.chaptersList[obj.ch].pagesList[obj.pg].src=(ajaxData.img[0]?ajaxData.img[0].src:ajaxData.img.src)||"";
+  console.log("CH: "+obj.ch+" PG: "+obj.pg);
+  obj.pg++;
+  try {
+    obj.chaptersList[obj.ch].pagesList[obj.pg].src=(ajaxData.img[1]?ajaxData.img[1].src:ajaxData.img.src)||"";
+    obj.pg++;
+  } catch(err) {
+    console.log("Further rest pages: Next page not exists.");
+  };
+  if (obj.pg>=obj.chaptersList[obj.ch].pages) {
+    obj.ch++;
+    thirdStep(obj);
+    return;
+  };
+  try {
+    obj.chaptersList[obj.ch].pagesList[obj.pg].URI=obj.chaptersList[obj.ch].pagesList[obj.pg].URI.match(new RegExp("[a-z]+:(\\\\|\/){2}ww[a-z0-9]{1,2}\\.mangatown\\.com\/manga\/[^\\\\\/]+\/(c[0-9.]+|v[0-9]+\/c[0-9.]+)\/[0-9]+.htm[l]{0,1}","i"))[0];
+  } catch(err) { console.log("No url!"); return -1 }
+  obj.chaptersList[obj.ch].pagesList[obj.pg].encodedURI=encodeURIComponent(obj.chaptersList[obj.ch].pagesList[obj.pg].URI);
+  obj.chaptersList[obj.ch].pagesList[obj.pg].query="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+obj.chaptersList[obj.ch].pagesList[obj.pg].encodedURI+"%22%20and%20xpath%3D'%2F%2Fselect%7C%2F%2Fimg'&format=json&diagnostics=true&callback=";
+  showResults(obj,1,1);
+  ajaxGetQuery(obj.chaptersList[obj.ch].pagesList[obj.pg].query,obj,furtherRestPages);
+};
+
+function showResults(obj,withChaptersList,showLog,showRes) {
+  if (showLog) log.innerText=obj.results(withChaptersList);
+  if (showRes) res.innerText=obj.resultsFile(withChaptersList);
+};
+
+function saveFile(textData,filename) {
+  var resultBlob=new Blob([textData.replace(new RegExp("\\n","gi"),"\r\n")],{type: 'text/plain'});
+  resultBlobMouseEvent=document.createEvent('MouseEvents');
+  resultBlobElement=document.createElement('a');
+  resultBlobElement.download=filenameReplacer(filename)+".txt";
+  resultBlobElement.href=window.URL.createObjectURL(resultBlob);
+  resultBlobElement.dataset.downloadurl=['text/plain',resultBlobElement.download,resultBlobElement.href].join(':');
+  resultBlobMouseEvent.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
+  resultBlobElement.dispatchEvent(resultBlobMouseEvent);
+};
+
+//http://www.mangatown.com/manga/nisekoi_komi_naoshi/
+//http://www.mangatown.com/manga/yamada_kun_to_7_nin_no_majo/c172/
+
+function gatherManga() {
+  if (this.busy==0) {
+    manga=new MangaTown(document.getElementById("mangaTownURL").value+"/");
+    firstStep(manga);
+  } else alert("Working already!");
+}
+</script>
+</body>
+</html>

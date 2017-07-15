@@ -1,0 +1,17 @@
+Rakudai Kishi no Eiyuutan (Rakudai Kishi no Cavalry)
+1,63,0,http://a.mangatown.com/store/manga/14658/001.0/compressed/e<counter>.jpg?v=51397472421
+1,47,0,http://a.mangatown.com/store/manga/14658/002.0/compressed/v<counter>.jpg?v=51399203721
+1,42,0,http://a.mangatown.com/store/manga/14658/003.0/compressed/e<counter>.jpg?v=51402157522
+1,47,0,http://a.mangatown.com/store/manga/14658/004.0/compressed/d<counter>.jpg?v=51404792721
+1,49,0,http://a.mangatown.com/store/manga/14658/005.0/compressed/e<counter>.jpg?v=51407931621
+1,60,0,http://a.mangatown.com/store/manga/14658/006.0/compressed/t<counter>.jpg?v=51410255427
+1,40,0,http://a.mangatown.com/store/manga/14658/007.0/compressed/m<counter>.jpg?v=51413981421
+1,49,0,http://a.mangatown.com/store/manga/14658/008.0/compressed/u<counter>.jpg?v=51416326821
+1,33,0,http://a.mangatown.com/store/manga/14658/009.0/compressed/g<counter>.jpg?v=51418884621
+1,36,0,http://a.mangatown.com/store/manga/14658/010.0/compressed/nrakudai-kishi-no-cavalry-<counter>.jpg?v=51422982981
+1,44,0,http://a.mangatown.com/store/manga/14658/011.0/compressed/s<counter>.jpg?v=51424115421
+1,35,0,http://a.mangatown.com/store/manga/14658/012.0/compressed/t<counter>.jpg?v=51425870722
+1,34,0,http://a.mangatown.com/store/manga/14658/013.0/compressed/m<counter>.jpg?v=51428481201
+1,50,0,http://a.mangatown.com/store/manga/14658/014.0/compressed/o<counter>.jpg?v=51431881528
+1,60,0,http://a.mangatown.com/store/manga/14658/015.0/compressed/j<counter>.jpg?v=51434082982
+1,66,0,http://a.mangatown.com/store/manga/14658/016.0/compressed/j<counter>.jpg?v=51438537921

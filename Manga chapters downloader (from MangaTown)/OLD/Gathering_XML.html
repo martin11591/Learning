@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>Gathering addresses of images from MANGATOWN</title>
+<script src="jquery-2.1.4.min.js"></script>
+</head>
+<body>
+<div id="log" style="width: 50%; display: inline-block; float: left"></div>
+<div id="result" style="width: 50%; display: inline-block; float: left"></div>
+<div id="gatherField" style="position: fixed; top: 45%; width: 100%; padding-top: 25px; padding-bottom: 25px; z-index: 1; background: rgba(255,255,255,0.5); text-align: center">
+<input id="mangaTownURL" value="http://www.mangatown.com/manga/yamada_kun_to_7_nin_no_majo/c170/" style="width: 50%"></input><br />
+<button onclick="gatherInitialize(document.getElementById('mangaTownURL').value)" style="width: 50%">GATHER ADDRESSES!</button></div>
+<script type="text/javascript">
+var lastChapter, firstPage, lastPage;
+
+log=document.getElementById("log");
+res=document.getElementById("result");
+
+// http://www.mangatown.com/manga/yamada_kun_to_7_nin_no_majo/c001
+myField=document.getElementById("gatherField");
+with (myField.style) {
+  top=window.innerHeight/2-myField.scrollHeight/2;
+}
+
+gatheringStarted=1;
+
+function gatherInitialize(url) {
+  try { chapterCounter } catch(err) {
+    chapterCounter=new RegExp("c[0-9]+","gi").exec(url);
+    chapterCounter=parseInt(chapterCounter[0].substr(1));
+  }
+  this.url=url;
+  sourceUrl="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+encodeURIComponent(this.url)+"%22%20and%20xpath%3D'%2F%2Foption%7C%2F%2Fimg%5B%40id%3D%5C'image%5C'%5D%7C%2F%2Fa%5B%40class%3D%5C'mr10%5C'%5D'&diagnostics=true";
+  siteSource=$.ajax({
+    dataType: "xml",
+    url: sourceUrl,
+    cache: false,
+    success: function() {
+      tmpStr=str=siteSource.responseText;
+      mangaName=new RegExp("<a class=\"mr10\" href=\".*\">.+<\/a>","gi").exec(str).toString();
+      mangaName=new RegExp("\">.+ \\d+<\/a>","gi").exec(mangaName).toString();
+      mangaName=mangaName.substring(2,mangaName.search(new RegExp(" \\d+<\/a>")));
+      lastChapter=new RegExp("href=\"[^\"]*\"","gi").exec(str);
+      lastChapter=parseInt(lastChapter[0].substring(lastChapter[0].lastIndexOf("\/c")+2,lastChapter[0].lastIndexOf("\/\"")))-1;
+      if (gatheringStarted==1) {
+        log.innerText+="Manga: "+mangaName+"\n\nChapters: "+lastChapter+" (additional/bonuses are not counted)\n\n";
+        res.innerText=mangaName.replace(new RegExp("[\/:\*\"<>|\\\\]+","gi"),"")+"\n";
+        gatheringStarted=0;
+      }
+      gatherChapterData();
+    }
+  });
+}
+function gatherChapterData() {
+  str=str.substring(str.indexOf("<option"),str.lastIndexOf("<option selected="));
+  pageOffset=0;
+  pageSrc=str.substr(str.lastIndexOf("src")+5);
+  pageSrc=pageSrc.substring(0,pageSrc.indexOf("\""));
+  pageSrc=pageSrc.replace(new RegExp("\/*[0-9]+.jpg","gi"),function(x) {
+    x=x.replace(new RegExp("[0-9]+"),function(y) {
+      pageOffset=parseInt(y)-1;
+      return "!counter!";
+    });
+    return x;
+  });
+  firstPage=str.substr(str.search(new RegExp(">[0-9]+<"))+1);
+  firstPage=parseInt(firstPage.substring(0,firstPage.indexOf("<")));
+  lastPage=str.substr(str.search(new RegExp(">[0-9]+<\/option><img"))+1);
+  lastPage=parseInt(lastPage.substring(0,lastPage.indexOf("<")));
+
+  log.innerText+="Chapter: "+chapterCounter+", pages: "+firstPage+"-"+lastPage+"\n";
+  res.innerText+=firstPage+","+lastPage+","+pageOffset+","+pageSrc+"\n";
+
+  strChapterCounter1="0".repeat(2-Math.floor(Math.log10(chapterCounter)))+chapterCounter;
+  chapterCounter++;
+  if (chapterCounter>lastChapter) {
+    log.innerText+="\nAll done. Save file as txt and use with batch file."
+    return;
+  }
+  strChapterCounter2="0".repeat(2-Math.floor(Math.log10(chapterCounter)))+chapterCounter;
+  this.url=this.url.replace(new RegExp("c"+strChapterCounter1,"gi"),"c"+strChapterCounter2);
+  gatherInitialize(this.url);
+}
+
+// YQL
+// select * from html where url="http://www.mangatown.com/manga/yamada_kun_to_7_nin_no_majo/c001" and xpath='//option|//img[@id=\'image\']|//a[@class=\'mr10\']'
+
+// https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fwww.mangatown.com%2Fmanga%2Fyamada_kun_to_7_nin_no_majo%2Fc001%22%20and%20xpath%3D'%2F%2Foption%7C%2F%2Fimg%5B%40id%3D%5C'image%5C'%5D%7C%2F%2Fa%5B%40class%3D%5C'mr10%5C'%5D'&diagnostics=true
+
+// " " = %20
+// ":" = %3A
+// "/" = %2F
+
+</script>
+</body>
+</html>

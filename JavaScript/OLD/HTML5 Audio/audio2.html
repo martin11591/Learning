@@ -1,0 +1,127 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>HTML5 Audio</title>
+</head>
+<style type="text/css">
+td {text-align: center}
+</style>
+<body>
+<audio id="listener" src=""></audio>
+<table style="width: 100%">
+<tr><td colspan=3>File:<input id="fileToPlay" type="text" value="D:\MARTIN\Muzyka\Z gier\[PSP] Final Fantasy Type-0\Atrac-000D4BC0-08400230-B62CECF3.wav" style="width: 98%" /></td></tr>
+<tr><td>FPS Played</td><td>&nbsp;</td><td>FPS Normal</td></tr>
+<tr><td><input id="FPSPlay" value=12 style="width: 100%" /></td><td>/</td><td><input id="FPSNorm" value=50 style="width: 100%" /></td></tr>
+<tr title="in samples; 2646 samples in 44,100 Hz freq means 1 second"><td colspan=3>Buffer length:<input id="bufferLength" value=750 style="width: 95%" /></td></tr>
+<tr><td colspan=3><button style="width: 100%" onclick="setFileInPlayer()">PLAY</button></td></tr>
+<tr><td colspan=3><progress id="songProgress" style="width: 100%"></progress></td></tr>
+<tr><td colspan=3 id="textTD">&nbsp;</td></tr>
+</table>
+<script type="text/javascript">
+function $(id) {return document.all?document.all[id]:document.getElementById(id)}
+
+function createAudioObject(id,data) {
+  if (typeof(data)!="object") {
+    data={file: "audio.wav"};
+  }
+  if (!data.file||data.file=="undefined"||data.file=="") data.file="audio.wav";
+  this.handle=$(id);
+  // Flags:
+  // 0 - stop
+  // 1 - play
+  // 2 - pause
+  this.flag=0;
+  this.muted=-1;
+  this.play=function() {
+    if (this.flag!=1) {
+      this.handle.play();
+    }
+  }
+  this.pause=function() {
+    if (this.flag!=2) {
+      this.handle.pause();
+    }
+  }
+  this.stop=function() {
+    if (this.flag!=0) {
+      this.handle.stop();
+    }
+  }
+  this.seek=function(seekTo) {
+    if (isNaN(seekTo)||seekTo=="undefined") return;
+    this.handle.currentTime=seekTo;
+  }
+  this.mute=function() {
+    this.muted=-this.muted;
+    if (this.muted<0) {this.handle.mute=false} else {this.handle.mute=true}  
+  }
+  this.volume=function(vol) {
+    this.handle.volume=vol;
+  }
+  this.setFile=function(f) {
+    this.file=f;
+    this.handle.src=f;
+  }
+  this.file=data.file;
+  this.log=function() {
+    temp="";
+    for (i in this.handle)
+    {
+      try
+      {
+        temp+="audio["+id+"]."+i+"="+eval("this.handle."+i);
+      } catch(err) {temp+="audio["+id+"]."+i+"=ERROR: "+err}
+      temp+="\n";
+    }
+    return temp;
+  }
+}
+
+setTimeout("setFileInPlayer()",750);
+
+function setFileInPlayer() {
+  try {
+    clearTimeout(timer1);
+    clearTimeout(timer2);
+    clearTimeout(timer3);
+  } catch(err) {void(null);}
+  audioElement=new createAudioObject("listener");
+  audioElement.setFile($("fileToPlay").value==""?"audio.wav":$("fileToPlay").value);
+  refresh=1000/30;
+  startTimer=new Date().getTime();
+  samplePlayed=0;
+  timer3=setTimeout("setProgressBar()");
+  playFile();
+}
+function playFile() {
+  fpsPlay=parseFloat($("FPSPlay").value);
+  fpsNorm=parseFloat($("FPSNorm").value);
+  bufLen=parseFloat($("bufferLength").value);
+  if (fpsPlay<0) fpsPlay=0;
+  if (fpsNorm<1) fpsNorm=1;
+  if (bufLen<refresh) bufLen=refresh;
+  getTimer=new Date().getTime();
+  diffTimer=getTimer-startTimer;
+  if (diffTimer>=bufLen) {
+    timer2=setTimeout("seekFile()",1);
+    startTimer=getTimer;
+  }
+  timer1=setTimeout("playFile()",refresh);
+}
+function seekFile() {
+  ref=diffTimer/1000*fpsPlay/fpsNorm;
+  if (audioElement.flag!=1) audioElement.play();
+  audioElement.seek(samplePlayed);
+  samplePlayed+=ref;
+  $("songProgress").value=samplePlayed;
+  while (samplePlayed>audioElement.handle.duration&&typeof(audioElement.handle.duration)=="number") {samplePlayed-=audioElement.handle.duration};
+}
+function setProgressBar() {
+  if (isNaN(audioElement.handle.duration)) timer3=setTimeout("setProgressBar()",50); else {
+    $("songProgress").max=audioElement.handle.duration;
+    clearTimeout(timer3);
+  }
+}
+</script>
+</body>
+</html>

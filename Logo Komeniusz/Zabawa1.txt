@@ -1,0 +1,55 @@
+oto zabawa
+ czyœæ
+ usuñ¿ó³wia wszystkie
+ ustaleg [1022 555]
+ nowy¿ó³w "komputer [0 0 0 p¿ "standard]
+ nowy¿ó³w "gracz [0 0 0 p¿ "oko]
+ nowy¿ó³w "rysownik [0 0 0 s¿ opu]
+ przypisz "kk pierw proszê "komputer [poz]
+ przypisz "kw ost proszê "komputer [poz]
+ przypisz "gk pierw ost stanmyszy
+ przypisz "gw ost ost stanmyszy
+ przypisz "kdk 3
+ przypisz "kdw 5
+ przypisz "gdk 5
+ przypisz "gdw -3
+ ps [Klawiszem spacji czyœcisz ekran.]
+ ps [Ustaw kursor tam, gdzie chcesz aby znalaz³o siê oko.]
+ ps [Czy chcesz, aby oba te obiekty rysowa³y miêdzy sob¹ linie ( T / N ) ?]
+ przypisz "odp czytajklawisz
+ gra
+ju¿
+oto gra
+ przypisz "skk :kk + :kdk
+ przypisz "skw :kw + :kdw
+ jeœli :skk < -511 [przypisz "kdk ( - :kdk )]
+ jeœli :skk > 511 [przypisz "kdk ( - :kdk )]
+ jeœli :skw < -277 [przypisz "kdw ( - :kdw )]
+ jeœli :skw > 277 [przypisz "kdw ( - :kdw )]
+ przypisz "kk :kk + :kdk
+ przypisz "kw :kw + :kdw
+ s³uchaj "komputer
+ pod
+ nowexy :kk :kw
+ opu
+ s³uchaj "gracz
+ pod
+ przypisz "sgx :gk + :gdk
+ przypisz "sgy :gw + :gdw
+ jeœli :sgx < -511 [przypisz "gdk ( - :gdk )]
+ jeœli :sgx > 511 [przypisz "gdk ( - :gdk )]
+ jeœli :sgy < -277 [przypisz "gdw ( - :gdw )]
+ jeœli :sgy > 277 [przypisz "gdw ( - :gdw )]
+ przypisz "gk :gk + :gdk
+ przypisz "gw :gw + :gdw
+ nowexy :gk :gw
+ opu
+ s³uchaj "komputer
+ skieruj azymut proszê "gracz [poz]
+ s³uchaj "gracz
+ skieruj azymut proszê "komputer [poz]
+ jeœli :odp = 116 [s³uchaj "rysownik odcinek :kk + 511 277 - :kw :gk + 511 277 - :gw 1022 555]
+ jeœli klawisz? [jeœli czytajklawisz = 32 [czyœæ]]
+ czekaj 1
+ gra
+ju¿

@@ -1,0 +1,89 @@
+oto starter
+ ulw 2 dzielekran
+ ustaleg [1024 618]
+ usuñ¿ó³wia wszystkie
+ uwsm []
+ czyœæ
+ init
+ju¿
+oto init
+ nowy¿ó³w "gracz1 [0 -300 0 animacja p¿ "kreska]
+ nowy¿ó³w "gracz2 [0 307 0 animacja p¿ "kreska]
+ nowy¿ó³w "pi³ka [0 0 0 p¿ "pilka]
+ s³uchaj wszystkie pod
+ przypisz "k 0
+ przypisz "w 0
+ przypisz "x1 0
+ przypisz "x2 0
+ przypisz "szer1 16
+ przypisz "punkty1 0
+ przypisz "punkty2 0
+ przypisz "zycia1 5
+ przypisz "zycia2 5
+ przypisz "odbite 0
+ przypisz "przepuszczone 0
+ przypisz "faza1 1
+ przypisz "dx1 ( losowa 30 ) - 1
+ dopóki [:dx1 = 0][przypisz "dx1 ( losowa 30 ) - 1]
+ przypisz "dk ( losowa 30 ) - 1
+ dopóki [:dk = 0][przypisz "dk ( losowa 30 ) - 1]
+ przypisz "dw ( losowa 30 ) - 1
+ dopóki [:dw = 0][przypisz "dw ( losowa 30 ) - 1]
+ przypisz "dx1 :dx1 * 3
+ przypisz "dk :dk / 50
+ przypisz "dw :dw / 50
+ przypisz "ii 0
+ przypisz "dii 1
+ przypisz "ij 1000
+ ruch
+ju¿
+oto poszerz
+ zwiêksz "faza1
+ jeœli :faza1 > 8 [przypisz "faza1 8][grajplik "extra2]
+ s³uchaj "gracz1
+ ustalfazê :faza1
+ przypisz "szer1 15 + :faza1 * 2
+ju¿
+oto ruch
+ przypisz "xx1 pierw ost stanmyszy
+ przypisz "sx :xx1 - :x1
+ jeœli :sx < -2 [przypisz "x1 :x1 - 2]
+ jeœli :sx > 2 [przypisz "x1 :x1 + 2]
+ jeœli :sx > -2 ~
+ [jeœli :sx < 2 ~
+ [przypisz "x1 :xx1]]
+ jeœli :x1 < -510 + :szer1 [przypisz "x1 -510 + :szer1]
+ jeœli :x1 > 512 - :szer1 [przypisz "x1 512 - :szer1]
+ s³uchaj "gracz1 nowex :x1
+ przypisz "sk :k + :dk
+ przypisz "sw :w + :dw
+ jeœli :sw <= -292 ~
+ [jeœli :sk > :x1 - :szer1 - 3 ~
+ [jeœli :sk < :x1 + :szer1 + 3 [przypisz "dw ( - :dw ) przypisz "punkty1 :punkty1 + 1 zwiêksz "odbite]]]
+ jeœli :sw >= 292 ~
+ [jeœli :sk > :x2 - :szer1 - 3 ~
+ [jeœli :sk < :x2 + :szer1 + 3 [przypisz "dw ( - :dw ) przypisz "punkty2 :punkty2 + 1]]]
+ jeœli ent :odbite / 10 + 1 > :faza1 [poszerz]
+ jeœli :zycia1 < 1 [stop]
+ jeœli :zycia2 < 1 [stop]
+ jeœli abs :sk > 505 [przypisz "dk ( - :dk )]
+ jeœli :sw > 302 [przypisz "dw ( - :dw ) przypisz "zycia2 :zycia2 - 1 grajplik "rocket]
+ jeœli :sw < -302 [przypisz "dw ( - :dw ) przypisz "zycia1 :zycia1 - 1 zwiêksz "przepuszczone grajplik "rocket]
+ przypisz "k :k + :dk
+ przypisz "w :w + :dw
+ s³uchaj "pi³ka nowexy :k :w
+ przypisz "xx2 :k
+ przypisz "sxx :xx2 - :x2
+ jeœli :sxx < -1 [przypisz "x2 :x2 - 1]
+ jeœli :sxx > 1 [przypisz "x2 :x2 + 1]
+ jeœli :sxx > -1 ~
+ [jeœli :sxx < 1 ~
+ [przypisz "x2 :xx2]]
+ jeœli :x2 < -510 + :szer1 [przypisz "x2 -510 + :szer1]
+ jeœli :x2 > 512 - :szer1 [przypisz "x2 512 - :szer1]
+ s³uchaj "gracz2 nowex :x2
+ jeœli :ij > 6000 [przypisz "dii 0]
+ przypisz "ii :ii + :dii
+ jeœli :ii > :ij [przypisz "ii reszta :ii :ij przypisz "ij :ij * 1.1 przypisz "dk :dk * 1.1 przypisz "dw :dw * 1.1]
+ ruch
+ju¿

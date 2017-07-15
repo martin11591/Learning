@@ -1,0 +1,17 @@
+oto starter
+ ustaleg [1024 618] ulw 2 dzielekran
+ usuñ¿ó³wia wszystkie
+ czyœæ
+ nowy¿ó³w 0 [0 618 0 s¿ s³uchaj]
+ju¿
+oto drzewo :ii :ile :d³p
+ jeœli :ile > 11 [przypisz "ile 11]
+ ugp :ile + 1
+ np :d³p
+ jeœli :ile = 0 [stop]
+ przypisz "k1 ( losowa 21 ) + 30
+ lw :k1
+ ka¿dy [nowy¿ó³w :ii + kto zd poz kierunek + ( ( losowa 21 ) + 30 ) + :k1]
+ s³uchaj wszystkie
+ drzewo d³ugoœæ wszystkie :ile - 1 0.7 * :d³p
+ju¿

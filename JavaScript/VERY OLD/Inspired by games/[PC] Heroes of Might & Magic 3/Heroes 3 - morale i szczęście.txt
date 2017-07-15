@@ -1,0 +1,16 @@
+Morale - szansa na drugi atak
+
++3 - 12.5% szansy na drugi atak
++2 - 8.3% szansy na drugi atak
++1 - 4.2% szansy na drugi atak
+0 - nic
+-1 - 4.2% szansy na utratê ataku
+-2 - 8.3% szansy na utratê ataku
+-3 - 12.5% szansy na utratê ataku
+
+Szczêœcie - szansa na podwójne uszkodzenia
+
++3 - 12.5% szansy na podwójne uszkodzenia
++2 - 8.3% szansy na podwójne uszkodzenia
++1 - 4.2% szansy na podwójne uszkodzenia
+0, -1, -2, -3 - nic

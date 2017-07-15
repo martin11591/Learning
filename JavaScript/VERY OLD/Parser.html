@@ -1,0 +1,657 @@
+﻿<html>
+<head>
+  <title>Parser</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+</head>
+<style type="text/css">
+td, input {
+  font-family: Tahoma;
+  font-size: 8pt;
+}
+td.right {
+  text-align: right;
+}
+input {
+  width: 100%;
+}
+</style>
+<body>
+<script type="text/javascript">
+miesiace=["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"];
+dni=["Niedziela","Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota"];
+jednostki=["","K","M","G","T","P","E"];
+function get(id) {
+  if (document.all) {return document.all[id]} else {return document.getElementById(id)}
+}
+function toNumber(x) {
+  if (!x) return "";
+  x=x.toString().replace(/[^0-9.]/g,"");
+  if (x.indexOf(".")==-1) return parseInt(x);
+  x=x+".";
+  x=x.substring(0,x.indexOf(".",x.indexOf(".")+1));
+  return parseFloat(x);
+}
+function $abbr(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  args[0]=" "+args[0];
+  if (args[1]) args[1]=toNumber(args[1]);
+  if ($len(args[0])<args[1]) return args[0];
+  args[0]=args[0].replace(/ [A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]{1,}/g,function(argX) {return argX.charAt(1)});
+  return args[0];
+}
+function $caps(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=$lower(args[0].toString());
+  args[0]=$upper(args[0].charAt(0))+args[0].substring(1);
+  args[0]=args[0].replace(/ [a-ząćęłńóśźż]/g,function(argX) {return $upper(argX)});
+  return args[0];
+}
+function $caps2(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[0]=$upper(args[0].charAt(0))+args[0].substring(1);
+  args[0]=args[0].replace(/ [a-ząćęłńóśźż]/g,function(argX) {return $upper(argX)});
+  return args[0];
+}
+function $char(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=toNumber(args[0]);
+  return String.fromCharCode(args[0]);
+}
+function $count(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString().replace(/[\[\]?*\-\\]/g,function(argX) {return "\\"+argX});
+  args[1]=new RegExp(args[1],"g");
+  argX=args[0].match(args[1]);
+  if (argX==null) {return 0} else {return toNumber(argX.length)}
+}
+function $cut(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  if (args[1]>$len(args[0])) args[1]=$len(args[0]);
+  args[0]=args[0].substring(0,args[1]);
+  return args[0];
+}
+function $date(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  return $year(args[0])+"-"+$month(args[0])+"-"+$day_of_month(args[0]);
+}
+function $day_of_month(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  return $num([args[0].substring(args[0].lastIndexOf("-")+1,args[0].indexOf(" ")),2]);
+}
+function $directory(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  if (!args[1]) args[1]=1;
+  args[1]=toNumber(args[1]);
+  argI=1;
+  while (argI<=args[1]&&x.lastIndexOf("/")!=-1) {
+    args[0]=args[0].substring(0,args[0].lastIndexOf("/",args[0].lastIndexOf("/")));
+    argsI+=1;
+  }
+  return args[0].substring(args[0].lastIndexOf("/")+1).replace(/[\\\/:\*\?<>|]/g,"");
+}
+function $directory_path(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  return args[0].substring(0,args[0].lastIndexOf("/"));
+}
+function $ext(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  return args[0].substring(args[0].lastIndexOf(".")+1).replace(/[\\\/:\*\?<>|]/g,"");
+}
+function $if(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString();
+  args[2]=args[2].toString();
+  if (args[0]!="") return args[1];
+    else return args[2];
+}
+function $if2(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString();
+  return $if([args[0],args[0],args[1]]);
+}
+function $if3(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  for (var i=0; i<args.length; i++) {
+    args[i]=args[i].toString();
+    if (args[i]!="") return args[i];
+  }
+  return "";
+}
+function $insert(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString();
+  args[2]=toNumber(args[2]);
+  if (args[2]>$len(args[0])) args[2]=$len(args[0]);
+  return args[0].substring(0,args[2])+args[1]+args[0].substring(args[2]);
+}
+function $left(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  return args[0].slice(0,args[1]);
+}
+function $len(arg) {
+  if (!arg) return 0;
+  if (typeof(arg)=="object"&&arg.length==1) arg=arg[0];
+  if (typeof(arg)!="string") arg=arg.toString();
+  return arg.length;
+}
+function $longest(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  for (var argI=0; argI<args.length; argI++) args[argI]=args[argI].toString();
+  argIndex=0;
+  argMax=0;
+  for (var argI=0; argI<args.length; argI++) if ($len(args[argI])>argMax) {argIndex=argI;argMax=$len(args[argI])}
+  return args[argIndex];
+}
+function $lower(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  return args[0].toString().toLowerCase();
+}
+function $month(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  return $num([args[0].substring(args[0].indexOf("-")+1,args[0].indexOf("-",args[0].indexOf("-")+1)),2]);
+}
+function $num(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  return $repeat([0,args[1]-$len(args[0])])+args[0];
+}
+function $padcut(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  if (!args[2]) {args[2]=" "} else {args[2]=args[2].toString()}
+  if (args[1]<$len(args[0])) {return $cut([args[0],args[1]])} else {return args[0]+$repeat([args[2],args[1]-$len(args[0])])}
+}
+function $padcut_right(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  if (!args[2]) {args[2]=" "} else {args[2]=args[2].toString()}
+  if (args[1]<$len(args[0])) {return $cut([args[0],args[1]])} else {return $repeat([args[2],args[1]-$len(args[0])])+args[0]}
+}
+function $progress(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=toNumber(args[0]);
+  args[1]=toNumber(args[1]);
+  args[2]=toNumber(args[2]);
+  args[3]=args[3].toString();
+  args[4]=args[4].toString();
+  argP=Math.round(args[0]*args[2]/args[1]);
+  return $repeat([args[4],argP-1])+args[3]+$repeat([args[4],args[2]-p]);
+}
+function $progress2(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=toNumber(args[0]);
+  args[1]=toNumber(args[1]);
+  args[2]=toNumber(args[2]);
+  args[3]=args[3].toString();
+  args[4]=args[4].toString();
+  argP=Math.round(args[0]*args[2]/args[1]);
+  return $repeat([args[0],argP])+$repeat([args[1],args[2]-argP]);
+}
+function $repeat(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  argStr="";
+  for (var argI=0; argI<args[1]; argI++) argStr+=args[0];
+  return argStr;
+}
+function $replace(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString().replace(/[\[\]\\\/$()]/g,function(rX) {return "\\"+rX});
+  args[2]=args[2].toString();
+  return args[0].replace(new RegExp(args[1],"g"),args[2]);
+}
+function $right(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  return args[0].slice(-args[1]);
+}
+function $select(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=toNumber(args[0])-1;
+  for (var argI=1; i<args.length; argI++) args[i]=args[i].toString();
+  if (args.length<1||args[0]<0||args[0]>args.length-1) return "";
+  return args[args[0]];
+}
+function $strchr(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString().charAt(0);
+  return args[0].indexOf(args[1])+1;
+}
+function $stripprefix(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  if (!args[1]) return args[0].replace(/(A |The )/i,"");
+  for (var argI=1; argI<args.length; argI++) {
+    args[argI]=args[argI].toString()+" ";
+    args[argI]=args[argI].replace(/ {2,}/g," ");
+  }
+  try {
+    eval("args[0]=args[0].replace(/("+args.join("|")+")/i,\"\");");
+  } catch(err) {
+    log("err:"+err+"\nargs[0]=args[0].replace(/("+args.join("|")+")/i,\"\");");
+  }
+  return args[0];
+}
+function $strrchr(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString().charAt(0);
+  return args[0].lastIndexOf(args[1])+1;
+}
+function $strstr(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=args[1].toString();
+  return args[0].lastIndexOf(args[1])+1;
+}
+function $substr(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[1]=toNumber(args[1]);
+  args[2]=toNumber(args[2]);
+  return args[0].substring(args[1]-1,args[2]);
+}
+function $swapprefix(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  argTmp="";
+  args[0]=args[0].toString();
+  if (!args[1]) {
+    args[0]=args[0].replace(/(A |The )/i,function(argX) {argTmp=", "+argX.substring(0,$len(argX)-1);return ""});
+    return args[0]+argTmp;
+  }
+  for (var argI=1; argI<args.length; argI++) {
+    args[argI]=args[argI].toString()+" ";
+    args[argI]=args[argI].replace(/ {2,}/g," ");
+  }
+  try {
+    eval("args[0]=args[0].replace(/("+args.join("|")+")/i,function(argX) {argTmp=\", \"+argX.substring(0,$len(argX)-1);return \"\"});");
+  } catch(err) {
+    log("err:"+err+"\nargs[0]=args[0].replace(/("+args.join("|")+")/i,function(argX) {argTmp=\", \"+argX.substring(0,$len(argX)-1);return \"\"});");
+  }
+  return args[0]+argTmp;
+}
+function $time(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  args[0]=args[0].substring(args[0].indexOf(" ")+1);
+  argX=$num([args[0].substring(0,args[0].indexOf(":")),2])+":";
+  args[0]=args[0].substring(args[0].indexOf(":")+1);
+  argX+=$num([args[0].substring(0,args[0].indexOf(":")),2]);
+  args[0]=args[0].substring(args[0].indexOf(":")+1);
+  if (toNumber(args[0].substring(0,2))!=0) {
+    argX+=":"+$num([args[0].substring(0,2),2]);
+  }
+  return argX;
+}
+function $upper(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  return args[0].toString().toUpperCase();
+}
+function $year(args) {
+  if (typeof(args)!="object") args=args.toString().split(",");
+  args[0]=args[0].toString();
+  return $num([args[0].substring(0,args[0].indexOf("-")),4]);
+}
+function parseWithTagFields(syntax) {
+  if (!syntax) syntax="";
+  syntax=syntax.toString();
+  log("$clear()");
+  pArtist=get("artist").value.toString();
+  pAlbum=get("album").value.toString();
+  pTitle=get("title").value.toString();
+  pTrackNumber=get("trackNumber").value.toString();
+  pTotalTracks=get("totalTracks").value.toString();
+  pDiscNumber=get("discNumber").value.toString();
+  pTotalDiscs=get("totalDiscs").value.toString();
+  pGenre=get("genre").value.toString();
+  pYear_Date=get("year_date").value.toString();
+  pAlbumArtist=get("albumArtist").value.toString();
+  pComposer=get("composer").value.toString();
+  pPerformer=get("performer").value.toString();
+  pComment=get("comment").value.toString();
+  pPath=get("path").value.toString().replace(/\\/g,"/").replace(/\/{2,}/g,"/");
+  pFileName=pPath.substring(pPath.lastIndexOf("/")+1);
+  get("fileName").value=pFileName;
+  pFileNameExt=pFileName.lastIndexOf(".")!=-1?pFileName.substring(pFileName.lastIndexOf(".")+1):"";
+  get("fileNameExt").value=pFileNameExt;
+  pDirectoryName=pPath.substring(pPath.lastIndexOf("/",pPath.lastIndexOf("/")-1)+1,pPath.lastIndexOf("/"));
+  get("directoryName").value=pDirectoryName;
+  pLastModified=get("lastModified").value.toString();
+  pLength=get("length").value.toString();
+  if (pLength.charAt($len(pLength)-1)==":") pLength+="00";
+  pLengthSeconds=toNumber(pLength.substring(pLength.lastIndexOf(":")+1));
+  if (pLength.lastIndexOf(":")!=-1) pLengthS=pLength.substring(0,pLength.lastIndexOf(":"));
+  else pLengthS=0;
+  pLengthSeconds+=toNumber(pLengthS)*60;
+  if (pLengthS.lastIndexOf(":")!=-1) pLengthS=pLength.substring(0,pLength.lastIndexOf(":"));
+  else pLengthS=0;
+  pLengthSeconds+=toNumber(pLengthS)*3600;
+  get("lengthSeconds").value=pLengthSeconds;
+  pBitRate=get("bitRate").value.toString();
+  pChannels=get("channels").value.toString();
+  pSampleRate=get("sampleRate").value.toString();
+  pCodec=get("codec").value.toString();
+  pCodecProfile=get("codecProfile").value.toString();
+  pFileSize=toNumber(get("fileSize").value);
+  pFileSizeNaturalUnitsI=0;
+  pFileSizeNatural=pFileSize;
+  while (pFileSizeNatural/1024>=1&&pFileSizeNaturalUnitsI<jednostki.length-1) {
+    pFileSizeNatural/=1024;
+    pFileSizeNaturalUnitsI+=1;
+  }
+  pFileSizeNatural=Math.round(pFileSizeNatural*10)/10+" "+jednostki[pFileSizeNaturalUnitsI]+"B";
+  get("fileSizeNatural").value=pFileSizeNatural;
+  for (var i=0; i<tags.length-3; i++) {
+    tags[i].title=tags[i].value;
+    if (tags[i].id=="lastModified") tags[i].title=$day_of_month(pLastModified)+" "+miesiace[toNumber($month(pLastModified))]+" "+$year(pLastModified)+" "+$time(pLastModified)+" ("+dni[new Date(toNumber($year(pLastModified)),toNumber($month(pLastModified))-1,toNumber($day_of_month(pLastModified))).getDay()]+")";
+    if (tags[i].id=="lengthSeconds") tags[i].title+=" sekund(a/y)";
+    if (tags[i].id=="bitRate") {
+      pBitI=1;
+      pBit=pBitRate;
+      while(pBit/1024>=1&&pBitI<jednostki.length-1) {
+        pBit/=1024;
+        pBitI+=1;
+      }
+      tags[i].title=Math.round(pBit*1000)/1000+" "+jednostki[pBitI]+"bps";
+    }
+    if (tags[i].id=="channels") {
+      switch(toNumber(pChannels)) {
+        case 1: pChannelsStr="Mono";break;
+        case 2: pChannelsStr="Stereo";break;
+        case 4: pChannelsStr="Kwadrofonia";break;
+        case 5: pChannelsStr="4.1 Surround";break;
+        case 6: pChannelsStr="5.1 Surround";break;
+        case 8: pChannelsStr="7.1";break;
+        case 10: pChannelsStr="9.1";break;
+        default: pChannelsStr=pChannels+" kanał(y/ów)";break;
+      }
+      tags[i].title=pChannelsStr;
+    }
+    if (tags[i].id=="sampleRate") tags[i].title+=" Hz";
+    if (tags[i].id=="fileSize") {
+      pFile=pFileSize;
+      for (var pI=$len(pFileSize); pI>0; pI-=3) pFile=$insert([pFile," ",pI]);
+      tags[i].title=pFile+" bajt(y/ów)";
+    }
+  }
+  if (logging) parserStart=new Date().getTime();
+  syntax=parser(syntax);
+  log();
+  if (logging) {
+    parserStop=new Date().getTime();
+    log($repeat(["=",fLog.cols]));
+    log("Wykonano w czasie "+((parserStop-parserStart)/1000)+"s",true);
+    log($repeat(["=",fLog.cols]));
+  }
+  log("$read()");
+  return syntax;
+}
+function parser(str) {
+  var str, quot, variables;
+  if (!str) str="";
+  str=str.toString().replace(/(\$tab\(\)|\\t)/g,"\t").replace(/\\n/g,"\n");
+  if (!quot) quot=new Array();
+  if (!variables) variables=new Array();
+  log("Parser - start",true,"#");
+  log();
+  log("Składnia",true);
+  log("",true,"=");
+  log(str,true);
+  log();
+  log("Apostrofy - zaznaczanie",true);
+  log("",true,"=");
+  log("  str:"+str);
+  str=zaznaczApostrofy(str);
+  log("  str:"+str+"\n");
+  log("Tagi",true);
+  log("",true,"=");
+  str=tagi(str);
+  log("  str:"+str+"\n");
+  log("Nawiasy kwadratowe",true);
+  log("",true,"=");
+  str=nawiasy(str);
+  log("  str:"+str+"\n");
+  log("Funkcje",true);
+  log("",true,"=");
+  str=funkcje(str);
+  log("  str:"+str+"\n");
+  log("Apostrofy - zamienianie",true);
+  log("",true,"=");
+  str=zamienApostrofy(str);
+  log("  str:"+str+"\n");
+  log("Wynik",true);
+  log("",true,"=");
+  log(str,true);
+  log();
+  log("Parser - stop",true,"#");
+  return str;
+
+//---------------------
+
+  function nawiasy(nStr) {
+    if (!nStr) nStr="";
+    nStr=nStr.toString();
+    while (nStr.indexOf("[")!=-1&&nStr.indexOf("]")!=-1&&$count([nStr,"["])==$count([nStr,"]"])) {
+      nPosA=nStr.indexOf("[");
+      nPosB=0;
+      do {
+        nPosB=nStr.indexOf("]",nPosB)+1;
+        nPosLog=$len(nPosA>nPosB?nPosA:nPosB);
+        nnStr=nStr.slice(nPosA,nPosB);
+        nCA=$count([nnStr,"["]);
+        nCB=$count([nnStr,"]"]);
+        nCLog=$len(nCA>nCB?nCA:nCB);
+        log("  nPosA:"+$num([nPosA,nPosLog]));
+        log("  nPosB:"+$num([nPosB,nPosLog]));
+        log("  nnStr:"+nnStr);
+        log("  nCA:"+$num([nCA,nCLog]));
+        log("  nCB:"+$num([nCB,nCLog]));
+        log("",true,"-");
+      } while(nCA!=nCB);
+      rStr=nStr.slice(nPosA,nPosB);
+      nnStr=rStr.slice(1,-1).replace(/\[[^\[\]]*\]/g,"");
+      log("  rStr:"+rStr);
+      log("  nnStr:"+nnStr);
+      nTest=false;
+      nnStr.replace(/'[^']*'/gi,function(nX) {
+        //if (readTag(nX)!="") nTest=true;
+        if ($len(nX)>2) nTest=true;
+      });    
+      log("  nTest:"+nTest);
+      if (nTest) nnStr=rStr.slice(1,-1);
+        else nnStr="";
+      log("  nnStr:"+nnStr);
+      //alert("str:"+str+"\nrStr:"+rStr+"\nnStr:"+nStr);
+      nStr=$replace([nStr,rStr,nnStr]);
+      log("  nStr:"+nStr);
+      log("",true,"+");
+    }
+    log($repeat(["-",fLog.cols]));
+    if (nStr.match(/\$[^$]*\([^()]\)/g)!=null) nStr=funkcje(nStr);
+    return nStr.replace(/'/g,"");
+  }
+  function funkcje(fStr) {
+    if (!fStr) fStr="";
+    fStr=fStr.toString();
+    while (fStr.match(/\$[^$]*\([^()]*\)/gi)!=null) {
+      fStr=fStr.replace(/\$[^$]*\([^()]*\)/gi,function(fX) {
+        fX=fX.replace(/\(/g,"([\"").replace(/,/g,"\",\"").replace(/\)/g,"\"])");
+        log("  fX:"+fX);
+        try {
+          fX=eval(fX);
+        } catch(err) {
+          log("  err:"+err);
+          fX="";
+        }
+        log("  fX:"+fX);
+        return fX;
+      });
+    }
+    if (fStr.match(/\[[^\[\]]*\]/g)!=null) fStr=nawiasy(fStr);
+    return fStr;
+  }
+  function zaznaczApostrofy(aStr) {
+    if (!aStr) aStr="";
+    aStr=aStr.toString().replace(/''/g,"#apostrof#");
+    while (aStr.match(/'[^']*'/gi)!=null) {
+      aStr=aStr.replace(/'[^']*'/gi,function(aX) {
+        aX=aX.slice(1,-1);
+        quot.push(aX);
+        log("  quot["+(quot.length-1)+"]:"+aX);
+        return "#apostrof"+(quot.length-1)+"#";
+      });
+    }
+    return aStr;
+  }
+  function zamienApostrofy(aStr) {
+    if (!aStr) aStr="";
+    aStr=aStr.toString();
+    while (aStr.match(/#apostrof[0-9]{1,}#/g)!=null) {
+      aStr=aStr.replace(/#apostrof[0-9]{1,}#/g,function(aX) {
+        aI=toNumber(aX.replace(/[^0-9]/g,""));
+        log("  aX:"+aX);
+        log("  quot["+aI+"]:"+quot[aI]);
+        return quot[aI];
+      });
+    }
+    return aStr.replace(/#apostrof#/g,"'");
+  }
+  function tagi(tStr) {
+    if (!tStr) tStr="";
+    tStr=tStr.toString();
+    while (tStr.match(/%[^%]{1,}%/gi)!=null) {
+      tStr=tStr.replace(/%[^%]{1,}%/gi,function(tX) {
+        return "'"+readTag(tX)+"'";
+      });
+    }
+    return tStr;
+  }
+}
+function readTag(tag) {
+  tag=$lower(tag.toString());
+  if (tag=="%artist%") tag="pArtist";
+  if (tag=="%album%") tag="pAlbum";
+  if (tag=="%title%") tag="pTitle";
+  if (tag=="%track%"||tag=="%tracknumber%") tag="pTrackNumber";
+  if (tag=="%totaltracks%") tag="pTotalTracks";
+  if (tag=="%disc%"||tag=="%discnumber%") tag="pDiscNumber";
+  if (tag=="%totaldiscs%") tag="pTotalDiscs";
+  if (tag=="%genre%") tag="pGenre";
+  if (tag=="%year%"||tag=="%date%") tag="pYear_Date";
+  if (tag=="%album artist%"||tag=="%album_artist%") tag="pAlbumArtist";
+  if (tag=="%composer%") tag="pComposer";
+  if (tag=="%performer%") tag="pPerformer";
+  if (tag=="%comment%") tag="pComment";
+  if (tag=="%path%") tag="pPath";
+  if (tag=="%filename%") tag="pFileName";
+  if (tag=="%filename ext%"||tag=="%filename_ext%") tag="pFileNameExt";
+  if (tag=="%directoryname%") tag="pDirectoryName";
+  if (tag=="%last modified%"||tag=="%last_modified%") tag="pLastModified";
+  if (tag=="%length%") tag="pLength";
+  if (tag=="%length_seconds%") tag="pLengthSeconds";
+  if (tag=="%bitrate%") tag="pBitRate";
+  if (tag=="%channels%") tag="pChannelsStr";
+  if (tag=="%samplerate%") tag="pSampleRate";
+  if (tag=="%codec%") tag="pCodec";
+  if (tag=="%codec profile%"||tag=="%codec_profile%") tag="pCodecProfile";
+  if (tag=="%filesize%") tag="pFileSize";
+  if (tag=="%filesize natural%"||tag=="%filesize_natural%") tag="pFileSizeNatural";
+  if (tag.charAt(0)=="%") return "";
+  try {
+    eval("if ("+tag+"!=null&&"+tag+"!=\"undefined\") {eval(\"x=\"+tag)} else {x=\"\"}");
+  } catch (err) {
+    log("err:"+err+"\ntag:"+tag);
+    return "";
+  }
+  return x;
+}
+function log(txt,center,str) {
+  if (!logging) {fLog.style.display="none";return}
+  if (!txt) txt="";
+  txt=txt.toString();
+  if ($lower(txt)=="$clear()") {logVar="";fLog.value="";return}
+  if ($lower(txt)=="$read()") {fLog.value=logVar;return}
+  if ($lower(txt)=="$show()") {fLog.style.display="block";return}
+  if ($lower(txt)=="$hide()") {fLog.style.display="none";return}
+  if (center) {
+    if (!str) str=" ";
+      else str=str.toString();
+    start=(Math.floor(fLog.cols/2)-Math.ceil($len(txt)/2))/$len(str);
+    stop=fLog.cols-start-$len(txt);
+    txt=$repeat([str,start])+txt+$repeat([str,stop]);
+  }
+  logVar+=txt+"\n";
+}
+</script>
+<form name="info">
+<table id="tagi" cellspacing=1 cellpadding=0 style="width: 100%">
+<tr style="text-align: center; font-weight: bold; background-color: black; color: white"><td>Nazwa tagu</td><td style="width: 300px">Wartość</td><td>Składnia</td></tr>
+<tr><td class="right">Artysta</td><td><input id="artist" value="Linkin Park"></td><td>%artist%</td></tr>
+<tr><td class="right">Album</td><td><input id="album" value="Meteora"></td><td>%album%</td></tr>
+<tr><td class="right">Tytuł</td><td><input id="title" value="Breaking the Habit"></td><td>%title%</td></tr>
+<tr><td class="right">Numer ścieżki</td><td><input id="trackNumber" value="9"></td><td>%tracknumber%</td></tr>
+<tr><td class="right">Wszystkich ścieżek</td><td><input id="totalTracks" value="13"></td><td>%totaltracks%</td></tr>
+<tr><td class="right">Numer dysku</td><td><input id="discNumber" value="1"></td><td>%discnumber%</td></tr>
+<tr><td class="right">Wszystkich dysków</td><td><input id="totalDiscs" value="1"></td><td>%totaldiscs%</td></tr>
+<tr><td class="right">Gatunek</td><td><input id="genre" value="Alternative Rock"></td><td>%genre%</td></tr>
+<tr><td class="right">Rok/Data</td><td><input id="year_date" value="2003"></td><td>%year%/%date%</td></tr>
+<tr><td class="right">Wykonawca albumu</td><td><input id="albumArtist" value="Linkin Park"></td><td>%album artist%</td></tr>
+<tr><td class="right">Kompozytor</td><td><input id="composer"></td><td>%composer%</td></tr>
+<tr><td class="right">Wydawca</td><td><input id="performer"></td><td>%performer%</td></tr>
+<tr><td class="right">Komentarz</td><td><input id="comment" value="Free Lossless Audio Codec"></td><td>%comment%</td></tr>
+<tr><td class="right">Plik</td><td><input id="path" value="D:\Rafał\Muzyka\Linkin Park - Meteora\09) Breaking the Habit.flac"></td><td>%path%</td></tr>
+<tr><td class="right">Nazwa pliku</td><td><input id="fileName" value="" readonly></td><td>%filename%</td></tr>
+<tr><td class="right">Rozszerzenie pliku</td><td><input id="fileNameExt" value="" readonly></td><td>%filename_ext%</td></tr>
+<tr><td class="right">Nazwa katalogu</td><td><input id="directoryName" value="" readonly></td><td>%directoryname%</td></tr>
+<tr><td class="right">Ostatnio modyfikowany</td><td><input id="lastModified" value="2009-07-13 15:06:03"></td><td>%last_modified%</td></tr>
+<tr><td class="right">Długość</td><td><input id="length" value="3:16"></td><td>%length%</td></tr>
+<tr><td class="right">Długość w sekundach</td><td><input id="lengthSeconds" value="196" readonly></td><td>%length_seconds%</td></tr>
+<tr><td class="right">Bitrate</td><td><input id="bitRate" value="1088"></td><td>%bitrate%</td></tr>
+<tr><td class="right">Kanały</td><td><input id="channels" value="2"></td><td>%channels%</td></tr>
+<tr><td class="right">Próbkowanie</td><td><input id="sampleRate" value="44100"></td><td>%samplerate%</td></tr>
+<tr><td class="right">Kodek</td><td><input id="codec" value="FLAC"></td><td>%codec%</td></tr>
+<tr><td class="right">Ustawienia kodowania</td><td><input id="codecProfile" value="?" title="np.: ABR, CBR, VBR, VBR V2"></td><td>%codec_profile%</td></tr>
+<tr><td class="right">Rozmiar pliku w bajtach</td><td><input id="fileSize" value="26685463"></td><td>%filesize%</td></tr>
+<tr><td class="right">Rozmiar pliku</td><td><input id="fileSizeNatural" value="25.4 MB" readonly></td><td>%filesize_natural%</td></tr>
+<tr><td style="text-align: right; font-weight: bold">Składnia parsowania</td><td colspan=2><input id="parserSyntax" value="[%artist% - [%album% - ][%tracknumber%. ]%title%] $if(%genre%,$if(%date%,'('$caps(%genre%)[', '$num(%date%,4)]')','('$caps(%genre%)')'),['('$num(%date%,4)')'])"></td></tr>
+<tr><td colspan=3><textarea id="parserResult" style="text-align: center; vertical-align: middle; font-weight: bold; font-family: Tahoma; font-size: 8pt; width: 100%" readonly></textarea></td></tr>
+<tr><td colspan=3><textarea id="log" rows=33 cols=121 readonly></textarea></td></tr>
+</table>
+</form>
+<script type="text/javascript">
+tags=document.forms['info'].elements;
+logging=true;
+fLog=get("log");
+get("parserResult").value=parseWithTagFields(get("parserSyntax").value);
+for (var i=1; i<tags.length-1; i++) {
+  if (tags[i].readOnly) {continue}
+  tags[i].onkeyup=function(){get("parserResult").value=parseWithTagFields(get("parserSyntax").value)}
+}
+</script>
+</body>
+</html>

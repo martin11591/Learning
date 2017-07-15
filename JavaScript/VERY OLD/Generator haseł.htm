@@ -1,0 +1,67 @@
+﻿<html>
+<head>
+<title>Generator haseł by Martin</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<table>
+<tr><td style="text-align: right">Znaki:</td><td><input id="znaki" onkeyup="passField.value=generate(this.value,lenField.value)" value="[a-z0-9]" style="width: 100%"></td></tr>
+<tr><td style="text-align: right">Długość:</td><td><input id="dlugosc" onkeyup="passField.value=generate(charsField.value,this.value)" value="20" style="width: 100%"></td></tr>
+<tr><td colspan=2 style="text-align: center"><input id="ignoreCheckBox" type=checkbox checked onclick="passField.value=generate(charsField.value,lenField.value)">Ignoruj wielkość liter</td></tr>
+<tr><td colspan=2 style="text-align: center"><input id="chancesCheckBox" type=checkbox onclick="passField.value=generate(charsField.value,lenField.value)">Wyrównaj szanse trafień</td></tr>
+<tr><td colspan=2 style="text-align: center">Wygenerowane hasło:</td></tr>
+<tr><td colspan=2><textarea id="haslo" style="font-family: Lucida Console; font-size: 8pt; font-weight: normal; width:100%" rows=24 cols=40>&nbsp;</textarea></td></tr>
+</table>
+<script type="text/javascript">
+function $(id) {
+  if (document.all) return document.all[id];
+    else return document.getElementById(id);
+}
+function generate(chars,len) {
+  if (!chars) return "";
+  if (!len) return "";
+  try {len=eval(len)} catch (err) {len=parseInt(len.toString().replace(/[^0-9]/g,""))}
+  maxLen=($("haslo").rows+1)*($("haslo").cols+2);
+  if (len>maxLen) len=maxLen;
+  chars=chars.replace(/\[[^\]]{1,}\]/,function(cX) {return reg(cX,($("ignoreCheckBox").checked?true:false))}); // jeśli nie chcesz sprawdzania klamry - usuń.
+  if (ignoreBox.checked) chars=chars.replace(/[0-9]/g,"").toLowerCase()+chars.replace(/[0-9]/g,"").toUpperCase()+chars.replace(/[^0-9]/g,"");
+  if (chancesBox.checked) {
+    cTmp="";
+    for (var cI=0; cI<chars.length; cI++) {
+      cExist=false;
+      for (var cJ=0; cJ<cTmp.length; cJ++) if (cTmp[cJ]==chars[cI]) {cExist=true;break}
+      if (cExist) continue;
+        else cTmp+=chars[cI];
+    }
+    chars=cTmp;
+  }
+  charsField.title=chars;
+  gen="";
+  for (var gI=0; gI<len; gI++) {
+    gRand=Math.round(Math.random()*9)+1;
+    for (var gJ=0; gJ<gRand; gJ++) rand=Math.round(Math.random()*(chars.length-1));
+    gen+=chars[rand];
+  }
+  return gen;
+}
+function reg(str,ignore) {
+  if (!str) return "";
+  if (!ignore) ignore="";
+    else ignore="i";
+  rStr=new RegExp(str,"g"+ignore);
+  nStr="";
+  for (rI=0; rI<=9999; rI++) { // liczba sprawdzanych znaków (chyba Unicode, lub UTF-8)
+    ch=String.fromCharCode(rI);
+    if (ch.match(rStr)!=null) nStr+=ch;
+  }
+  return nStr!=""?nStr:str;
+}
+charsField=$("znaki");
+lenField=$("dlugosc");
+passField=$("haslo");
+ignoreBox=$("ignoreCheckBox");
+chancesBox=$("chancesCheckBox");
+if (passField.rows>2) passField.rows-=1;
+if (passField.cols>3) passField.cols-=2;
+passField.value=generate(charsField.value,lenField.value);
+</script>
+</html>

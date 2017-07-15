@@ -1,0 +1,24 @@
+oto rysuj
+ nowy¿ó³w "kursor [0 0 0 p¿ "standard]
+ nowy¿ó³w "punkt [0 0 0 p¿ "standard]
+ nowy¿ó³w "rysowanie [0 0 0 s¿]
+ przypisz "k2 0
+ przypisz "w2 0
+ ustalwskaŸnikmyszy pusto
+ ps [Prawym klawiszem myszki ustawiasz punkt pocz¹tkowy linii.]
+ ps [Lewym klawiszem myszki rysujesz liniê od punktu pocz¹tkowego do miejsca, w którym znajduje siê kursor.]
+ ps [Klawiszem spacji czyœcisz ekran.]
+ ruszaj
+ju¿
+oto ruszaj
+ s³uchaj "punkt
+ skieruj azymut ost stanmyszy
+ s³uchaj "kursor
+ skieruj azymut proszê "punkt [poz]
+ pod
+ napoz ost stanmyszy
+ jeœli pierw stanmyszy = 1 [przypisz "k1 pierw ost stanmyszy przypisz "w1 ost ost stanmyszy przypisz "k1 :k1 + 1024 przypisz "w1 1024 - :w1 s³uchaj "rysowanie opu odcinek :k1 :w1 :k2 + 1024 1024 - :w2 2048 pod s³uchaj "kursor]
+ jeœli pierw stanmyszy = 2 [przypisz "k2 pierw ost stanmyszy przypisz "w2 ost ost stanmyszy s³uchaj "punkt pod nowexy :k2 :w2 s³uchaj "kursor]
+ jeœli klawisz? [jeœli czytajklawisz = 32 [czyœæ s³uchaj "punkt pod nowexy :k2 :w2 s³uchaj "kursor]]
+ ruszaj
+ju¿

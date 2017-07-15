@@ -1,0 +1,44 @@
+oto starter
+ ustaleg [1024 618]
+ ulw 2 dzielekran
+ju¿
+oto ko³o :kolumna :wiersz :promieñ1 :promieñ2
+ pod
+ nowexy :kolumna + :promieñ1 * cos 0 :wiersz + :promieñ2 * sin 0
+ opu
+ powtórz 360 [nowexy :kolumna + :promieñ1 * cos numpow :wiersz + :promieñ2 * sin numpow]
+ju¿
+oto globus :gh :gw :h :w :x :y
+ powtórz :gh [ko³o numpow * 0 0 20 - numpow * :x :h]
+ powtórz :gw [ko³o 0 numpow * 0 :w 20 - numpow * :y]
+ju¿
+oto krzywa :kolumna :wiersz :promieñ.a :promieñ.b :ile :strona
+ pod
+ jeœli :strona = "lewo [nowexy :kolumna + :promieñ.a * sin 0 :wiersz + :promieñ.b * cos 0]
+ jeœli :strona = "prawo [nowexy :kolumna + :promieñ.a * cos 0 :wiersz + :promieñ.b * sin 0]
+ opu
+ jeœli :strona = "lewo [powtórz :ile [nowexy :kolumna + :promieñ.a * sin numpow :wiersz + :promieñ.b * cos numpow]]
+ jeœli :strona = "prawo [powtórz :ile [nowexy :kolumna + :promieñ.a * cos numpow :wiersz + :promieñ.b * sin numpow]]
+ju¿
+oto odcinek :px1 :py1 :px2 :py2 :rex :rey
+ jeœli :px1 < 0 [przypisz "px1 0]
+ jeœli :px1 > ( :rex - 1 ) [przypisz "px1 ( :rex - 1 )]
+ jeœli :py1 < 0 [przypisz "py1 0]
+ jeœli :py1 > ( :rey - 1 ) [przypisz "py1 ( :rey - 1 )]
+ jeœli :px2 < 0 [przypisz "px2 0]
+ jeœli :px2 > ( :rex - 1 ) [przypisz "px2 ( :rex - 1 )]
+ jeœli :py2 < 0 [przypisz "py2 0]
+ jeœli :py2 > ( :rey - 1 ) [przypisz "py2 ( :rey - 1 )]
+ przypisz "rex :rex / 2
+ przypisz "rex :rex - 1
+ przypisz "rey :rey / 2
+ przypisz "rey :rey - 1
+ przypisz "px1 :px1 - :rex
+ przypisz "py1 :rey - :py1
+ przypisz "px2 :px2 - :rex
+ przypisz "py2 :rey - :py2
+ pod
+ nowexy :px1 :py1
+ opu
+ nowexy :px2 :py2
+ju¿

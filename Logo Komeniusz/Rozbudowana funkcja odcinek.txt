@@ -1,0 +1,22 @@
+oto odcinek :px1 :py1 :px2 :py2 :rex :rey
+ jeœli :px1 < 0 [przypisz "px1 0]
+ jeœli :px1 > ( :rex - 1 ) [przypisz "px1 ( :rex - 1 )]
+ jeœli :py1 < 0 [przypisz "py1 0]
+ jeœli :py1 > ( :rey - 1 ) [przypisz "py1 ( :rey - 1 )]
+ jeœli :px2 < 0 [przypisz "px2 0]
+ jeœli :px2 > ( :rex - 1 ) [przypisz "px2 ( :rex - 1 )]
+ jeœli :py2 < 0 [przypisz "py2 0]
+ jeœli :py2 > ( :rey - 1 ) [przypisz "py2 ( :rey - 1 )]
+ przypisz "rex :rex / 2
+ przypisz "rex :rex - 1
+ przypisz "rey :rey / 2
+ przypisz "rey :rey - 1
+ przypisz "px1 :px1 - :rex
+ przypisz "py1 :rey - :py1
+ przypisz "px2 :px2 - :rex
+ przypisz "py2 :rey - :py2
+ pod
+ nowexy :px1 :py1
+ opu
+ nowexy :px2 :py2
+ju¿

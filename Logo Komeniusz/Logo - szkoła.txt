@@ -1,0 +1,55 @@
+oto g³êbia_studni :h
+ odcinek ( - :h ) ( - :h ) :h ( - :h )
+ odcinek :h ( - :h ) :h :h
+ odcinek :h :h ( - :h ) :h
+ odcinek ( - :h ) :h ( - :h ) ( - :h )
+ju¿
+oto kwiatek :dl :liczba
+ powtórz :liczba [p³atek :dl lw 360 / :liczba]
+ju¿
+oto odcinek :x1 :y1 :x2 :y2
+ przypisz "qw abs :x2 - :x1
+ przypisz "qe abs :y2 - :y1
+ jeœli :qw < :qe [przypisz "qw :qe]
+ przypisz "dx ( :x2 - :x1 ) / :qw
+ przypisz "dy ( :y2 - :y1 ) / :qw
+ przypisz "x :x1
+ przypisz "y :y1
+ powtórz :qw [wróæ pod pw 90 np :x pw 90 np :y opu np 1 pod przypisz "x :x + :dx przypisz "y :y + :dy pw 180]
+ju¿
+oto plansza :dl :krok :xx :yy
+ s¿
+ jeœli :krok < 2 [przypisz "krok 2]
+ przypisz "k 0
+ powtórz :dl / :krok / :krok + 1 [odcinek 0 - :xx 0 - :yy :k * :krok - :xx :dl - :yy przypisz "k :k + :krok]
+ przypisz "k 0
+ powtórz :dl / :krok / :krok + 1 [odcinek 0 - :xx 0 - :yy :dl - :xx :k * :krok - :yy przypisz "k :k + :krok]
+ przypisz "k ( :dl / :krok / :krok ) * :krok
+ powtórz :dl / :krok / :krok + 1 [odcinek :dl - :xx :dl - :yy :dl - :k * :krok - :xx 0 - :yy przypisz "k :k - :krok]
+ przypisz "k ( :dl / :krok / :krok ) * :krok
+ powtórz :dl / :krok / :krok + 1 [odcinek :dl - :xx :dl - :yy 0 - :xx :dl - :k * :krok - :yy przypisz "k :k - :krok]
+ju¿
+oto p³atek :dl
+ powtórz 180 [np :dl lw 0.25]
+ lw 135
+ powtórz 180 [np :dl lw 0.25]
+ lw 135
+ju¿
+oto studnia :h :g1 :g2
+ jeœli :h < 50 [przypisz "h 50]
+ jeœli :h > 511 [przypisz "h 511]
+ przypisz "s 1
+ dopóki [:s <= :h][g³êbia_studni :s przypisz "s :s + :s / :g2]
+ g³êbia_studni :h
+ przypisz "dl :h - ( - :h )
+ przypisz "s 0
+ dopóki [:s <= :dl / :g1][odcinek ( - :h ) + :s * :g1 ( - :h ) :h - :s * :g1 :h przypisz "s :s + :g1]
+ odcinek ( - :h ) :h :h ( - :h )
+ przypisz "s 0
+ dopóki [:s <= :dl / :g1][odcinek :h ( - :h ) + :s * :g1 ( - :h ) :h - :s * :g1 przypisz "s :s + :g1]
+ odcinek :h :h ( - :h ) ( - :h )
+ju¿
+to tunel :boki :dlp :krok :ile :x :y
+ przypisz "wsp :krok * 0.5
+ powtórz :ile [powtórz :boki [np :dlp pw 360 / :boki] pod lw 90 np :wsp - :x lw 90 np :krok / 2 + :y lw 180 opu przypisz "dlp :dlp + :krok]
+ju¿

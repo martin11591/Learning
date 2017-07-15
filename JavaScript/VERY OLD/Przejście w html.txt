@@ -1,0 +1,4 @@
+<head>
+<meta http-equiv="page-enter" content="blendtrans(duration=1)">
+<meta http-equiv="page-exit" content="blendtrans(duration=1)">
+</head>

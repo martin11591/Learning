@@ -1,0 +1,17 @@
+<html><style>body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold}</style>
+Uszkodzenia:<input id="uszkodzenia"><br>Liczba jednostek:<input id="liczba"><br>Wytrzyma³oœæ:<input id="wytrzymalosc"><div id="wynik">&nbsp;</div><script>
+document.all.uszkodzenia.value=Math.round(9999*Math.random()+1);
+document.all.liczba.value=Math.round(2999*Math.random()+1);
+document.all.wytrzymalosc.value=5*Math.round(59*Math.random()+1);
+licz();
+function licz() {
+u=parseInt(document.all.uszkodzenia.value);
+l=parseInt(document.all.liczba.value);
+w=parseInt(document.all.wytrzymalosc.value);
+ll=parseInt(u/w);
+ww=w-u%w;
+if(ll>=l){document.all.wynik.innerText="Nie prze¿yje"}
+else{document.all.wynik.innerText="Straty:"+ll+"\nPozosta³e jednostki:"+(l-ll)+"\nPozosta³e punkty ¿ycia:"+ww}
+setTimeout("licz()",1);
+}
+</script>

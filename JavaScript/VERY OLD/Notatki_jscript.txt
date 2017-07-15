@@ -1,0 +1,210 @@
+Kadrowanie - IE
+
+document.all.nazwawarstwy.style.clip = "rect(10 100 200 0)";
+document.all.nazwawarstwy.style.clip = "rect("+top+" "+right+" "+bottom+" "+left+")";
+
+------------------------------------------------------------
+
+Przezroczystoœæ - IE
+
+document.all.nazwawarstwy.style.filter="alpha(opacity=x)";
+
+------------------------------------------------------------
+
+Widocznoœæ - IE
+style.visibility="visible"; - w³¹czona
+style.visibility="hidden"; - wy³¹czona
+
+------------------------------------------------------------
+
+Wyœwietlanie - IE
+
+style.display="block"; - w³¹czone
+style.display="none"; - wy³¹czone
+
+------------------------------------------------------------
+
+Odwracanie - IE
+
+document.all.nazwawarstwy.style.filter="flipH"; - poziomo
+document.all.nazwawarstwy.style.filter="flipV"; - piononwo
+document.all.nazwawarstwy.style.filter="none"; - powraca do normalnego stanu
+
+------------------------------------------------------------
+
+Blokowanie czegoœ
+
+document.costam*=anuluj;
+function anuluj() {return false}
+
+------------------------------------------------------------
+
+Zamiana czasu (milisekundy na minuty i sekundy np. 291520=04:51)
+
+WA¯NE! Czas jest podawany w milisekundach (np. 291520,231270)
+
+ti=czas/1000;
+tm=parseInt(ti/60);
+ts=parseInt(ti-tm*60);
+if (tm<10) {tm="0"+tm}
+if (ts<10) {ts="0"+ts}
+t=tm+":"+ts;
+
+------------------------------------------------------------
+
+Zamiana czasu (milisekundy na minuty, sekundy i tysi¹czne sekundy np. 231270=03:51.270)
+
+WA¯NE! Czas jest podawany w milisekundach (np. 291520,231270)
+
+ti=parseInt(czas/1000);
+tm=parseInt(ti/60);
+ts=ti-tm*60;
+ts=ts.toString();
+tti=czas;
+tti=tti.toString();
+ts=ts+"."+tti.substring(tti.length-3,tti.length);
+if (tm<10) {tm="0"+tm}
+if (ts<10) {ts="0"+ts}
+t=tm+":"+ts;
+
+------------------------------------------------------------
+
+Pobieranie pozycji kursora, informacji o przyciskach myszy (wciœniêty/nie wciœniêty) i klawiaturze
+
+document.costam*=ster;
+function ster() {
+x=event.clientX; /*podaje pozycjê poziom¹ kursora*/
+y=event.clientY; /*podaje pozycjê pionow¹ kursora*/
+buttons=event.button; /*podaje zmienn¹ o wciœniêtym przycisku myszy*/
+keys=event.keyCode; /*podaje zmienn¹ wciœniêtego klawisza (np.77=m)*/
+}
+
+------------------------------------------------------------
+
+Liczenie procentów na krzy¿
+
+    liczba - 100%
+          \ /
+           X
+          / \
+dr. liczba - x%
+
+x=dr. liczba*100/liczba
+
+------------------------------------------------------------
+
+Zaznaczanie elementu z przewijalnej listy
+
+document.all.nazwalisty.selectedIndex=numerelementu;
+np.document.all.plik.selectedIndex=2;
+
+------------------------------------------------------------
+
+Wy³¹czanie elementów
+
+document.all.costam.disabled=true - wy³¹cz
+document.all.costam.disabled=false - w³¹cz
+
+------------------------------------------------------------
+
+Obs³uga funkcji replace
+
+zmienna=zmienna.replace(/znak/g,"znak2");
+
+znak-znak, który chcesz zamieniæ (jeœli wpiszesz /znak/g to zamienisz wszyskie takie znaki, a jeœli wpiszesz sam ten znak to zamieni tylko pierwszy napotkany)
+
+znak2-znak, który ma byæ wpisany zamiast tamtego
+
+------------------------------------------------------------
+
+Pobieranie rozmiarów obszaru roboczego (nie rozdzielczoœci)
+
+document.costam*=ster;
+function ster() {
+h=document.body.clientWidth;
+w=document.body.clientHeight;
+}
+
+------------------------------------------------------------
+
+Pobieranie nazwy elementu wyœwietlanego z listy (nie wartoœci ani nie identyfikatora)
+
+document.all.costam[document.all.costam.selectedIndex].outerText;
+
+------------------------------------------------------------
+
+Dopisywanie do strony bez kasowania zawartoœci
+
+document.body.appendChild(j**);
+
+------------------------------------------------------------
+
+Przyk³ad utworzenia elementu div o kodzie:
+<div id="a1" style="position:absolute; background-color:black; color:white">gfgfd</div>
+
+j=document.createElement("div");
+j.setAttribute("id","a1");
+j.style.position="absolute";
+j.style.backgroundColor="black";
+j.style.color="white";
+j.appendChild(document.createTextNode("gfgfd"));
+document.body.appendChild(j);
+
+------------------------------------------------------------
+
+Wy³¹czenie wyœwietlania b³êdów
+
+window.onerror=new Function('return true;');
+
+------------------------------------------------------------
+
+Zaznaczanie tekstu
+
+Opera
+
+textbox.select();
+
+Mozilla
+
+textbox.setSelectionRange(poczatek,koniec);
+
+IE
+
+range=textbox.createTextRange();
+range.moveStart("character",poczatek);
+range.moveEnd("character",-textbox.value.length+koniec);
+range.select();
+
+------------------------------------------------------------
+
+Podmiana zaznaczonego tekstu
+
+IE
+
+range=document.selection.createRange();
+range.text=sText;
+range.collapse(true); // true - zaznaczenie do koñca; false - zaznaczenie do pocz¹tku
+range.select();
+
+Mozilla
+
+var iStart = oTextbox.selectionStart;
+       oTextbox.value = oTextbox.value.substring(0, iStart) + sText + oTextbox.value.substring(oTextbox.selectionEnd, oTextbox.value.length);
+       oTextbox.setSelectionRange(iStart + sText.length, iStart + sText.length); 
+
+------------------------------------------------------------
+
+Obiekt
+
+Zapis obj={x:0,y:0,z:"gfd"} zapisuje obiekt obj.
+Aby siê odwo³aæ do wartoœci x, y lub z nale¿y wpisaæ
+
+obj.x, obj.y lub obj.z
+
+Typ wartoœci zostaje dostosowany automatycznie
+
+------------------------------------------------------------
+
+
+*-document.oncontextmenu,document.ondragstart
+**-'j' mo¿e byæ utworzone za pomoc¹ funkcji document.createElement(tag), gdzie tag to np. "div"

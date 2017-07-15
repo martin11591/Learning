@@ -1,0 +1,176 @@
+			EL 31	GranKuwagamon
+
+			HP	382
+			MP	384
+
+			Attack	175
+			Defense	143
+			Speed	104
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+EL 38	Gryphonmon	EL 25	Myotismon	EL 11	Leomon
+
+HP	440		HP	260		HP	241
+MP	425		MP	261		MP	241
+
+Attack	182		Attack	110		Attack	127
+Defense	179		Defense	102		Defense	121
+Speed	104		Speed	 76		Speed	 80
+
+=================================================================
+
+EL 21	Okuwamon	EL 11	Kuwagamon	EL  1	Tentomon
+
+HP	369		HP	218		HP	 62
+MP	364		MP	219		MP	 62
+
+Attack	161		Attack	120		Attack	108
+Defense	146		Defense	102		Defense	 93
+Speed	104		Speed	 81		Speed	 55
+
+-----------------------------------------------------------------
+
+			EL 21	Deramon
+
+			HP	400
+			MP	393
+
+			Attack	167
+			Defense	162
+			Speed	103
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+EL 38	GranKuwagamon	EL 25	Myotismon	EL 11	Kuwagamon
+
+HP	382		HP	260		HP	218
+MP	384		MP	261		MP	219
+
+Attack	175		Attack	110		Attack	120
+Defense	143		Defense	102		Defense	102
+Speed	104		Speed	 76		Speed	 81
+
+=================================================================
+
+EL 11	Kuwagamon	EL 11	Flymon		EL  1	Kunemon
+
+HP	265		HP	224		HP	 61
+MP	264		MP	222		MP	 61
+
+Attack	137		Attack	116		Attack	102
+Defense	123		Defense	111		Defense	 95
+Speed	 93		Speed	 80		Speed	 55
+-----------------------------------------------------------------
+
+			EL 11	Kokatorimon
+
+			HP	262
+			MP	256
+
+			Attack	129
+			Defense	127
+			Speed	 89
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+EL 38	GranKuwagamon	EL 25	Myotismon	EL 11	Angemon
+
+HP	382		HP	260		HP	216
+MP	384		MP	261		MP	207
+
+Attack	175		Attack	110		Attack	104
+Defense	143		Defense	102		Defense	110
+Speed	104		Speed	 76		Speed	 71
+
+=================================================================
+
+EL  1	Kunemon		EL  1	Dokunemmon	EL  1	Floramon
+
+HP	 64		HP	 52		HP	 47
+MP	 64		MP	 51		MP	 46
+
+Attack	108		Attack	 84		Attack	 82
+Defense	 95		Defense	 81		Defense	 83
+Speed	 57		Speed	 49		Speed	 48
+
+-----------------------------------------------------------------
+
+EL 31	Gryphonmon	EL 31	S-Mammothmon	EL 21	Deramon
+
+HP	440		HP	450		HP	400
+MP	425		MP	449		MP	393
+		     +			     =	
+Attack	182		Attack	189		Attack	167
+Defense	179		Defense	181		Defense	162
+Speed	104		Speed	102		Speed	103
+
+These are formulas I've found. The Formulas are (The result is always rounded down) :
+
+1. Ultimate Formula (Mega + Mega)
+HP/MP = 45% of Parents' HP/MP
+ATK/DEF = 50% of higher ATK/DEF + 40% of lower ATK/DEF
+SPD = 50% of Parents' SPD
+
+2. Champion Formula (Mega + Ultimate or Ultimate + Ultimate)
+HP/MP = 34% of Parents' HP/MP
+ATK/DEF = 50% of higher ATK/DEF + 30% of lower ATK/DEF
+SPD = 45% of Parents' SPD
+
+3. Rookie Formula (Mega + Champion or Ultimate + Champion or Champion + Champion)
+HP/MP = 10% of Parents' HP/MP
+ATK/DEF = 40% of higher ATK/DEF + 30% of lower ATK/DEF
+SPD = 30% of Parents' Speed
+
+Important Note for ATK or DEF calculating :
+Don't round down each of the result, round down the final result
+
+In your case (Rookie Formula) :
+HP = 0.1 x (169 + 164) = 0.1 x 333 = 33.3 = 33
+MP = 0.1 x (171 + 161) = 0.1 x 332 = 33.2 = 33
+ATK = 0.4 x 52 + 0.3 x 44 = 20.8 + 13.2 = 34.0 = 34
+DEF = 0.4 x 52 + 0.3 x 46 = 20.8 + 13.8 = 34.6 = 34
+SPD = 0.3 x (39 + 32) = 0.3 x 71 = 21.3 = 21
+
+I hope this help you.
+
+EL  1	0
+EL  2	6
+EL  3	16
+EL  4	33
+EL  5	57
+EL  6	91
+EL  7	138
+EL  8	198
+EL  9	274
+EL 10	369
+EL 11	483
+EL 12	600
+EL 13	760
+EL 14	981
+EL 15	1281
+EL 16	1681
+EL 17	2202
+EL 18	2862
+EL 19	3682
+EL 20	4683
+EL 21	5883
+EL 22	7140
+EL 23	8520
+EL 24	10080
+EL 25	11880
+EL 26	13980
+EL 27	16440
+EL 28	19320
+EL 29	22680
+EL 30	26580
+EL 31	31080
+EL 32	35740
+EL 33	40640
+EL 34	45900
+EL 35	51640
+EL 36	57980
+EL 37	65040
+EL 38	72940
+EL 39	81800
+EL 40	91740

@@ -1,0 +1,20 @@
+oto starter
+ ustaleg [1024 618]
+ ulw 2 dzielekran
+ ugp 1
+ju¿
+oto ko³a :ile :r11 :r12 :r21 :r22
+ jeœli :ile < 1 [przypisz "ile 1]
+ jeœli :ile > 360 [przypisz "ile 360]
+ ugp 1
+ powtórz 360 [jeœli reszta numpow 360 / :ile = 0 [ko³o 0 - :r11 * cos numpow 0 + :r12 * sin numpow :r21 :r22]]
+ ugp 5
+ ko³o 0 0 :r11 :r12
+ ugp 1
+ju¿
+oto ko³o :kolumna :wiersz :promieñ1 :promieñ2
+ pod
+ nowexy :kolumna + :promieñ1 * cos 0 :wiersz + :promieñ2 * sin 0
+ opu
+ powtórz 360 [nowexy :kolumna + :promieñ1 * cos numpow :wiersz + :promieñ2 * sin numpow]
+ju¿

@@ -1,0 +1,13 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+b\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+
+<v:rect id="" style="position:absolute;left:0px;top:0px;width:0px;height:0px" filled="f" fillcolor="white [7]" stroked="f">
+<v:imagedata src="" o:title="up" />
+</v:rect>

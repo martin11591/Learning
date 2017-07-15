@@ -1,0 +1,39 @@
+oto starter
+ ustaleg [618 618] ulw 2 dzielekran
+ czyœæ
+ powtórz 24 [czyœæ gwiazda1 14 numpow 0 50 czekaj 1000]
+ju¿
+oto gwiazda1 :krok :ile :odl :szer
+ powtórz :ile [przypisz "ii 0 powtórz 309 / :krok [trójk¹t :odl :szer :ii * :krok zwiêksz "ii] pw 360 / :ile]
+ju¿
+oto trójk¹t :odl :szer :wys
+ pod
+ np :odl
+ lw 90
+ np :szer / 2
+ pw 180
+ opu
+ przypisz "x1 pozx
+ przypisz "y1 pozy
+ np :szer
+ przypisz "x2 pozx
+ przypisz "y2 pozy
+ ws :szer / 2
+ lw 90
+ pod
+ np :wys
+ przypisz "x3 pozx
+ przypisz "y3 pozy
+ opu
+ nowexy :x1 :y1
+ pod
+ nowexy :x3 :y3
+ opu
+ nowexy :x2 :y2
+ lw 90
+ np :szer / 2
+ pw 90
+ pod
+ ws :odl
+ opu
+ju¿

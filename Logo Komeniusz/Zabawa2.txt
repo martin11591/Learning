@@ -1,0 +1,83 @@
+oto init
+ ustaleg [1022 556]
+ czyœæ
+ usuñ¿ó³wia wszystkie
+ przypisz "x pierw ost stanmyszy
+ przypisz "y ost ost stanmyszy
+ ustalwskaŸnikmyszy pusto ~
+ nowy¿ó³w "rysownik [0 0 0 s¿ "standard]
+ nowy¿ó³w "komputer [0 0 0 s¿ "oko]
+ nowy¿ó³w "gracz [0 0 0 p¿ "standard]
+ s³uchaj "gracz
+ pod
+ nowexy :x :y
+ opu
+ skieruj azymut proszê "komputer [poz]
+ przypisz "dk 0
+ przypisz "dw 0
+ przypisz "k 0
+ przypisz "w 0
+ ps [Prawym przyciskiem myszki hamujesz swojego ¿ó³wia.]
+ ps [Czy chesz, aby uczestniczy³ te¿ ¿ó³w komputera ? ( T / N )]
+ przypisz "odp1 czytajklawisz
+ jeœli :odp1 = 116 ~
+ [s³uchaj "komputer ~
+ p¿ ~
+ przypisz "dx 2 ~
+ przypisz "dy -3 ~
+ przypisz "x 0 ~
+ przypisz "y 0 ~
+ s³uchaj "gracz ~
+ ps [Czy chcesz, aby pomiêdzy ¿ó³wiami rysowa³y siê linie ? ( T / N )] ~
+ przypisz "odp2 czytajklawisz]
+ jeœli :odp1 <> 116 ~
+ [ps [Czy chcesz, aby od twojego ¿ó³wia rysowa³a siê linia do œrodka ekranu ? ( T / N )] ~
+ przypisz "odp3 czytajklawisz]
+ ruch
+ju¿
+oto ruch
+ przypisz "x1 pierw ost stanmyszy
+ przypisz "y1 ost ost stanmyszy
+ czekaj 1
+ przypisz "x2 pierw ost stanmyszy
+ przypisz "y2 ost ost stanmyszy
+ przypisz "dk :dk + ( ( :x2 - :x1 ) / 2 )
+ przypisz "dw :dw + ( ( :y2 - :y1 ) / 2 )
+ jeœli :dk < -25 [przypisz "dk -25]
+ jeœli :dk > 25 [przypisz "dk 25]
+ jeœli :dw < -25 [przypisz "dw -25]
+ jeœli :dw > 25 [przypisz "dw 25]
+ przypisz "sk :k + :dk
+ przypisz "sw :w + :dw
+ jeœli :sk < -510 [przypisz "dk ( - :dk )]
+ jeœli :sk > 510 [przypisz "dk ( - :dk )]
+ jeœli :sw < -277 [przypisz "dw ( - :dw )]
+ jeœli :sw > 277 [przypisz "dw ( - :dw )]
+ przypisz "k :k + :dk
+ przypisz "w :w + :dw
+ pod
+ nowexy :k :w
+ opu
+ skieruj azymut proszê "komputer [poz]
+ jeœli :odp1 = 116 [ruchk]
+ jeœli :odp1 <> 116 ~
+ [jeœli :odp3 = 116 ~
+ [s³uchaj "rysownik pod napoz proszê "komputer [poz] opu napoz proszê "gracz [poz] pod s³uchaj "gracz]]
+ ruch
+ju¿
+oto ruchk
+ przypisz "sx :x + :dx
+ przypisz "sy :y + :dy
+ jeœli :sx < -510 [przypisz "dx ( - :dx )]
+ jeœli :sx > 510 [przypisz "dx ( - :dx )]
+ jeœli :sy < -277 [przypisz "dy ( - :dy )]
+ jeœli :sy > 277 [przypisz "dy ( - :dy )]
+ przypisz "x :x + :dx
+ przypisz "y :y + :dy
+ s³uchaj "komputer
+ pod
+ nowexy :x :y
+ opu
+ skieruj azymut proszê "gracz [poz]
+ jeœli :odp2 = 116 [s³uchaj "rysownik pod napoz proszê "komputer [poz] opu napoz proszê "gracz [poz] pod s³uchaj "gracz]
+ju¿

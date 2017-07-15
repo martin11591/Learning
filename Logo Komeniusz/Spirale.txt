@@ -1,0 +1,10 @@
+oto spirala1 :ramiona :ile :krok
+ przypisz "dl 1
+ jeœli reszta :ramiona 2 = 0 [przypisz "k¹t 360 / :ramiona]
+ jeœli reszta :ramiona 2 = 1 [przypisz "k¹t ( 360 - 360 / :ramiona ) / 2]
+ powtórz :ile [np :dl pw :k¹t przypisz "dl :dl + :krok]
+ju¿
+oto spirala2 :k¹t :ile :krok
+ przypisz "dl 1
+ powtórz :ile [np :dl pw :k¹t przypisz "dl :dl + :krok]
+ju¿

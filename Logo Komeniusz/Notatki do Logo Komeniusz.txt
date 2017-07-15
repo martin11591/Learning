@@ -1,0 +1,6 @@
+Rozmiary Logo Komeniusz
+
+Rozdzielczoœci
+
+1024x768 - 1024x558 (dla ulw 6 dzielekran)
+1024x768 - 1024x618 (dla ulw 2 dzielekran)

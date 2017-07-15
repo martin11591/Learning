@@ -1,0 +1,10 @@
+dx=Math.sin(stopnie*Math.PI/180)
+dy=-Math.cos(stopnie*Math.PI/180)	- przeliczanie stopni na kierunki DX i DY
+
+(Math.atan2(dy,dx)*180/Math.PI+270)%360	- przeliczanie kierunków DX i DY na stopnie, gdzie:
+
+					0
+					|
+				    270-O-90
+					|
+				       180

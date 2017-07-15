@@ -1,0 +1,42 @@
+Parser
+
+Grouping - Grupowanie
+
+// Method 1
+
+$puts(p,$directory_path(%path%))
+$puts(a,$strstr($get(p),anime))
+$puts(b,$sub($strrchr($get(p),\),1))
+$puts(p,$substr($directory_path(%path%),$get(a),$get(b)))
+$replace($right($get(p),$sub($len($get(p)),$strchr($get(p),\))),\, )
+
+// Inline
+
+$puts(p,$directory_path(%path%))$puts(a,$strstr($get(p),anime))$puts(b,$sub($strrchr($get(p),\),1))$puts(p,$substr($directory_path(%path%),$get(a),$get(b)))$replace($right($get(p),$sub($len($get(p)),$strchr($get(p),\))),\, )
+
+// Method 2
+
+$puts(p,$directory_path(%path%))
+$puts(a,$strstr($get(p),anime))
+$puts(p,$right($get(p),$sub($len($get(p)),$get(a))))
+$puts(a,$strstr($get(p),\))
+$puts(p,$right($get(p),$sub($len($get(p)),$get(a))))
+$left($get(p),$sub($strstr($get(p),\),1))
+
+// Inline
+
+$puts(p,$directory_path(%path%)\Other)$puts(a,$strstr($get(p),anime))$puts(p,$right($get(p),$sub($len($get(p)),$get(a))))$puts(a,$strstr($get(p),\))$puts(p,$right($get(p),$sub($len($get(p)),$get(a))))$left($get(p),$sub($strstr($get(p),\),1))
+
+// Sort - Sortowanie
+
+// Normal
+
+$ext(%path%)-%artist%-$if(%date%,$ifgreater(%date%,1900,%date%,$add(%date%,1900)),1900)-%album%-$if2(%discnumber%,0)-$if2(%tracknumber%,0)-$if2(%subsong%,0)-%title%-%filename%
+
+// Animelike
+
+$ext(%path%)-$replace($replace($replace($replace($replace($replace($replace($replace($replace($replace($lower($directory_path(%path%)),openingi,opening),opening,1),endingi,ending),ending,2),songs,song),characters,character),character song,3),original soundtrack,soundtrack),soundtrack,ost),ost,4)-$ifgreater($strstr($lower(%title%-%filename%),instrumental),0,1,$ifgreater($strstr($lower(%title%-%filename%),off vocal),0,1,$ifgreater($strstr($lower(%title%-%filename%),karaoke),0,1,2)))-$if2(%discnumber%,0)-$if2(%tracknumber%,0)-$if2(%subsong%,0)-[%artist%-][%album%-][%title%-]%filename%
+
+// Animelike grouping Method 2
+
+$replace($replace($replace($replace($replace($replace($replace($replace($replace($replace($lower($directory_path(%path%)-$ext(%path%)),openingi,opening),opening,1),endingi,ending),ending,2),songs,song),characters,character),character song,3),original soundtrack,soundtrack),soundtrack,ost),ost,4)-$ifgreater($strstr($lower(%title%-%filename%),instrumental),0,1,$ifgreater($strstr($lower(%title%-%filename%),off vocal),0,1,$ifgreater($strstr($lower(%title%-%filename%),karaoke),0,1,2)))-$if2(%discnumber%,0)-$if2(%tracknumber%,0)-$if2(%subsong%,0)-[%artist%-][%album%-][%title%-]%filename%

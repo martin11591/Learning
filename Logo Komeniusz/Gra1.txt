@@ -1,0 +1,54 @@
+oto starter
+ ulw 2 dzielekran
+ ustaleg [1024 618]
+ usuñ¿ó³wia wszystkie
+ ustalwskaŸnikmyszy pusto
+ czyœæ
+ init
+ju¿
+oto init
+ nowy¿ó³w "pkt1 [-100 100 135 p¿ "standard]
+ nowy¿ó³w "pkt2 [100 -100 -45 p¿ "standard]
+ s³uchaj "pkt1 skieruj 180 + azymut proszê "pkt2 [poz]
+ s³uchaj "pkt2 skieruj 180 + azymut proszê "pkt1 [poz]
+ s³uchaj wszystkie pod
+ przypisz "x1 -100
+ przypisz "y1 100
+ przypisz "x2 100
+ przypisz "y2 -100
+ przypisz "dx1 ( losowa 3 ) - 1
+ dopóki [:dx1 = 0][przypisz "dx1 ( losowa 3 ) - 1]
+ przypisz "dy1 ( losowa 3 ) - 1
+ dopóki [:dy1 = 0][przypisz "dy1 ( losowa 3 ) - 1]
+ przypisz "dx2 ( losowa 3 ) - 1
+ dopóki [:dx2 = 0][przypisz "dx2 ( losowa 3 ) - 1]
+ przypisz "dy2 ( losowa 3 ) - 1
+ dopóki [:dy2 = 0][przypisz "dy2 ( losowa 3 ) - 1]
+ przypisz "dx1 :dx1 * 3
+ przypisz "dy1 :dy1 * 3
+ przypisz "dx2 :dx2 * 3
+ przypisz "dy2 :dy2 * 3
+ ruch
+ju¿
+oto ruch
+ przypisz "k1 pierw ost stanmyszy
+ przypisz "w1 ost ost stanmyszy
+ czekaj 1
+ przypisz "k2 pierw ost stanmyszy
+ przypisz "w2 ost ost stanmyszy
+ przypisz "dx1 :dx1 + ( ( :k2 - :k1 ) / 2 )
+ przypisz "dy1 :dy1 + ( ( :w2 - :w1 ) / 2 )
+ jeœli abs :x1 + :dx1 > 510 [przypisz "dx1 ( - :dx1 )]
+ jeœli abs :y1 + :dy1 > 307 [przypisz "dy1 ( - :dy1 )]
+ przypisz "x1 :x1 + :dx1
+ przypisz "y1 :y1 + :dy1
+ jeœli abs :x2 + :dx2 > 510 [przypisz "dx2 ( - :dx2 )]
+ jeœli abs :y2 + :dy2 > 307 [przypisz "dy2 ( - :dy2 )]
+ przypisz "x2 :x2 + :dx2
+ przypisz "y2 :y2 + :dy2
+ s³uchaj "pkt1 nowexy :x1 :y1
+ s³uchaj "pkt2 nowexy :x2 :y2
+ s³uchaj "pkt1 skieruj 180 + azymut proszê "pkt2 [poz]
+ s³uchaj "pkt2 skieruj 180 + azymut proszê "pkt1 [poz]
+ ruch
+ju¿

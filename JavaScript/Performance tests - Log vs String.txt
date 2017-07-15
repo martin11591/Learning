@@ -1,0 +1,83 @@
+Intel Core i7-4700MQ @ 4x2.4GHz (4 cores, 8 threads)
+
+1 000 000 prób
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) x=(13465).toString(2);
+  console.timeEnd("Test");
+})();
+
+2580 ms, 2620 ms
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) x=(1346537256).toString(2);
+  console.timeEnd("Test");
+})();
+
+4720 ms, 4740 ms
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) {
+    x=13465;
+    len=Math.floor(Math.log2(x));
+    y="";
+    while (len-- >= 0) {
+      y=(x%2)+y;
+      x=x>>>1;
+    }
+  }
+  console.timeEnd("Test");
+})();
+
+1750 ms, 1740 ms
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) {
+    x=1346537256;
+    len=Math.floor(Math.log2(x));
+    y="";
+    while (len-- >= 0) {
+      y=(x%2)+y;
+      x=x>>>1;
+    }
+  }
+  console.timeEnd("Test");
+})();
+
+4110 ms, 4070 ms
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) x=(1346537256).toString().length;
+  console.timeEnd("Test");
+})();
+
+150 ms, 153 ms, 147 ms
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) x=Math.ceil(Math.log10(1346537256));
+  console.timeEnd("Test");
+})();
+
+328 ms, 328 ms, 317 ms
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) x=Math.pow(10,13);
+  console.timeEnd("Test");
+})();
+
+8.86 ms, 8.58 ms
+
+(function(){
+  console.time("Test");
+  for (var i=0; i<1000000; i++) x=parseInt("1"+"0".repeat(13));
+  console.timeEnd("Test");
+})();
+
+1180 ms, 1180 ms

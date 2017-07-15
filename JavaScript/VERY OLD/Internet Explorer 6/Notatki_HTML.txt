@@ -1,0 +1,48 @@
+Stosowanie gradientu jako koloru t³a w HTML
+
+<style>
+body{...filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#FFFFFFFF',EndColorStr='#FFFF0000);...}
+</style>
+
+gdzie:
+GradientType=0	-	gradient poziomy (z lewa na prawo)
+GradientType=1	-	gradient pionowy (z góry na dó³)
+
+Stosowanie filtrów do elementów w HTML
+
+<style>
+body{filter:progid:DXImageTransform.Microsoft.Pixelate(MaxSquare=50, Duration=1, Enabled=false);...}
+</style>
+Potem nale¿y filter uruchomiæ poprzez skrypt:
+[...].style.filters[0].enabled=true;
+[...].style.filters[0].Apply();
+[...].style.filters[0].Play();
+
+Stosowanie przejœcia filtru alpha (np. sta³y kolor w przezroczysty)
+
+<style>
+costam{filter:alpha(opacity=a, finishopacity=b, style=x)}
+</style>
+gdzie:
+a to przezroczystoœæ pocz¹tkowa (100=bez przezroczystoœci)
+b to przezroczystoœæ koñcowa (0=ca³kowita przezroczystoœæ)
+x to styl, gdzie:
+  0 = brak stylu
+  1 = styl liniowy
+  2 = styl ko³owy
+  3 = styl prostok¹tny
+
+Wymuszenie u¿ycia kontrolki Windows Media Playera (IE)
+
+<OBJECT 
+  ID="mediaPlayer"  
+  CLASSID="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95" 
+    TYPE="application/x-oleobject">
+  <PARAM NAME="fileName" VALUE="jazzball.mid">
+  <PARAM NAME="autoStart" VALUE="false">
+  <PARAM NAME="showControls" VALUE="true">
+</OBJECT>
+
+document.all.mediaPlayer.FileName=plik;		// plik do odtworzenia
+document.all.mediaPlayer.volume=vol;		// g³oœnoœæ, gdzie vol (-10000,0)
+document.all.mediaPlayer.PlayCount=ile;		// ile razy odtworzyæ (ile>=1)

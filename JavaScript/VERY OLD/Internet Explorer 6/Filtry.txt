@@ -1,0 +1,82 @@
+flipH
+	style="filter:flipH()"
+flipV
+	style="filter:flipV()"
+Invert
+	style="filter:invert()"
+Gray
+	style="filter:gray()"
+Xray
+	style="filter:xray()"
+
+DXImageTransform.Intel.Additive
+DXImageTransform.Microsoft.Alpha
+	style="filter:alpha(style=0|1|2|3 opacity=0-100 finishOpacity=0-100 startX=? startY=? finishX=? finishY=?)"
+DXImageTransform.Microsoft.AlphaImageLoader
+DXImageTransform.Microsoft.Barn
+DXImageTransform.Microsoft.BasicImage
+DXImageTransform.Microsoft.Blinds
+DXImageTransform.Microsoft.Blur
+	style="filter:blur(add=false|true direction=? strength=?)"
+DXImageTransform.Microsoft.CheckerBoard
+DXImageTransform.Microsoft.Chroma
+	style="filter:chroma(color=#??????|#0x??????)"
+DXImageTransform.Microsoft.Compositor
+DXImageTransform.Microsoft.Convolution
+DXImageTransform.Microsoft.DropShadow
+	style="filter:dropShadow(color=#?????? offX=? offY=? positive=false|true)"
+DXImageTransform.Microsoft.Emboss
+DXImageTransform.Microsoft.Engrave
+DXImageTransform.Microsoft.Fade
+DXImageTransform.Microsoft.Glow
+	style="filter:glow(color=#?????? strength=?)"
+DXImageTransform.Microsoft.Gradient
+DXImageTransform.Microsoft.GradientWipe
+DXImageTransform.Microsoft.ICMFilter
+DXImageTransform.Microsoft.Inset
+DXImageTransform.Microsoft.Iris
+DXImageTransform.Microsoft.Light
+	style="filter:light()"
+	myfilter.filters.light.addCone(?,?,?,x2,y2,r?,g?,b?,?,?);
+DXImageTransform.Microsoft.MaskFilter
+	style="filter:mask(color=#??????)"
+DXImageTransform.Microsoft.Matrix
+DXImageTransform.Microsoft.MMSpecialEffect1Input
+DXImageTransform.Microsoft.MMSpecialEffect2Inputs
+DXImageTransform.Microsoft.MMSpecialEffectInplace1Input
+DXImageTransform.Microsoft.MotionBlur
+DXImageTransform.Microsoft.MovieMaker.Age
+DXImageTransform.Microsoft.MovieMaker.Fade
+DXImageTransform.Microsoft.MovieMaker.VidAdjust
+DXImageTransform.Microsoft.NDFXArtEffects
+DXImageTransform.Microsoft.OAVRedirect
+DXImageTransform.Microsoft.Pixelate
+DXImageTransform.Microsoft.RadialWipe
+DXImageTransform.Microsoft.RandomBars
+DXImageTransform.Microsoft.RandomDissolve
+DXImageTransform.Microsoft.Redirect
+DXImageTransform.Microsoft.RevealTrans
+DXImageTransform.Microsoft.Shadow
+DXImageTransform.Microsoft.Slide
+DXImageTransform.Microsoft.Spiral
+DXImageTransform.Microsoft.Stretch
+DXImageTransform.Microsoft.Strips
+DXImageTransform.Microsoft.Wave
+	style="filter:wave(add=false|true freq=? lightStrength=? phase=? strength=?)"
+DXImageTransform.Microsoft.Wheel
+DXImageTransform.Microsoft.Wipe
+DXImageTransform.Microsoft.ZigZag
+
+DXImageTransform.Microsoft.CrBarn
+DXImageTransform.Microsoft.CrBlinds
+DXImageTransform.Microsoft.CrBlur
+DXImageTransform.Microsoft.CrEmboss
+DXImageTransform.Microsoft.CrEngrave
+DXImageTransform.Microsoft.CrInset
+DXImageTransform.Microsoft.CrIris
+DXImageTransform.Microsoft.CrRadialWipe
+DXImageTransform.Microsoft.CrSlide
+DXImageTransform.Microsoft.CrSpiral
+DXImageTransform.Microsoft.CrStretch
+DXImageTransform.Microsoft.CrWheel
+DXImageTransform.Microsoft.CrZigzag

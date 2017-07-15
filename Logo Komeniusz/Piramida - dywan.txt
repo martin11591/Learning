@@ -1,0 +1,15 @@
+oto piramida :dl :n
+ ustaleg [1024 1024]
+ usuñ¿ó³wia wszystkie
+ nowy¿ó³w 0 [-511 -511 0]
+ s³uchaj 0
+ jeœli :dl < 8 [przypisz "dl 8]
+ jeœli :n < 1 [przypisz "n 1]
+ jeœli :n > 1024 / :dl [przypisz "n ent 1024 / :dl]
+ przypisz "nn :n
+ pw 30
+ dopóki [:n > 0][np :dl * :n pw 120 powtórz :n - 1 [np :dl pw 120 np :dl lw 120] np :dl pw 240 przypisz "n :n - 1]
+ pw 240
+ np :dl * :nn
+ pw 120
+ju¿

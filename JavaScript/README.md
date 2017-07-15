@@ -5,6 +5,8 @@ VERY OLD - more than about 5 years ago
 
 At old times I did not format my scripts, so now I see how much wrong programistic convention it is.
 
+In addition I always wrote in one file without grouping. For most of the time I didn't need to, because it was small "projects" for single thing to do.
+
 ## 3D Graphics
 
 3D graphics created in Word image canvas \(even before WebGL canvas!\). IE6 only.
@@ -19,6 +21,8 @@ OLD - do około 5 lat temu
 VERY OLD - starsze niż około 5 lat temu
 
 Dawniej nie formatowałem skryptów, przez co widzę teraz jak bardzo jest to złą praktyką programistyczną.
+
+W dodatku zawsze pisałem w jednym pliku bez grupowania. Przez większość czasu nie potrzebowałem tego, ponieważ były to małe "projekty" do zrealizowania pojedynczych rzeczy.
 
 ## Grafika 3D
 

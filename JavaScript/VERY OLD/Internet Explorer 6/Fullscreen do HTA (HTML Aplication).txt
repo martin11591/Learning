@@ -1,0 +1,1 @@
+<HTA:APPLICATION ID="oHTA" APPLICATIONNAME="nazwa_aplikacji" BORDER="thin" BORDERSTYLE="normal" CAPTION="no" maximizeButton="no" minimizeButton="no" ICON="img/wmptour.ico" SHOWINTASKBAR="no" SINGLEINSTANCE="yes" SYSMENU="yes" VERSION="1.0" WINDOWSTATE="maximize">

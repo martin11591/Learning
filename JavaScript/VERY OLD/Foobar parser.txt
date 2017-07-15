@@ -1,0 +1,1 @@
+[%artist% - [%album% - ][%tracknumber%. ]%title%] $if(%genre%,$if(%date%,'('$caps(%genre%)', '$num(%date%,4)')',['('$caps(%genre%)')']),['('$num(%date%,4)')'])

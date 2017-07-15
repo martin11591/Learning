@@ -1,0 +1,237 @@
+function nazwafunkcjimyszki() {
+if (event.button==costam) {
+do wykonania
+}
+}
+function nazwafunkcjiklawiszy() {
+if (event.keyCode==costam) {
+do wykonania
+}
+}
+onmousedown=nazwafunkcjimyszki;
+
+event.button==1		- lewy przycisk myszy
+event.button==2		- prawy przycisk myszy
+event.button==3		- oba przyciski myszy
+event.button==4		- kÛ≥ko myszy (wciúniÍte)
+event.button==5		- kÛ≥ko i lewy przycisk myszy
+event.button==6		- kÛ≥ko i prawy przycisk myszy
+event.button==7		- kÛ≥ko i oba przyciski myszy
+
+onkeydown=nazwafunkcjiklawiszy;
+
+event.ctrlKey		- Ctrl
+event.shiftKey		- Shift
+event.altKey		- Alt
+event.keyCode==3	- Break (Ctrl + Pause)
+event.keyCode==8	- Backspace
+event.keyCode==9	- Tab
+event.keyCode==12	- 5 na klaw. numerycznej (przy wy≥πczonym Num Lock)
+event.keyCode==13	- Enter
+event.keyCode==16	- Shift
+event.keyCode==17	- Ctrl
+event.keyCode==18	- Alt
+event.keyCode==19	- Pause
+event.keyCode==20	- Caps Lock
+event.keyCode==27	- Esc
+event.keyCode==32	- Spacja
+event.keyCode==33	- Page Up
+event.keyCode==34	- Page Down
+event.keyCode==35	- End
+event.keyCode==36	- Home
+event.keyCode==37	- Lewo
+event.keyCode==38	- GÛra
+event.keyCode==39	- Prawo
+event.keyCode==40	- DÛ≥
+event.keyCode==45	- Insert
+event.keyCode==46	- Delete
+event.keyCode==48	- 0
+event.keyCode==49	- 1
+event.keyCode==50	- 2
+event.keyCode==51	- 3
+event.keyCode==52	- 4
+event.keyCode==53	- 5
+event.keyCode==54	- 6
+event.keyCode==55	- 7
+event.keyCode==56	- 8
+event.keyCode==57	- 9
+event.keyCode==65	- A
+event.keyCode==66	- B
+event.keyCode==67	- C
+event.keyCode==68	- D
+event.keyCode==69	- E
+event.keyCode==70	- F
+event.keyCode==71	- G
+event.keyCode==72	- H
+event.keyCode==73	- I
+event.keyCode==74	- J
+event.keyCode==75	- K
+event.keyCode==76	- L
+event.keyCode==77	- M
+event.keyCode==78	- N
+event.keyCode==79	- O
+event.keyCode==80	- P
+event.keyCode==81	- Q
+event.keyCode==82	- R
+event.keyCode==83	- S
+event.keyCode==84	- T
+event.keyCode==85	- U
+event.keyCode==86	- V
+event.keyCode==87	- W
+event.keyCode==88	- X
+event.keyCode==89	- Y
+event.keyCode==90	- Z
+event.keyCode==91	- Logo windows (lewy)
+event.keyCode==92	- Logo windows (prawy)
+event.keyCode==93	- obok logo windows (po prawej stronie)
+event.keyCode==96	- 0 (przy w≥πczonym Num Lock)
+event.keyCode==97	- 1 (przy w≥πczonym Num Lock)
+event.keyCode==98	- 2 (przy w≥πczonym Num Lock)
+event.keyCode==99	- 3 (przy w≥πczonym Num Lock)
+event.keyCode==100	- 4 (przy w≥πczonym Num Lock)
+event.keyCode==101	- 5 (przy w≥πczonym Num Lock)
+event.keyCode==102	- 6 (przy w≥πczonym Num Lock)
+event.keyCode==103	- 7 (przy w≥πczonym Num Lock)
+event.keyCode==104	- 8 (przy w≥πczonym Num Lock)
+event.keyCode==105	- 9 (przy w≥πczonym Num Lock)
+event.keyCode==106	- *
+event.keyCode==107	- +
+event.keyCode==109	- -
+event.keyCode==110	- , (przy w≥πczonym Num Lock)
+event.keyCode==111	- /
+event.keyCode==112	- F1
+event.keyCode==113	- F2
+event.keyCode==114	- F3
+event.keyCode==115	- F4
+event.keyCode==116	- F5
+event.keyCode==117	- F6
+event.keyCode==118	- F7
+event.keyCode==119	- F8
+event.keyCode==120	- F9
+event.keyCode==121	- F10
+event.keyCode==122	- F11
+event.keyCode==123	- F12
+event.keyCode==144	- Num Lock
+event.keyCode==145	- Scroll Lock
+event.keyCode==186	- ;
+event.keyCode==187	- =
+event.keyCode==188	- ,
+event.keyCode==189	- -
+event.keyCode==190	- .
+event.keyCode==191	- /
+event.keyCode==192	- `
+event.keyCode==219	- [
+event.keyCode==220	- \
+event.keyCode==221	- ]
+event.keyCode==222	- '
+
+onkeyup=nazwafunkcjiklawiszy
+
+event.keyCode==44	- Print Screen
+reszta jak wyøej z wyjπtkiem taba (nie ma go)
+
+onkeypress=nazwafunkcjiklawiszy
+
+event.keyCode==33	- !
+event.keyCode==34	- "
+event.keyCode==35	- #
+event.keyCode==36	- $
+event.keyCode==37	- %
+event.keyCode==38	- &
+event.keyCode==39	- '
+event.keyCode==40	- (
+event.keyCode==41	- )
+event.keyCode==42	- *
+event.keyCode==43	- +
+event.keyCode==44	- ,
+event.keyCode==45	- -
+event.keyCode==46	- .
+event.keyCode==47	- /
+event.keyCode==58	- :
+event.keyCode==59	- ;
+event.keyCode==60	- <
+event.keyCode==61	- =
+event.keyCode==62	- >
+event.keyCode==63	- ?
+event.keyCode==64	- @
+event.keyCode==65	- Shift + A
+event.keyCode==66	- Shift + B
+event.keyCode==67	- Shift + C
+event.keyCode==68	- Shift + D
+event.keyCode==69	- Shift + E
+event.keyCode==70	- Shift + F
+event.keyCode==71	- Shift + G
+event.keyCode==72	- Shift + H
+event.keyCode==73	- Shift + I
+event.keyCode==74	- Shift + J
+event.keyCode==75	- Shift + K
+event.keyCode==76	- Shift + L
+event.keyCode==77	- Shift + M
+event.keyCode==78	- Shift + N
+event.keyCode==79	- Shift + O
+event.keyCode==80	- Shift + P
+event.keyCode==81	- Shift + Q
+event.keyCode==82	- Shift + R
+event.keyCode==83	- Shift + S
+event.keyCode==84	- Shift + T
+event.keyCode==85	- Shift + U
+event.keyCode==86	- Shift + V
+event.keyCode==87	- Shift + W
+event.keyCode==88	- Shift + X
+event.keyCode==89	- Shift + Y
+event.keyCode==90	- Shift + Z
+event.keyCode==91	- [
+event.keyCode==92	- \
+event.keyCode==93	- ]
+event.keyCode==94	- ^
+event.keyCode==95	- _
+event.keyCode==96	- `
+event.keyCode==97	- A
+event.keyCode==98	- B
+event.keyCode==99	- C
+event.keyCode==100	- D
+event.keyCode==101	- E
+event.keyCode==102	- F
+event.keyCode==103	- G
+event.keyCode==104	- H
+event.keyCode==105	- I
+event.keyCode==106	- J
+event.keyCode==107	- K
+event.keyCode==108	- L
+event.keyCode==109	- M
+event.keyCode==110	- N
+event.keyCode==111	- O
+event.keyCode==112	- P
+event.keyCode==113	- Q
+event.keyCode==114	- R
+event.keyCode==115	- S
+event.keyCode==116	- T
+event.keyCode==117	- U
+event.keyCode==118	- V
+event.keyCode==119	- W
+event.keyCode==120	- X
+event.keyCode==121	- Y
+event.keyCode==122	- Z
+event.keyCode==123	- {
+event.keyCode==124	- |
+event.keyCode==125	- }
+event.keyCode==211	- Shift + Alt + O	”
+event.keyCode==243	- Alt + O		Û
+event.keyCode==260	- Shift + Alt + A	•
+event.keyCode==261	- Alt + A		π
+event.keyCode==262	- Shift + Alt + C	∆
+event.keyCode==263	- Alt + C		Ê
+event.keyCode==280	- Shift + Alt + E	 
+event.keyCode==281	- Alt + E		Í
+event.keyCode==321	- Shift + Alt + L	£
+event.keyCode==322	- Alt + L		≥
+event.keyCode==323	- Shift + Alt + N	—
+event.keyCode==324	- Alt + N		Ò
+event.keyCode==346	- Shift + Alt + S	å
+event.keyCode==347	- Alt + S		ú
+event.keyCode==377	- Shift + Alt + X	è
+event.keyCode==378	- Alt + X		ü
+event.keyCode==379	- Shift + Alt + Z	Ø
+event.keyCode==380	- Alt + Z		ø
+event.keyCode==8364	- Alt + U		Ä
+reszta jak w przypadku onkeydown z wyjπtkiem:obu logo windows, Alt, Shift, Ctrl, Caps Lock, Num Lock, Scroll Lock, Insert, Delete, Home, End, Page up, Page down, Pause, Print Screen, Backspace, Tab, klawisza obok logo windows, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12

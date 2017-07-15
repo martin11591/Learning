@@ -1,0 +1,255 @@
+<html>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250" />
+<style>
+body,table{font-family:Trebuchet MS;font-size:10pt;font-weight:bold}
+body,input{cursor:default}
+</style>
+<table border=0>
+<tr><td style="font-style:italic">Strona atakująca</td><td style="font-style:italic">Strona broniąca się</td></tr>
+<tr><td>Liczba jednostek</td><td>Liczba jednostek</td></tr>
+<tr><td><input id="liczba1"></td><td><input id="liczba2"></td></tr>
+<tr><td>Atak</td><td>Atak</td></tr>
+<tr><td><input id="atak1"></td><td><input id="atak2"></td></tr>
+<tr><td>Obrona</td><td>Obrona</td></tr>
+<tr><td><input id="obrona1"></td><td><input id="obrona2"></td></tr>
+<tr><td>Uszkodzenia</td><td>Uszkodzenia</td></tr>
+<tr><td><input id="uszkodzenia1_1"> - <input id="uszkodzenia1_2"></td><td><input id="uszkodzenia2_1"> - <input id="uszkodzenia2_2"></td></tr>
+<tr><td>Punkty życia \ Wytrzymałość</td><td>Punkty życia \ Wytrzymałość</td></tr>
+<tr><td><input id="zycie1"> \ <input id="wytrzymalosc1"></td><td><input id="zycie2"> \ <input id="wytrzymalosc2"></td></tr>
+<tr><td></td><td><input type=checkbox id="kontratak2">Jednostka kontratakuje</td></tr>
+<tr><td colspan=2 style="text-align:center"><input type=checkbox id="moraleISzczescie" onclick="uwzglednianie()">Uwzględnij morale i szczęście</td></tr>
+<tr id="moraleISzczescie1" style="display:none"><td>Morale</td><td>Morale</td></tr>
+<tr id="moraleISzczescie2" style="display:none"><td><input id="morale1m3" name=morale1 type=radio value="-3">-3<br><input id="morale1m2" name=morale1 type=radio value=-2>-2<br><input id="morale1m1" name=morale1 type=radio value=-1>-1<br><input id="morale10" name=morale1 type=radio value="0" checked>0<br><input id="morale1p1" name=morale1 type=radio value=1>+1<br><input id="morale1p2" name=morale1 type=radio value=2>+2<br><input id="morale1p3" name=morale1 type=radio value=3>+3</td><td><input id="morale2m3" name=morale2 type=radio value="-3">-3<br><input id="morale2m2" name=morale2 type=radio value=-2>-2<br><input id="morale2m1" name=morale2 type=radio value=-1>-1<br><input id="morale20" name=morale2 type=radio value="0" checked>0<br><input id="morale2p1" name=morale2 type=radio value=1>+1<br><input id="morale2p2" name=morale2 type=radio value=2>+2<br><input id="morale2p3" name=morale2 type=radio value=3>+3</td></tr>
+<tr id="moraleISzczescie3" style="display:none"><td>Szczęście</td><td>Szczęście</td></tr>
+<tr id="moraleISzczescie4" style="display:none"><td><input id="szczescie1m3" name=szczescie1 type=radio value="-3">-3<br><input id="szczescie1m2" name=szczescie1 type=radio value=-2>-2<br><input id="szczescie1m1" name=szczescie1 type=radio value=-1>-1<br><input id="szczescie10" name=szczescie1 type=radio value="0" checked>0<br><input id="szczescie1p1" name=szczescie1 type=radio value=1>+1<br><input id="szczescie1p2" name=szczescie1 type=radio value=2>+2<br><input id="szczescie1p3" name=szczescie1 type=radio value=3>+3</td><td><input id="szczescie2m3" name=szczescie2 type=radio value="-3">-3<br><input id="szczescie2m2" name=szczescie2 type=radio value=-2>-2<br><input id="szczescie2m1" name=szczescie2 type=radio value=-1>-1<br><input id="szczescie20" name=szczescie2 type=radio value="0" checked>0<br><input id="szczescie2p1" name=szczescie2 type=radio value=1>+1<br><input id="szczescie2p2" name=szczescie2 type=radio value=2>+2<br><input id="szczescie2p3" name=szczescie2 type=radio value=3>+3</td></tr>
+<tr><td colspan=2 style="text-align:center"><button onclick="clearTimeout(timer);pobierzInformacje();atakuj()">Atakuj</button></td></tr>
+</table>Skutek ataku:<div id="wyniki">&nbsp;</div>
+<script>
+var timer;
+ll1=liczbaLosowa(2000);
+ll2=liczbaLosowa(2000);
+document.all.liczba1.value=ll1;
+document.all.liczba2.value=ll2;
+aa1=16-Math.round(ll1*15/2000);
+aa2=16-Math.round(ll2*15/2000);
+document.all.atak1.value=aa1;
+document.all.atak2.value=aa2;
+oo1=liczbaLosowa(aa1+5);
+oo2=liczbaLosowa(aa2+5);
+document.all.obrona1.value=oo1;
+document.all.obrona2.value=oo2;
+uu11=liczbaLosowa(20);
+uu12=uu11+liczbaLosowa(20-uu11);
+document.all.uszkodzenia1_1.value=uu11;
+document.all.uszkodzenia1_2.value=uu12;
+uu21=liczbaLosowa(20);
+uu22=uu21+liczbaLosowa(20-uu21);
+document.all.uszkodzenia2_1.value=uu21;
+document.all.uszkodzenia2_2.value=uu22;
+ww1=liczbaLosowa(60)*5;
+ww2=liczbaLosowa(60)*5;
+document.all.zycie1.value=ww1;
+document.all.wytrzymalosc1.value=ww1;
+document.all.zycie2.value=ww2;
+document.all.wytrzymalosc2.value=ww2;
+licz();
+function licz() {
+document.onkeydown=null;
+num1=eval(parseInt(document.all.liczba1.value));
+num2=eval(parseInt(document.all.liczba2.value));
+att1=eval(parseInt(document.all.atak1.value));
+att2=eval(parseInt(document.all.atak2.value));
+def1=eval(parseInt(document.all.obrona1.value));
+def2=eval(parseInt(document.all.obrona2.value));
+dam11=eval(parseInt(document.all.uszkodzenia1_1.value));
+dam12=eval(parseInt(document.all.uszkodzenia1_2.value));
+dam21=eval(parseInt(document.all.uszkodzenia2_1.value));
+dam22=eval(parseInt(document.all.uszkodzenia2_2.value));
+pol1=eval(parseInt(document.all.wytrzymalosc1.value));
+pol2=eval(parseInt(document.all.wytrzymalosc2.value));
+document.all.wyniki.innerHTML="Zadawane obrażenia przez stronę atakującą:"+liczObrazenia(num1,att1,dam11,dam12,def2)+"<br>Zadawane obrażenia przez stronę broniącą się:"+liczObrazenia(num2,att2,dam21,dam22,def1);
+timer=setTimeout("licz()",1);
+}
+function uwzglednianie() {
+stan=document.all.moraleISzczescie1.style.display;
+if(stan=="none"){
+with(document.all){moraleISzczescie1.style.display="block";moraleISzczescie2.style.display="block";moraleISzczescie3.style.display="block";moraleISzczescie4.style.display="block"}
+}
+if(stan=="block"){
+with(document.all){moraleISzczescie1.style.display="none";moraleISzczescie2.style.display="none";moraleISzczescie3.style.display="none";moraleISzczescie4.style.display="none"}
+}
+}
+function liczObrazenia(Liczba1,Atak1,Uszkodzenia11,Uszkodzenia12,Obrona2) {
+Uszkodzenia1=Liczba1*Uszkodzenia11;
+Uszkodzenia2=Liczba1*Uszkodzenia12;
+if(Atak1>Obrona2){
+Bonus=(Atak1-Obrona2)*5;
+if(Bonus>400){Bonus=400}
+Uszkodzenia1+=Uszkodzenia1*Bonus/100;
+Uszkodzenia2+=Uszkodzenia2*Bonus/100;
+}
+if(Atak1<Obrona2){
+Bonus=(Obrona2-Atak1)*2;
+if(Bonus>30){Bonus=30}
+Uszkodzenia1-=Uszkodzenia1*Bonus/100;
+Uszkodzenia2-=Uszkodzenia2*Bonus/100;
+}
+Uszkodzenia1=Math.round(Uszkodzenia1);
+Uszkodzenia2=Math.round(Uszkodzenia2);
+wynik=Uszkodzenia1;
+if(Uszkodzenia1!=Uszkodzenia2){wynik+="-"+Uszkodzenia2}
+return wynik;
+}
+function inne() {
+kontra=document.all.kontratak2.checked;
+stan=document.all.moraleISzczescie1.style.display;
+if(kontra){
+with(document.all){
+morale2m3.disabled=true;
+morale2m2.disabled=true;
+morale2m1.disabled=true;
+morale20.disabled=true;
+morale2p1.disabled=true;
+morale2p2.disabled=true;
+morale2p3.disabled=true;
+szczescie2m3.disabled=true;
+szczescie2m2.disabled=true;
+szczescie2m1.disabled=true;
+szczescie20.disabled=true;
+szczescie2p1.disabled=true;
+szczescie2p2.disabled=true;
+szczescie2p3.disabled=true;
+}
+}else{
+with(document.all){
+morale2m3.disabled=false;
+morale2m2.disabled=false;
+morale2m1.disabled=false;
+morale20.disabled=false;
+morale2p1.disabled=false;
+morale2p2.disabled=false;
+morale2p3.disabled=false;
+szczescie2m3.disabled=false;
+szczescie2m2.disabled=false;
+szczescie2m1.disabled=false;
+szczescie20.disabled=false;
+szczescie2p1.disabled=false;
+szczescie2p2.disabled=false;
+szczescie2p3.disabled=false;
+}
+}
+}
+function liczbaLosowa(zakres) {
+return Math.round((zakres-1)*Math.random()+1);
+}
+function pobierzInformacje() {
+aLiczba=eval(document.all.liczba1.value);
+bLiczba=eval(document.all.liczba2.value);
+aAtak=eval(document.all.atak1.value);
+bAtak=eval(document.all.atak2.value);
+aObrona=eval(document.all.obrona1.value);
+bObrona=eval(document.all.obrona2.value);
+aUszkodzenia1=eval(document.all.uszkodzenia1_1.value);
+aUszkodzenia2=eval(document.all.uszkodzenia1_2.value);
+bUszkodzenia1=eval(document.all.uszkodzenia2_1.value);
+bUszkodzenia2=eval(document.all.uszkodzenia2_2.value);
+aZycie=eval(document.all.zycie1.value);
+bZycie=eval(document.all.zycie2.value);
+aWytrzymalosc=eval(document.all.wytrzymalosc1.value);
+bWytrzymalosc=eval(document.all.wytrzymalosc2.value);
+}
+function atakuj() {
+kontratak=document.all.kontratak2.checked;
+uwzglednij=document.all.moraleISzczescie.checked;
+stat="";
+if(uwzglednij){
+los=(liczbaLosowa(1001)-1)/10;
+if(document.all.morale1m3.checked){
+if(los<=12.5){document.all.wyniki.innerHTML="Niskie morale nie pozwala na wykonanie ataku";return}
+}
+if(document.all.morale1m2.checked){
+if(los<=8.3){document.all.wyniki.innerHTML="Niskie morale nie pozwala na wykonanie ataku";return}
+}
+if(document.all.morale1m1.checked){
+if(los<=4.2){document.all.wyniki.innerHTML="Niskie morale nie pozwala na wykonanie ataku";return}
+}
+}
+if(kontratak){stat="<table border=0><tr><td style=\"font-style:italic\">Strona atakująca</td><td style=\"font-style:italic\">Strona broniąca się</td></tr>"}
+aAtakb1=eval(liczObrazenia(aLiczba,aAtak,aUszkodzenia1,aUszkodzenia1,bObrona));
+aAtakb2=eval(liczObrazenia(aLiczba,aAtak,aUszkodzenia2,aUszkodzenia2,bObrona));
+if(aAtakb1>aAtakb2){aAtak=eval(aAtakb1);aAtakb1=eval(aAtakb2);aAtakb2=eval(aAtak)}
+aAtakb=eval(aAtakb1+liczbaLosowa(aAtakb2-aAtakb1+1)-1);
+if(uwzglednij){
+los=(liczbaLosowa(1001)-1)/10;
+if(document.all.szczescie1p1.checked){
+if(los<=4.2){stat="Wysokie szczęście pozwala na zadanie podwójnych obrażeń<br>"+stat;aAtakb*=2}
+}
+if(document.all.szczescie1p2.checked){
+if(los<=8.3){stat="Wysokie szczęście pozwala na zadanie podwójnych obrażeń<br>"+stat;aAtakb*=2}
+}
+if(document.all.szczescie1p3.checked){
+if(los<=12.5){stat="Wysokie szczęście pozwala na zadanie podwójnych obrażeń<br>"+stat;aAtakb*=2}
+}
+}
+bStraty=eval(parseInt(aAtakb/bWytrzymalosc));
+bZycie-=aAtakb-bStraty*bWytrzymalosc;
+if(bZycie<=0){bZycie+=bWytrzymalosc;bStraty+=1}
+if(!kontratak){
+stat+="<table border=0><tr><td style=\"font-style:italic\">Strona atakująca</td><td style=\"font-style:italic\">Strona broniąca się</td></tr><tr><td>Zadane uszkodzenia:"+aAtakb+"</td>";
+if(bStraty<bLiczba){stat+="<td>Straty:"+bStraty+"</td><td></td></tr><tr><td></td><td>Pozostałe punkty życia:"+bZycie+"</td>"}
+else{stat+="<td>Cała jednostka zginęła</td>"}
+stat+="</tr></table>";
+}
+if(!kontratak){
+if(uwzglednij){
+los=(liczbaLosowa(1001)-1)/10;
+if(document.all.morale1p1.checked){
+if(los<=4.2){document.all.wyniki.innerHTML="Wysokie morale pozwala na powtórny atak";setTimeout("atakuj()",1000);return}
+}
+if(document.all.morale1p2.checked){
+if(los<=8.3){document.all.wyniki.innerHTML="Wysokie morale pozwala na powtórny atak";setTimeout("atakuj()",1000);return}
+}
+if(document.all.morale1p3.checked){
+if(los<=12.5){document.all.wyniki.innerHTML="Wysokie morale pozwala na powtórny atak";setTimeout("atakuj()",1000);return}
+}
+}
+document.all.wyniki.innerHTML=stat;
+document.onkeydown=licz;
+return;
+}
+bLiczba-=bStraty;
+bAtaka1=eval(liczObrazenia(bLiczba,bAtak,bUszkodzenia1,bUszkodzenia1,aObrona));
+bAtaka2=eval(liczObrazenia(bLiczba,bAtak,bUszkodzenia2,bUszkodzenia2,aObrona));
+if(bAtaka1>bAtaka2){bAtak=eval(bAtaka1);bAtaka1=eval(bAtaka2);bAtaka2=eval(bAtak)}
+bAtaka=eval(bAtaka1+liczbaLosowa(bAtaka2-bAtaka1+1)-1);
+if(uwzglednij){
+los=(liczbaLosowa(1001)-1)/10;
+if(document.all.szczescie2p1.checked){
+if(los<=4.2){stat="Wysokie szczęście pozwala na zadanie podwójnych obrażeń<br>"+stat;bAtaka*=2}
+}
+if(document.all.szczescie2p2.checked){
+if(los<=8.3){stat="Wysokie szczęście pozwala na zadanie podwójnych obrażeń<br>"+stat;bAtaka*=2}
+}
+if(document.all.szczescie2p3.checked){
+if(los<=12.5){stat="Wysokie szczęście pozwala na zadanie podwójnych obrażeń<br>"+stat;bAtaka*=2}
+}
+}
+aStraty=eval(parseInt(bAtaka/aWytrzymalosc));
+aZycie-=bAtaka-aStraty*aWytrzymalosc;
+if(aZycie<=0){aZycie+=aWytrzymalosc;aStraty+=1}
+if(aStraty<aLiczba){zyje1=1}else{zyje1=0}
+if(bStraty<bLiczba){zyje2=1}else{zyje2=0}
+stat+="<tr>";
+if(zyje1==1){stat+="<td>Zadane uszkodzenia:"+aAtakb+"</td>"}
+if(zyje2==0){stat+="<td>Cała jednostka zginęła</td>"}else{stat+="<td>Straty:"+bStraty+"</td>"}
+stat+="</tr><tr>";
+if(zyje1==0){stat+="<td>Cała jednostka zginęła</td>"}else{stat+="<td>Straty:"+aStraty+"</td>"}
+if(zyje2==1){stat+="<td>Zadane uszkodzenia:"+bAtaka+"</td>"}
+stat+="</tr><tr>";
+if(zyje1==1){stat+="<td>Pozostałe punkty życia:"+aZycie+"</td>"}else{stat+="<td></td>"}
+if(zyje2==1){stat+="<td>Pozostałe punkty życia:"+bZycie+"</td>"}else{stat+="<td></td>"}
+stat+="</tr></table>";
+document.all.wyniki.innerHTML=stat;
+document.onkeydown=licz;
+}
+</script>

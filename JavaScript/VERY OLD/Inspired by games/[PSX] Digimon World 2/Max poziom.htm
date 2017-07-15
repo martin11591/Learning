@@ -1,0 +1,37 @@
+<html><title>Liczenie maksymalnego poziomu Digimona</title>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+</head>
+<body>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold}
+</style>
+Poziom pierwszego digimona:<input type=text id="dig1" size=6 maxlength=2 value=11><br>
+Poziom drugiego digimona:<input type=text id="dig2" size=6 maxlength=2 value=11><br>
+Maksymalny poziom nowego digimona:<input type=text id="digm" size=6 maxlength=2 readonly>
+<div id="info">&nbsp;</div>
+<script>
+licz();
+function licz() {
+p1=document.all.dig1.value;
+p2=document.all.dig2.value;
+if(p1==""||p1==null){p1=11}
+if(p1<11){p1=11}
+if(p1>99){p1==99}
+if(p2==""||p2==null){p2=11}
+if(p2<11){p2=11}
+if(p2>99){p2==99}
+p1=Math.floor(parseFloat(p1));
+p2=Math.floor(parseFloat(p2));
+if (p2>p1) {tmp=p1;p1=p2;p2=p1}
+mx=p1+Math.floor(parseFloat(p2/5));
+document.all.digm.value=mx;
+info.innerHTML="";
+if(mx>=11&&mx<21){info.innerHTML="Osiągnie poziom Champion."}
+if(mx>=21&&mx<31){info.innerHTML="Osiągnie poziom Ultimate."}
+if(mx>=31){info.innerHTML="Osiągnie poziom Mega."}
+setTimeout("licz()",1);
+}
+</script>
+</body>
+</html>

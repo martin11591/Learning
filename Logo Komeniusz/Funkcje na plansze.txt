@@ -1,0 +1,14 @@
+oto plansza1 :rx :ry :gx :gy
+ przypisz "ii 0
+ dopóki [:ii <= :rx][odcinek 0 :ry / 2 :ii 0 2048 przypisz "ii :ii + :gx]
+ przypisz "ii 0
+ dopóki [:ii <= :ry][odcinek 0 :ry / 2 :rx :ii 2048 przypisz "ii :ii + :gy]
+ przypisz "ii :rx
+ dopóki [:ii >= 0][odcinek 0 :ry / 2 :ii :ry 2048 przypisz "ii :ii - :gx]
+ przypisz "ii :rx
+ dopóki [:ii >= 0][odcinek :rx :ry / 2 :ii 0 2048 przypisz "ii :ii - :gx]
+ przypisz "ii 0
+ dopóki [:ii <= :ry][odcinek :rx :ry / 2 0 :ii 2048 przypisz "ii :ii + :gy]
+ przypisz "ii 0
+ dopóki [:ii <= :rx][odcinek :rx :ry / 2 :ii :ry 2048 przypisz "ii :ii + :gx]
+ju¿

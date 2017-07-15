@@ -1,0 +1,31 @@
+DP=wiêkszy DP+1 (czyli np. DP1=5, DP2=3 to DP=6 lub DP1=0, DP2=3 to DP=4)
+Max Level=wiêkszy Level+dzielenie ca³kowite mniejszego Levela przez 5 (czyli np. EL1=13, EL2=20 to MAX=EL2+EL1/5=20+2=22)
+
+Dla wynikowego EL 1 (EL 31+ + EL 11-20, EL 21-30 + EL 11-20, EL 11-20 + EL 11-20)
+HP=zaokr¹glenie w dó³ (HP1+HP2)*0.10
+MP=zaokr¹glenie w dó³ (MP1+MP2)*0.10
+Att=zaokr¹glenie (Att1+Att2)*0.369
+Def=zaokr¹glenie (Def1+Def2)*0.369
+Spd=zaokr¹glenie w dó³ (Spd1+Spd2)*0.30
+Exp=0
+Next=6 (6)
+
+Dla wynikowego EL 11 (EL 31+ + EL 21-30, EL 21-30 + EL 21-30)
+HP=zaokr¹glenie w dó³ (HP1+HP2)*0.34
+MP=zaokr¹glenie w dó³ (MP1+MP2)*0.34
+
+Att=zaokr¹glenie (Att1+Att2)*0.405 plus minus 0.005
+Def=zaokr¹glenie (Def1+Def2)*0.405 plus minus 0.005
+
+Spd=zaokr¹glenie w dó³ (Spd1+Spd2)*0.45
+Exp=483
+Next=117 (600)
+
+Dla wynikowego EL 21 (EL 31+ + EL 31+)
+HP=zaokr¹glenie w dó³ (HP1+HP2)*0.45
+MP=zaokr¹glenie w dó³ (MP1+MP2)*0.45
+Att=zaokr¹glenie (Att1+Att2)*0.45 plus minus 0.005
+Def=zaokr¹glenie (Def1+Def2)*0.45 plus minus 0.005
+Spd=zaokr¹glenie w dó³ (Spd1+Spd2)*0.50
+Exp=5883
+Next=1257 (7140)

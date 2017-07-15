@@ -1,0 +1,60 @@
+Archanio³
+
+Atak			39
+Obrona			38
+Uszkodzenia		50
+Liczba jednostek	17
+
+--------------------------------------------------------------------
+
+Zombie
+
+Atak			5
+Obrona			5
+Uszkodzenia		2-3
+Liczba jednostek	27
+
+Zadawane obra¿enia	2295 = 2.3k
+
+Gryf królewski
+
+Atak			9
+Obrona			9
+Uszkodzenia		3-6
+
+Zadawane obra¿enia	2125 = 2.1k
+
+Knurzy jeŸdŸcy
+
+Atak			6
+Obrona			5
+Uszkodzenia		2-3
+
+Zadawane obra¿enia	2295 = 2.3k
+
+¯ywio³aki powietrza
+
+Atak			9
+Obrona			9
+Uszkodzenia		2-8
+Liczba			25
+
+Zadawane obra¿enia	2210 = 2.2k
+
+¯ywio³aki magmy
+
+Atak			11
+Obrona			11
+Uszkodzenia		6-10
+
+Zadawane obra¿enia	2040 = 2k
+
+Demony
+
+Atak			10
+Obrona			10
+Uszkodzenia		7-9
+Wytrzyma³oœæ		35
+Liczba jednostek	46
+
+Zadawane obra¿enia	2167 = 2.2k

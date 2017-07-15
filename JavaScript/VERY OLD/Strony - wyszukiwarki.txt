@@ -1,0 +1,41 @@
+Wyszukiwanie na stronie mp3.teledyski.info
+
+javascript:{window.location.href="http:\/\/www.mp3.teledyski.info\/index.html?text="+prompt("Tytu³ piosenki","").replace(/%20/g,"+")+"&strona=1&file=global&name=eplik&dalej=Szukaj"}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Wyszukiwanie na google.pl
+
+javascript:{window.location.href="http:\/\/www.google.pl\/search?q="+prompt("S³owo(a) kluczowe","").replace(/%20/g,"+")}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Wyszukiwanie na images.google.com
+
+javascript:{window.location.href="http:\/\/www.images.google.com\/images?q="+prompt("S³owo(a) kluczowe","").replace(/%20/g,"+")+"&gbv=2&safe=off&sa=G"}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Wyszukiwanie na video.google.com
+
+javascript:{window.location.href="http:\/\/www.video.google.com\/videosearch?q="+prompt("S³owo(a) kluczowe","").replace(/%20/g,"+")+"&emb=0&safe=off"}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Wyszukiwanie na gry-online.pl
+
+javascript:{window.location.href="http:\/\/www.gry-online.pl\/S032.asp?SEARCH="+prompt("Tytu³ gry","").replace(/%20/g,"+")+"&Submit="}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Wyszukiwanie na youtube.com
+
+javascript:{window.location.href="http:\/\/www.youtube.com/results?search_type=&search_query="+prompt("S³owo(a) kluczowe","").replace(/%20/g,"+")}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Wyszukiwanie na allegro.pl
+
+javascript:{window.location.href="http:\/\/www.allegro.pl\/search.php?string="+prompt("S³owo(a) kluczowe","").replace(/%20/g,"+")+"&buy=1&order=pd"}
+
+-------------------------------------------------------------------------------------------------------------------------

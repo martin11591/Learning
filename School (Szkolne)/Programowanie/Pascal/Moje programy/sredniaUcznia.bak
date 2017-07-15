@@ -1,0 +1,21 @@
+program sredniaUcznia;
+uses crt, textGraph;
+var
+  opcjeMenuGlowne:array[0..4] of string;
+
+procedure czysc(x1,y1,x2,y2:longint);
+var
+  i,j:longint;
+begin
+  for j:=y1 to y2 do
+  begin
+    for i:=x1 to x2 do
+    begin
+      gotoxy(i,j);
+      write(' ');
+    end;
+  end;
+end;
+
+begin
+end.

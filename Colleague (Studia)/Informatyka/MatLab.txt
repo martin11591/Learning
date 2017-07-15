@@ -1,0 +1,53 @@
+xi=[2 4 6 8 9];
+yi=[-5 0 2 -1 6];
+x=1:0.01:9.1;
+y1=interp1(xi,yi,x,'linear');
+plot(x,y1,xi,yi,'o'),grid on
+xi=[2 4 6 8 9];
+yi=[-5 0 2 -1 6];
+x=1:0.01:9.1;
+y1=interp1(xi,yi,x,'cubic');
+plot(x,y1,xi,yi,'o'),grid on
+xi=[2 4 6 8 9];
+yi=[-5 0 2 -1 6];
+x=1:0.01:9.1;
+y1=interp1(xi,yi,x,'nearest');
+plot(x,y1,xi,yi,'o'),grid on
+xi=[2 4 6 8 9];
+yi=[-5 0 2 -1 6];
+x=1:0.01:9.1;
+y1=interp1(xi,yi,x,'spline');
+plot(x,y1,xi,yi,'o'),grid on
+
+----------------------------------------------------------
+
+x=-5:1:5;
+y=[9.5 10.1 11.3 12.5 13.7 15.1 16.7 18.4 20.7 22.5 25.8];
+xi=-5:0.1:5;
+yi=interp1(x,y,xi,'linear');
+plot(x,y,'*',xi,yi),grid on
+title('Interpolaca funkcji jednej zmiennej')
+xlabel('Zmienna X')
+ylabel('Zmienna y')
+text(1.5,11,'* - wezly interpolacji')
+
+----------------------------------------------------------
+
+x=-1:0.01:4;
+y=(x.^2).*sin(pi*x);
+z=-1:0.5:4;
+y1=(z.^2).*sin(pi*z);
+yi=interp1(z,y1,x);
+bl=y-yi;
+blm=max(abs(bl));
+subplot(2,1,1)
+plot(x,y,x,yi,z,y1,'*'),grid on
+title('Wykres danej funkcji i jej przyblizenia')
+xlabel('Zmienna X')
+ylabel('Zmienna Y')
+text(1.7,-12.5,'* - wezly interpolacji')
+subplot(2,1,2)
+plot(x,bl),grid on
+title('Wykres bledu')
+xlabel('Zmienna X')
+ylabel('Zmienna Y')

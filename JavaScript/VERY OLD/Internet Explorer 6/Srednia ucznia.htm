@@ -1,0 +1,496 @@
+<html>
+<body scroll=auto>
+<title>Liczenie úrednich uczniÛw oraz úrednich ich przedmiotÛw</title>
+<style>
+body,input,table{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<table>
+<tr><td style="vertical-align:top">
+<table>
+<tr><td>ImiÍ:</td><td><input id="imieUcznia"></input></td><td rowspan=2><button onclick="dodajUcznia()" style="width:100%;height:54px">Dodaj ucznia<br>do listy uczniÛw</button></td></tr>
+<tr><td>Nazwisko:</td><td><input id="nazwiskoUcznia"></input></td></tr>
+<tr><td colspan=3><span id="uczniowieLista" style="display:none"></span></td></tr>
+<tr><td colspan=3><button onclick="uczenWGore()" style="width:20%">&uarr;</button><button onclick="usunUcznia()" style="width:60%">UsuÒ ucznia z listy</button><button onclick="uczenWDol()" style="width:20%">&darr;</button></td></tr>
+<tr><td colspan=3><button onclick="sortujWyniki('uczniowie','+','txt')" style="width:50%">Sortuj uczniÛw rosnπco</button><button onclick="sortujWyniki('uczniowie','-','txt')" style="width:50%">Sortuj uczniÛw malejπco</button></td></tr>
+<tr><td colspan=3><hr></td></tr>
+<tr><td>Nazwa przedmiotu:</td><td><input id="nazwaPrzedmiotu"></input></td><td><button onclick="dodajPrzedmiot()" style="width:100%;height:100%">Dodaj do listy<br>przedm. ucznia</button></td></tr>
+<tr><td colspan=3><span id="przedmiotyLista" style="display:none"></span></td></tr>
+<tr><td colspan=3><button onclick="przedmiotWGore()" style="width:20%">&uarr;</button><button onclick="usunPrzedmiot()" style="width:60%">UsuÒ przedmiot z listy</button><button onclick="przedmiotWDol()" style="width:20%">&darr;</button></td></tr>
+<tr><td colspan=3><button onclick="sortujWyniki('uczniowie[aktywnyUczen]','+','txt')" style="width:50%">Sortuj przedmioty rosnπco</button><button onclick="sortujWyniki('uczniowie[aktywnyUczen]','-','txt')" style="width:50%">Sortuj przedmioty malejπco</button></td></tr>
+<tr><td colspan=3><hr></td></tr>
+<tr><td>Oceny:</td><td><input id="ocenyUcznia" style="width:100%"></input></td><td><button onclick="zapiszOceny()" style="width:100%;height:100%">Zapisz oceny<br>z przedmiotu</button></td></tr>
+<tr><td colspan=3><button onclick="sortujWyniki('oceny','+','txt')" style="width:50%">Sortuj za ocenami rosnπco</button><button onclick="sortujWyniki('oceny','-','txt')" style="width:50%">Sortuj za ocenami malejπco</button></td></tr>
+<tr><td colspan=3><button onclick="sortujWyniki('srednie','+','txt')" style="width:50%">Sortuj za úredniami rosnπco</button><button onclick="sortujWyniki('srednie','-','txt')" style="width:50%">Sortuj za úredniami malejπco</button></td></tr>
+<tr><td colspan=3><hr></td></tr>
+<tr><td colspan=3 id="plikDanychHTML"></td></tr>
+<tr><td colspan=3><button id="zapisywanieDanych" disabled=true style="width:100%" onclick="zapiszDane()">Zapisz dane do pliku</button>
+</table></td>
+<td style="vertical-align:top"><span id="tablicaWynikow"></span></td></table>
+<script>
+var listaUczniow;
+dc=document;
+dca=dc.all;
+uczniowie=new Array();
+uczniowieLiczbaPrzedm=new Array();
+liczbaUczniow=0;
+aktywnyUczen=0;
+aktywnyPrzedmiot=0;
+dca.plikDanychHTML.innerHTML="<input id=\"plikDanych\" type=file style=\"display:none\" onchange=\"wczytajDane()\" value=\"Moje oceny.txt\"><\/input><button onclick=\"dca.plikDanych.click()\" style=\"width:100%\" title=\"Wczytywanie plikÛw z danymi\nTylko pliki TXT odpowiednio\nprzygotowane przez tπ stronÍ\">Wczytaj plik z danymi</button>";
+function dodajUcznia() {
+uczenImie=dca.imieUcznia.value;
+uczenImie=uczenImie.substring(0,1).toUpperCase()+uczenImie.substring(1).toLowerCase();
+uczenNazwisko=dca.nazwiskoUcznia.value;
+uczenNazwisko=uczenNazwisko.substring(0,1).toUpperCase()+uczenNazwisko.substring(1).toLowerCase();
+if (uczenImie==""||uczenImie==null||uczenNazwisko==""||uczenNazwisko==null) {return}
+uczen=uczenNazwisko+" "+uczenImie;
+for (i in uczniowie) {
+if (uczniowie[i][0].toUpperCase()==uczen.toUpperCase()) {return}
+}
+uczniowie[liczbaUczniow]=new Array();
+uczniowie[liczbaUczniow][0]=uczen;
+uczniowieLiczbaPrzedm[liczbaUczniow]=0;
+liczbaUczniow+=1;
+if (uczniowie[0]) {dca.zapisywanieDanych.disabled=false} else {dca.zapisywanieDanych.disabled=true}
+budujListeUczniow();
+aktywnyUczen=liczbaUczniow-1;
+dca.listaUczniow.selectedIndex=aktywnyUczen;
+}
+function dodajPrzedmiot() {
+if (!uczniowie[0]) {return}
+przedmiot=dca.nazwaPrzedmiotu.value;
+przedmiot=przedmiot.substring(0,1).toUpperCase()+przedmiot.substring(1).toLowerCase();
+if (przedmiot==null||przedmiot=="") {return}
+prz2=przedmiot.substring(0,2).toLowerCase();
+prz3=przedmiot.substring(0,3).toLowerCase();
+prz4=przedmiot.substring(0,4).toLowerCase();
+prz8=przedmiot.substring(0,8).toLowerCase();
+if (prz2=="po") {przedmiot="Przysposobiennie obronne"}
+if (prz2=="wf") {przedmiot="Wychowanie fizyczne"}
+if (prz3=="rel") {przedmiot="Religia"}
+if (prz3=="mat") {przedmiot="Matematyka"}
+if (prz3=="che") {przedmiot="Chemia"}
+if (prz3=="bio") {przedmiot="Biologia"}
+if (prz3=="fiz") {przedmiot="Fizyka"}
+if (prz3=="opr") {przedmiot="Oprogamowanie biurowe"}
+if (prz3=="pro"||prz3=="prg") {przedmiot="Programowanie"}
+if (prz3=="urz") {przedmiot="Urzπdzenia technologii komputerowej"}
+if (prz3=="pol") {przedmiot="JÍzyk polski"}
+if (prz3=="ang") {przedmiot="JÍzyk angielski"}
+if (prz3=="nie") {przedmiot="JÍzyk niemiecki"}
+if (prz3=="cze") {przedmiot="JÍzyk czeski"}
+if (prz3=="fra") {przedmiot="JÍzyk francuski"}
+if (prz3=="ros") {przedmiot="JÍzyk rosyjski"}
+if (prz3=="gre") {przedmiot="JÍzyk grecki"}
+if (prz3=="jap") {przedmiot="JÍzyk japoÒski"}
+if (prz4=="hist") {przedmiot="Historia"}
+if (prz4=="hisz") {przedmiot="JÍzyk hiszpaÒski"}
+if (prz4=="j. p.") {przedmiot="JÍzyk polski"}
+if (prz4=="wych") {przedmiot="Wychowanie fizyczne"}
+aktywnyUczen=dca.listaUczniow.value;
+for (i in uczniowie[aktywnyUczen]) {
+if (i>0) {
+if (uczniowie[aktywnyUczen][i][0].toUpperCase()==przedmiot.toUpperCase()) {return}
+}
+}
+uczniowie[aktywnyUczen][uczniowieLiczbaPrzedm[aktywnyUczen]+1]=new Array();
+uczniowie[aktywnyUczen][uczniowieLiczbaPrzedm[aktywnyUczen]+1][0]=przedmiot;
+uczniowie[aktywnyUczen][uczniowieLiczbaPrzedm[aktywnyUczen]+1][1]="";
+uczniowieLiczbaPrzedm[aktywnyUczen]+=1;
+aktywnyPrzedmiot=uczniowieLiczbaPrzedm[aktywnyUczen];
+budujListePrzedmiotow();
+budujTabliceWynikow();
+}
+function zapiszOceny() {
+if (!uczniowie[0]) {return}
+if (!uczniowie[aktywnyUczen][1]) {return}
+oceny=dca.ocenyUcznia.value;
+oceny=oceny.split(",");
+temp=new Array();
+for (i in oceny) {
+ocena=Math.floor(parseFloat(oceny[i]));
+if (ocena>=-6&&ocena<=6) {
+ocenaStr=oceny[i].toString();
+if (!(ocenaStr.charAt(0)=="-"&&(ocenaStr.charAt(1)=="0"||ocenaStr.charAt(1)=="1")||ocenaStr.charAt(0)=="+"&&(ocenaStr.charAt(1)=="0"||ocenaStr.charAt(1)=="6"))) {
+temp.push(oceny[i]);
+}
+}
+}
+oceny=temp;
+srednia=0;
+for (i in oceny) {srednia+=Math.floor(Math.abs(oceny[i]))}
+srednia/=oceny.length;
+srednia=Math.round(srednia*100)/100;
+sredniaStr=srednia.toString();
+if (sredniaStr.lastIndexOf(".")!=-1) {sredniaPrzecinek=sredniaStr.substring(sredniaStr.lastIndexOf("."))} else {sredniaPrzecinek=0}
+if (sredniaPrzecinek.length==2) {sredniaStr+="0"}
+if (sredniaPrzecinek==0) {sredniaStr+=".00"}
+sredniaStr=sredniaStr.replace(/[.]/g,",");
+oceny=oceny.join(",");
+oceny=oceny.replace(/[a-z]/g,"");
+oceny=oceny.replace(/[^+\-,0-9]/g,"");
+dca.ocenyUcznia.value=oceny;
+aktywnyElement=dca.listaPrzedmiotow.value;
+uczniowie[aktywnyUczen][aktywnyElement][1]=oceny;
+uczniowie[aktywnyUczen][aktywnyElement][2]=sredniaStr;
+budujTabliceWynikow();
+}
+function budujListeUczniow() {
+czyCosDodano=0;
+lista="<select id=\"listaUczniow\" style=\"width:100%\" onchange=\"aktywnyUczen=eval(dca.listaUczniow.value);budujListePrzedmiotow()\" onclick=\"aktywnyUczen=eval(dca.listaUczniow.value);budujListePrzedmiotow()\">";
+for (i in uczniowie) {
+lista+="<option value="+i+">"+uczniowie[i][0]+"</option>";
+czyCosDodano+=1;
+}
+lista+="</select>";
+dca.uczniowieLista.innerHTML=lista;
+dca.listaUczniow.selectedIndex=i;
+if (czyCosDodano==0) {dca.uczniowieLista.style.display="none"} else {dca.uczniowieLista.style.display="block"}
+}
+function budujListePrzedmiotow() {
+czyCosDodano=0;
+aktywnyUczen=dca.listaUczniow.value;
+lista="<select id=\"listaPrzedmiotow\" style=\"width:100%\" onchange=\"aktywnyPrzedmiot=eval(dca.listaPrzedmiotow.value)\" onclick=\"aktynwyPrzedmiot=eval(dca.listaPrzedmiotow.value)\">";
+for (i in uczniowie[aktywnyUczen]) {
+if (i>0) {
+lista+="<option value="+i+">"+uczniowie[aktywnyUczen][i][0]+"</option>";
+czyCosDodano+=1;
+}
+}
+lista+="</select>";
+dca.przedmiotyLista.innerHTML=lista;
+dca.listaPrzedmiotow.selectedIndex=i-1;
+if (czyCosDodano==0) {dca.przedmiotyLista.style.display="none"} else {dca.przedmiotyLista.style.display="block"}
+}
+function budujTabliceWynikow() {
+tablica="<table id=\"wyniki\" border=1>";
+for (i in uczniowie) {
+tablica+="<tr><td colspan=3 style=\"text-align:center\">"+uczniowie[i][0]+"</td></tr>";
+tablica+="<tr><td style=\"text-align:center\">Przedmiot</td><td style=\"text-align:center\">Oceny</td><td style=\"text-align:center\">årednia</td></tr>";
+sredniaUcznia1=0;
+sredniaUcznia2=0;
+for (j in uczniowie[i]) {
+if (j>0) {
+tablica+="<tr><td>"+uczniowie[i][j][0]+"</td><td>"+uczniowie[i][j][1]+"</td><td>"+uczniowie[i][j][2]+"</td></tr>";
+sredniaUcznia1+=Math.floor(parseFloat(uczniowie[i][j][2].replace(/[,]/g,".")));
+sredniaUcznia2+=Math.ceil(parseFloat(uczniowie[i][j][2].replace(/[,]/g,".")));
+}
+if (j==uczniowie[i].length-1) {
+sredniaUcznia1/=(uczniowie[i].length-1);
+sredniaUcznia1=Math.floor(sredniaUcznia1*100)/100;
+sredniaUczniaStr1=sredniaUcznia1.toString().replace(/[.]/g,",");
+if (sredniaUczniaStr1.lastIndexOf(",")!=-1) {
+sredniaUczniaPrzecinek1=sredniaUczniaStr1.substring(sredniaUczniaStr1.lastIndexOf(","));
+if (sredniaUczniaPrzecinek1.length==2) {sredniaUczniaStr1+="0"}
+} else {sredniaUczniaStr1+=",00"}
+sredniaUcznia2/=(uczniowie[i].length-1);
+sredniaUcznia2=Math.ceil(sredniaUcznia2*100)/100;
+sredniaUczniaStr2=sredniaUcznia2.toString().replace(/[.]/g,",");
+if (sredniaUczniaStr2.lastIndexOf(",")!=-1) {
+sredniaUczniaPrzecinek2=sredniaUczniaStr2.substring(sredniaUczniaStr2.lastIndexOf(","));
+if (sredniaUczniaPrzecinek2.length==2) {sredniaUczniaStr2+="0"}
+} else {sredniaUczniaStr2+=",00"}
+tablica+="<tr><td colspan=3>årednia ucznia:"+sredniaUczniaStr1+"-"+sredniaUczniaStr2+"</td></tr><tr></tr>";
+}
+}
+}
+tablica=tablica.substring(0,tablica.length-9)+"</table>";
+dca.tablicaWynikow.innerHTML=tablica;
+dca.tablicaWynikow.style.display="block";
+}
+function uczenWGore() {
+if (!uczniowie[0]) {return}
+aktywnyUczen=eval(aktywnyUczen);
+if (aktywnyUczen<1) {return}
+elementWGore("uczniowie",aktywnyUczen+1);
+budujListeUczniow();
+if (aktywnyUczen>0) {aktywnyUczen-=1}
+dca.listaUczniow.selectedIndex=aktywnyUczen;
+budujTabliceWynikow();
+}
+function usunUcznia() {
+if (!uczniowie[0]) {return}
+aktywnyUczen=eval(aktywnyUczen);
+usunElement("uczniowie",aktywnyUczen+1);
+budujListeUczniow();
+if (uczniowie[0]) {dca.zapisywanieDanych.disabled=false} else {dca.zapisywanieDanych.disabled=true}
+liczbaUczniow-=1;
+if (aktywnyUczen<0) {aktywnyUczen-=1}
+if (aktywnyUczen>uczniowie.length-1) {aktywnyUczen=uczniowie.length-1}
+dca.listaUczniow.selectedIndex=aktywnyUczen;
+budujTabliceWynikow();
+}
+function uczenWDol() {
+if (!uczniowie[0]) {return}
+aktywnyUczen=eval(aktywnyUczen);
+if (aktynwyUczen>liczbaUczniow) {return}
+elementWDol("uczniowie",aktywnyUczen+1);
+budujListeUczniow();
+if ((aktywnyUczen+1)<uczniowie.length) {aktywnyUczen+=1}
+dca.listaUczniow.selectedIndex=aktywnyUczen;
+budujTabliceWynikow();
+}
+function przedmiotWGore() {
+if (!uczniowie[aktywnyUczen][1]) {return}
+aktywnyPrzedmiot=eval(aktywnyPrzedmiot);
+if (aktywnyPrzedmiot<2) {return}
+elementWGore("uczniowie[aktywnyUczen]",aktywnyPrzedmiot+1);
+budujListePrzedmiotow();
+if (aktywnyPrzedmiot>1) {aktywnyPrzedmiot-=1}
+dca.listaPrzedmiotow.selectedIndex=aktywnyPrzedmiot-1;
+budujTabliceWynikow();
+}
+function usunPrzedmiot() {
+if (!uczniowie[aktywnyUczen][1]) {return}
+aktywnyPrzedmiot=eval(aktywnyPrzedmiot);
+usunElement("uczniowie[aktywnyUczen]",aktywnyPrzedmiot+1);
+budujListePrzedmiotow();
+if (aktywnyPrzedmiot<1) {aktywnyPrzedmiot=1}
+if (aktywnyPrzedmiot>uczniowie[aktywnyUczen].length-1) {aktywnyPrzedmiot=uczniowie[aktywnyUczen].length-1}
+dca.listaPrzedmiotow.selectedIndex=aktywnyPrzedmiot;
+uczniowieLiczbaPrzedm[aktywnyUczen]-=1;
+budujTabliceWynikow();
+}
+function przedmiotWDol() {
+if (!uczniowie[aktywnyUczen][1]) {return}
+aktywnyPrzedmiot=eval(aktywnyPrzedmiot);
+if (aktywnyPrzedmiot>=uczniowieLiczbaPrzedm[aktywnyUczen]) {return}
+elementWDol("uczniowie[aktywnyUczen]",aktywnyPrzedmiot+1);
+budujListePrzedmiotow();
+if ((aktywnyPrzedmiot+1)<uczniowie[aktywnyUczen].length) {aktywnyPrzedmiot+=1}
+dca.listaPrzedmiotow.selectedIndex=aktywnyPrzedmiot-1;
+budujTabliceWynikow();
+}
+function sortujWyniki(nazwaTablicy,jakSortowac,typDanych) {
+danaTablica=eval(nazwaTablicy);
+if (nazwaTablicy.toString().toLowerCase()=="srednie") {
+sTemp=
+}
+}
+function elementNaSamaGore(nazwaTablicy,numerIndeksu) {
+temp=new Array();
+danaTablica=eval(nazwaTablicy);
+if (danaTablica.length<=1) {return}
+if (numerIndeksu==1) {return}
+numerIndeksu-=1;
+temp.push(danaTablica[numerIndeksu]);
+for (var i=0; i<danaTablica.length; i++) {
+if (i!=numerIndeksu) {temp.push(danaTablica[i])}
+}
+eval(nazwaTablicy+"=temp");
+}
+function elementWGore(nazwaTablicy,numerIndeksu) {
+temp=new Array();
+danaTablica=eval(nazwaTablicy);
+if (danaTablica.length<=1) {return}
+if (numerIndeksu==1) {return}
+numerIndeksu-=1;
+for (var i=0; i<danaTablica.length; i++) {
+if ((i+1)==numerIndeksu) {temp.push(danaTablica[i+1]);temp.push(danaTablica[i]);i+=1}
+else {temp.push(danaTablica[i])}
+}
+eval(nazwaTablicy+"=temp");
+}
+function usunElement(nazwaTablicy,numerIndeksu) {
+temp=new Array();
+danaTablica=eval(nazwaTablicy);
+if (danaTablica.length<1) {return}
+numerIndeksu-=1;
+for (i in danaTablica) {
+if (i!=numerIndeksu) {temp.push(danaTablica[i])}
+}
+eval(nazwaTablicy+"=temp");
+}
+function elementWDol(nazwaTablicy,numerIndeksu) {
+temp=new Array();
+danaTablica=eval(nazwaTablicy);
+if (danaTablica.length<=1) {return}
+if (numerIndeksu>=danaTablica.length) {return}
+numerIndeksu-=1;
+for (var i=0; i<danaTablica.length; i++) {
+if (i==numerIndeksu) {temp.push(danaTablica[i+1]);temp.push(danaTablica[i]);i+=1}
+else {temp.push(danaTablica[i])}
+}
+eval(nazwaTablicy+"=temp");
+}
+function elementNaSamDol(nazwaTablicy,numerIndeksu) {
+temp=new Array();
+danaTablica=eval(nazwaTablicy);
+if (danaTablica.length<=1) {return}
+numerIndeksu-=1;
+if (numerIndeksu>=danaTablica.length) {return}
+for (var i=0; i<danaTablica.length; i++) {
+if (i!=numerIndeksu) {temp.push(danaTablica[i])}
+}
+temp.push(danaTablica[numerIndeksu]);
+eval(nazwaTablicy+"=temp");
+}
+function sortujDane(nazwaTablicy,jakSortowac,typDanych) {
+danaTablica=eval(nazwaTablicy);
+jakSortowac=jakSortowac.toString().toLowerCase();
+typDanych=typDanych.toString().toLowerCase();
+if (typDanych=="txt"||typDanych=="text"||typDanych=="tekst") {
+temp1=new Array();
+temp2=new Array();
+for (i in danaTablica) {temp1.push((usunPolskieZnaki(danaTablica[i])+dopiszZera(i,20)).toLowerCase())}
+if (jakSortowac==">"||jakSortowac=="ros"||jakSortowac=="rosnπco"||jakSortowac=="rosnaco"||jakSortowac=="+") {
+temp1.sort();
+for (i in temp1) {
+temp2.push(danaTablica[eval(temp1[i].substring(temp1[i].length-20))]);
+}
+}
+if (jakSortowac=="<"||jakSortowac=="mal"||jakSortowac=="malejπco"||jakSortowac=="malejaco"||jakSortowac=="-") {
+temp1.sort();
+for (i in temp1) {
+temp2.push(danaTablica[eval(temp1[i].substring(temp1[i].length-20))]);
+}
+temp2.reverse();
+}
+eval(nazwaTablicy+"=temp2");
+}
+if (typDanych=="num"||typDanych=="number"||typDanych=="numbers"||typDanych=="liczba"||typDanych=="liczby") {
+temp=new Array();
+lmin=0;
+lmax=0;if (jakSortowac==">"||jakSortowac=="ros"||jakSortowac=="rosnπco"||jakSortowac=="rosnaco"||jakSortowac=="+") {
+for (i in danaTablica) {
+if (danaTablica[i]>lmin) {lmax=danaTablica[i]}
+for (j in danaTablica) {
+if (danaTablica[j]<lmax&&danaTablica[j]>lmin) {temp.push(danaTablica[j]);lmin=danaTablica[j]}
+}
+}
+lmax=0;
+for (i in danaTablica) {
+if (danaTablica[i]>lmax) {lmax=danaTablica[i]}
+}
+temp.push(lmax);
+}
+if (jakSortowac=="<"||jakSortowac=="mal"||jakSortowac=="malejπco"||jakSortowac=="malejaco"||jakSortowac=="-") {
+for (i in danaTablica) {
+if (danaTablica[i]>lmin) {lmax=danaTablica[i]}
+for (j in danaTablica) {
+if (danaTablica[j]<lmax&&danaTablica[j]>lmin) {temp.push(danaTablica[j]);lmin=danaTablica[j]}
+}
+}
+lmax=0;
+for (i in danaTablica) {
+if (danaTablica[i]>lmax) {lmax=danaTablica[i]}
+}
+temp.push(lmax);
+temp.reverse();
+}
+eval(nazwaTablicy+"=temp");
+}
+}
+function wczytajDane() {
+temp1=window.open(dca.plikDanych.value);
+temp=temp1.document.body.outerHTML;
+temp1.window.close();
+dca.plikDanychHTML.innerHTML="";
+dca.plikDanychHTML.innerHTML="<input id=\"plikDanych\" type=file style=\"display:none\" onchange=\"wczytajDane()\" value=\"Moje oceny.txt\"><\/input><button onclick=\"dca.plikDanych.click()\" style=\"width:100%\" title=\"Wczytywanie plikÛw z danymi\nTylko pliki TXT odpowiednio\nprzygotowane przez tπ stronÍ\">Wczytaj plik z danymi</button>";
+dca.plikDanych.value="";
+temp=temp.replace(/\n/g,"<br>");
+temp1=temp.substring(temp.indexOf("[uczniowie]")+16);
+temp2=temp1.substring(0,temp1.indexOf("[przedmioty]"));
+daneUczniowie=temp2.replace(/[^A-Za-z•∆ £—”åèØπÊÍ≥ÒÛúüø <>;]*/g,"").replace(/<br>/g,"")+";";
+temp1=temp.substring(temp.indexOf("[przedmioty]")+17);
+temp2=temp1.substring(0,temp1.indexOf("[oceny]"));
+danePrzedmioty=temp2.replace(/[^A-Za-z•∆ £—”åèØπÊÍ≥ÒÛúüø <>,;]*/g,"").replace(/<br>/g,"")+";";
+temp1=temp.substring(temp.indexOf("[oceny]")+8);
+daneOceny=temp1.replace(/[^0-9+\- <>,;]*/g,"").substring(2).replace(/;<>/g,";")+";";
+i=0;
+uczniowie=new Array();
+uczniowieLiczbaPrzedm=new Array();
+while(daneUczniowie.lastIndexOf(";")!=-1) {
+uczniowie[i]=new Array();
+uczniowie[i][0]=daneUczniowie.substring(0,daneUczniowie.indexOf(";"));
+uczniowieLiczbaPrzedm[i]=0;
+daneUczniowie=daneUczniowie.substring(daneUczniowie.indexOf(";")+1);
+i+=1;
+}
+i=0;
+while(danePrzedmioty.lastIndexOf(";")!=-1) {
+j=1;
+danePrzedmioty1=danePrzedmioty.substring(0,danePrzedmioty.indexOf(";"))+",";
+daneOceny1=daneOceny.substring(0,daneOceny.indexOf(";"))+"<>";
+while(danePrzedmioty1.lastIndexOf(",")!=-1) {
+danyPrzedmiot=danePrzedmioty1.charAt(0).toUpperCase()+danePrzedmioty1.substring(1,danePrzedmioty1.indexOf(",")).toLowerCase();
+daneOceny2=daneOceny1.substring(0,daneOceny1.indexOf("<>"));
+uczniowie[i][j]=new Array();
+uczniowie[i][j][0]=danyPrzedmiot;
+uczniowie[i][j][1]=daneOceny2;
+uczniowieLiczbaPrzedm[i]+=1;
+daneOceny2=daneOceny2.split(",");
+danaSrednia=0;
+for (ii in daneOceny2) {danaSrednia+=Math.floor(Math.abs(daneOceny2[ii]))}
+danaSrednia/=daneOceny2.length;
+danaSrednia=(Math.round(danaSrednia*100)/100).toString().replace(/[.]/g,",");
+if (danaSrednia.lastIndexOf(",")!=-1) {
+if (danaSrednia.substring(danaSrednia.lastIndexOf(",")).length==2) {danaSrednia+="0"}
+} else {danaSrednia+=",00"}
+uczniowie[i][j][2]=danaSrednia;
+danePrzedmioty1=danePrzedmioty1.substring(danePrzedmioty1.indexOf(",")+1);
+daneOceny1=daneOceny1.substring(daneOceny1.indexOf("<>")+2);
+j+=1;
+}
+danePrzedmioty=danePrzedmioty.substring(danePrzedmioty.indexOf(";")+1);
+i+=1;
+}
+aktywnyUczen=uczniowie.length-1;
+aktywnyPrzedmiot=uczniowie[aktywnyUczen].length-1;
+budujListeUczniow();
+budujListePrzedmiotow();
+budujTabliceWynikow();
+if (uczniowie[0]) {dca.zapisywanieDanych.disabled=false} else {dca.zapisywanieDanych.disabled=true}
+}
+function zapiszDane() {
+temp=window.open();
+tempTXT="<html><body scroll=auto><title>Plik z danymi do zapisania</title><script>document.body.onbeforecopy=zamknijOkno;function zamknijOkno() {window.close()}<\/script><span style=\"font-family:Courier\">************************************<br>*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br>*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plik z ocenami uczniÛw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br>*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br>************************************<br><br>[uczniowie]<br>";
+for (i in uczniowie) {tempTXT+=uczniowie[i][0]+";"}
+tempTXT=tempTXT.substring(0,tempTXT.length-1)+"<br><br>[przedmioty]<br>";
+for (i in uczniowie) {
+for (j in uczniowie[i]) {
+if (j>0) {
+tempTXT+=uczniowie[i][j][0]+",";
+}
+}
+tempTXT=tempTXT.substring(0,tempTXT.length-1)+";";
+}
+tempTXT=tempTXT.substring(0,tempTXT.length-1)+"<br><br>[oceny]<br>";
+for (i in uczniowie) {
+for (j in uczniowie[i]) {
+if (j>0) {
+tempTXT+=uczniowie[i][j][1]+"<br>";
+}
+}
+tempTXT=tempTXT.substring(0,tempTXT.length-4)+";<br>";
+}
+tempTXT=tempTXT.substring(0,tempTXT.length-5)+"<\/span><\/body><\/html>";
+temp.document.write(tempTXT);
+alert("Skopiuj zawartoúÊ tej strony i zapisz jπ do pliku o rozszerzeniu TXT np.: Moje oceny.txt. Po skopiowaniu zawartoúci za pomocπ klawiszy CTRL+C okno zamknie siÍ.");
+}
+function dopiszZera(liczba,dlugoscLiczby) {
+liczba=liczba.toString();
+liczbaZer=dlugoscLiczby-liczba.length;
+for (var i=1; i<=liczbaZer; i++) {liczba="0"+liczba}
+return liczba;
+}
+function usunPolskieZnaki(tekst) {
+return tekst.replace(/•/g,"A").replace(/∆/g,"C").replace(/ /g,"E").replace(/£/g,"L").replace(/—/g,"N").replace(/”/g,"O").replace(/å/g,"S").replace(/è/g,"Z").replace(/Ø/g,"Z").replace(/π/g,"a").replace(/Ê/g,"c").replace(/Í/g,"e").replace(/≥/g,"l").replace(/Ò/g,"n").replace(/Û/g,"o").replace(/ú/g,"s").replace(/Ä/g,"u").replace(/ü/g,"z").replace(/ø/g,"z");
+}
+function rozpiszTablice() {
+for (var a=0 in uczniowie) {
+if (uczniowie[a] instanceof Array==true) {
+for (var b=0 in uczniowie[a]) {
+if (uczniowie[a][b] instanceof Array==true) {
+for (var c=0 in uczniowie[a][b]) {
+alert("uczniowie["+a+"]["+b+"]["+c+"]="+uczniowie[a][b][c]);
+}
+} else {
+alert("uczniowie["+a+"]["+b+"]="+uczniowie[a][b]);
+}
+}
+} else {
+alert("uczniowie["+a+"]="+uczniowie[a]);
+}
+}
+}
+</script>

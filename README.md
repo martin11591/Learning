@@ -1,4 +1,4 @@
-# Learning
+ï»¿# Learning
 
 
 ## Encoding
@@ -9,6 +9,6 @@ I discovered UTF-8 later and now I'm using it.
 
 ## Kodowanie
 
-Wiêkszoœæ moich starych skryptów (jêzyk nie ma znaczenia) jest kodowanych w standardowym Windows-1250 (ANSI) lub ISO-8859-2 i zostawiam je tak jak s¹.
+WiÄ™kszoÅ›Ä‡ moich starych skryptÃ³w (jÄ™zyk nie ma znaczenia) jest kodowanych w standardowym Windows-1250 (ANSI) lub ISO-8859-2 i zostawiam je tak jak sÄ….
 
-PóŸniej odkry³em UTF-8 i teraz go stosujê.
+PÃ³Åºniej odkryÅ‚em UTF-8 i teraz go stosujÄ™.

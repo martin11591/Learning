@@ -1,0 +1,31 @@
+uczniowie[0]->tablica
+uczniowie[0][0]->imie
+uczniowie[0][1]->tablica
+uczniowie[0][1][0]->nazwa przedmiotu
+uczniowie[0][1][1]->oceny
+uczniowie[0][1][2]->œrednia przedmiotu
+uczniowie[0][2]->tablica
+uczniowie[0][2][0]->nazwa
+uczniowie[0][2][1]->oceny
+uczniowie[0][2][2]->œrednia przedmiotu
+uczniowie[1]->tablica
+uczniowie[1][0]->imie
+uczniowie[1][1]->tablica
+uczniowie[1][1][0]->nazwa przedmiotu
+uczniowie[1][1][1]->oceny
+uczniowie[1][1][2]->œrednia przedmiotu
+uczniowie[1][2]->tablica
+uczniowie[1][2][0]->nazwa
+uczniowie[1][2][1]->oceny
+uczniowie[1][2][2]->œrednia przedmiotu
+
+uczniowie[0]
+uczniowie[0][0]="Marcin Podraza"
+uczniowie[0][1]
+uczniowie[0][1][0]="Jêzyk polski"
+uczniowie[0][1][1]="3,3,1,2"
+uczniowie[0][1][2]="2,25"
+uczniowie[0][2]
+uczniowie[0][2][0]="Programowanie"
+uczniowie[0][2][1]="5,5,6,-5,4"
+uczniowie[0][2][2]="5"

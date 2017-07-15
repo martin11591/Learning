@@ -1,4 +1,6 @@
-﻿# Manga chapters downloader (from MangaTown)
+﻿*08.2015 - 06.2016*
+
+# Manga chapters downloader (from MangaTown)
 
 ## It was my first attempt
 
@@ -6,7 +8,7 @@ Back to then, I didn't know about JSZip library and creating Blob resources to s
 
 I tried to gather data from page with Yahoo Query API (YQL) to bypass introduced that time Cross-Origin Request Sharing (CORS) policy. Browser can't get HTML source from page loaded to iframe or new window/tab without additional tools. I managed to discover that with using YQL I could get the source code and parse it to gather links and other data allowing me to browsing website further.
 
-Now YQL can't get full HTML (despite requests limits per day), so project doesn't work anymore. I've abandoned that project version, because I've started new version \(**[Manga-downloader](https://github.com/martin11591/Manga-downloader)** repository\), which uses JSZip library (allowing to compress images together to one file and save by browser) and my little PHP script (allowing to bypass CORS, get HTML source and download images).
+Now YQL can't get full HTML (despite limit of requests per day), so project doesn't work anymore. I've abandoned that project version, because I've started new version \(**[Manga-downloader](https://github.com/martin11591/Manga-downloader)** repository\), which uses JSZip library (allowing to compress images together to one file and save by browser) and my little PHP script (allowing to bypass CORS, get HTML source and download images).
 
 All that in one page, no additional programs needed to run, opposed to previous project. It needed to get images links, prepare them as text files for parsing and downloading by wget (thanks to another program, Batch script).
 

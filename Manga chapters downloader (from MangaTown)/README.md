@@ -10,9 +10,9 @@ Now YQL can't get full HTML (despite requests limits per day), so project doesn'
 
 All that in one page, no additional programs needed to run, opposed to previous project. It needed to get images links, prepare them as text files for parsing and downloading by wget (thanks to another program, Batch script).
 
-## Still, as best part of this piece of code I consider requests management.
+## Still, as best part of this piece of code I consider requests management
 
-I can: reuse it somewhere else, control number of simultaneous requests at once, pause current requests or abort it whenever I want, then retry it.
+I can: reuse it somewhere else, control number of simultaneous requests at once, pause current requests or abort it whenever I want, then retry it, set waiting time between next retry.
 
 All requests are stored in history with its results, grouped by: aborted, succeded and failed.
 
@@ -28,8 +28,8 @@ Teraz YQL nie może uzyskać pełnych danych HTML (pomijając limit żądań na 
 
 Wszystko to na jednej stronie, nie potrzeba uruchamiać żadnych dodatkowych programów, w przeciwieństwie do poprzedniego projektu. Potrzebował on pobrać linki obrazów oraz przygotować je jako tekstowe pliki do parsowania i pobrania przez wget (dzięki kolejnemu programowi, skryptowi Batch).
 
-## Wciąż, za najlepszą część tego kodu uważam zarządzanie żądaniami.
+## Wciąż, za najlepszą część tego kodu uważam zarządzanie żądaniami
 
-Mogę: wykorzystać to ponownie gdzieś indziej, kontrolować równoczesną liczbę żądań na raz, pauzować bieżące żądanie lub anulować je kiedy chcę, by następnie je wznowić.
+Mogę: wykorzystać je ponownie gdzieś indziej, kontrolować równoczesną liczbę żądań na raz, pauzować bieżące żądanie lub anulować je kiedy chcę, by następnie je wznowić, ustawić czas oczekiwania między kolejnymi próbami.
 
 Wszystkie żądania są zachowywane w historii wraz z ich wynikami, pogrupowane jako: anulowane, zakończone sukcesem i błędem.

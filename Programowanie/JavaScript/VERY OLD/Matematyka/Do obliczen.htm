@@ -1,0 +1,22 @@
+<html>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<input id="operacja" oncontextmenu="document.all.operacja.value='';return false" onkeydown="klawiatura(event)"><button onclick="licz()">Licz</button><div id="wynik">&nbsp;</div>
+<script>
+window.onerror=function() {return false}
+function getId(id) {
+if (document.all) {return document.all[id]} else {return document.getElementById(id)}
+}
+function licz() {
+dzialanie=getId('operacja').value;
+getId('wynik').innerHTML=dzialanie+"="+eval(dzialanie);
+}
+function klawiatura(e) {
+if (window.event) {kod=e.keyCode}
+if (e.which) {kod=e.which}
+if (kod==13) {licz();return false}
+return true;
+}
+</script>

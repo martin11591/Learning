@@ -1,0 +1,46 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//Transitional//EN" "http://www.w3.org/1999/TR/trans.dtd">
+<html>
+<head>
+<title>Matematyka niekomputerowa</title>
+<meta http-equiv="content-type" type="text/html; charset=UTF-8" />
+<style>
+.mathFracNumerator {
+	border-bottom: 1px solid black;
+}
+.mathFracDenominator {
+	border-top: 1px solid black;
+}
+#mathTable {
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
+</head>
+<body>
+<script type="text/javascript">
+Math.writeRoot=function(str1,str2) {
+  if (!str1||str1==""||str1==null) {str1=" "}
+  return "<sup style=\"text-decoration: underline\">"+str1+"</sup><sub>\\/</sub><sup>/</sup><span class=\"mathFracDenominator\">"+str2+"</span>";
+}
+Math.writeLog=function(str1,str2) {
+  if (!str1||str1==""||str1==null) {str1=" "}
+  return "log<sub><sub>"+str1+"</sub></sub>"+str2;
+}
+Math.writePow=function(str1,str2) {
+  return str1+"<sup><sup>"+str2+"</sup></sup>";
+}
+Math.writeFrac=function(str1,str2) {
+  return "<span class=\"mathFracNumerator\">"+str1+"</span><br/><span class=\"mathFracDenominator\">"+str2+"</span>";
+}
+document.write('<table id=\"mathTable\"><tr><td>'+Math.writeFrac(1,125)+'</td><td>&middot;</td><td>4x</td><td>&divide;</td><td>7x</td><td>+</td><td>5'+Math.writeLog(6,Math.writePow(2,5))+'</td></tr></table>');
+mT=document.all?document.all['mathTable']:document.getElementById('mathTable');
+for (var i=0; i<mT.rows.length; i++) {
+  for (var j=0; j<mT.rows[i].cells.length; j++) {
+    j.innerHTML=j.value;
+  }
+}
+var img_src = 'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw==';
+document.write("<img src="+img_src+"></img>");
+</script>
+</body>
+</html>

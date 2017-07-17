@@ -1,0 +1,225 @@
+<html><body scroll=auto><title>Kó³ko i krzy¿yk by M.A.R.T.I.N.</title>
+<style>
+div{cursor:default;font-family:Tahoma;font-size:8pt;text-align:center}
+.stat{width:140px;height:25px;vertical-align:top;font-family:Tahoma;font-size:8pt;text-align:center}
+td{width:72px;height:84px;z-index:100}
+img{width:72px;height:72px}
+</style><br><br><br><table border=0 align=center><tr><td class=stat>Iloœæ rozgrywek</td><td class=stat>Wygranych przez gracza 1</td><td class=stat>Wygranych przez gracza 2</td></tr><tr><td id="iloscrozgr" class=stat>0</td><td id="win1" class=stat>0 - 0%</td><td id="win2" class=stat>0 - 0%</td></tr></table>
+<table align=center cellpadding=5 cellspacing=5 border=1 bordercolor=black frame=void>
+<tr>
+<td><img id="x1y1" src="game2/pusty.ico"></img></td>
+<td><img id="x2y1" src="game2/pusty.ico"></img></td>
+<td><img id="x3y1" src="game2/pusty.ico"></img></td>
+</tr>
+<tr>
+<td><img id="x1y2" src="game2/pusty.ico"></img></td>
+<td><img id="x2y2" src="game2/pusty.ico"></img></td>
+<td><img id="x3y2" src="game2/pusty.ico"></img></td>
+</tr>
+<tr>
+<td><img id="x1y3" src="game2/pusty.ico"></img></td>
+<td><img id="x2y3" src="game2/pusty.ico"></img></td>
+<td><img id="x3y3" src="game2/pusty.ico"></img></td>
+</tr>
+</table><br>
+<div id="info" style="">&nbsp;</div>
+<script>
+g=Math.round(1+Math.random());
+liczbapol=0;
+iloscrozgrywek=0;
+wins1=0;
+wins2=0;
+pos=new Array(3);
+pos[1]=new Array(3);
+pos[2]=new Array(3);
+pos[3]=new Array(3);
+pos[1][1]=pos[1][2]=pos[1][3]=pos[2][1]=pos[2][2]=pos[2][3]=pos[3][1]=pos[3][2]=pos[3][3]=0;
+kod="";
+var timer;
+var codes=new Array("clear11","clear21","clear31","clear12","clear22","clear32","clear13","clear23","clear33","win1","win2");
+var codes_effect=new Array("pos[1][1]=0;liczbapol-=1;clrx1y1()","pos[2][1]=0;liczbapol-=1;clrx2y1()","pos[3][1]=0;liczbapol-=1;clrx3y1()","pos[1][2]=0;liczbapol-=1;clrx1y2()","pos[2][2]=0;liczbapol-=1;clrx2y2()","pos[3][2]=0;liczbapol-=1;clrx3y2()","pos[1][3]=0;liczbapol-=1;clrx1y3()","pos[2][3]=0;liczbapol-=1;clrx2y3()","pos[3][3]=0;liczbapol-=1;clrx3y3()","wins1+=1;powtorz()","wins2+=1;powtorz()");
+var letters=new Array("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+document.oncontextmenu=anuluj;
+document.ondragstart=anuluj;
+ustaw_info("Wciœnij lewy przycisk myszy aby rozpocz¹æ grê.");
+document.onclick=gra;
+pusty=".src=\"game2/pusty.ico\"";
+function anuluj() {return false}
+function pokaz(x,y,g) {
+for(i in pos){
+for(j in pos[i]){
+if(pos[j][i]!=0&&x==j&&y==i){return}
+}
+}
+wstaw="x"+x+"y"+y+".src='game2/g"+g+".ico'";
+eval(wstaw);
+}
+function postaw(x,y,g) {
+var liczbapol=1;
+for(i in pos){
+for(j in pos[i]){
+if(pos[j][i]!=0){liczbapol+=1}
+if(pos[j][i]!=0&&x==j&&y==i){ustaw_info("Nie mo¿na tam postawiæ. Postawi³ tam gracz "+pos[j][i]+".");return}
+}
+}
+pos[x][y]=g;
+wstaw="x"+x+"y"+y+".src='game2/g"+g+".ico'";
+eval(wstaw);
+alpha=0;
+opac("x"+x+"y"+y);
+sprawdz();
+if(win==1){setTimeout("powtorz()",50);return}
+this.g+=1;
+if(g>1){this.g-=2}
+if(liczbapol==9){powtorz();return}
+ustaw_info("Gracz "+g);
+}
+function wyswx1y1(){pokaz(1,1,g)}
+function wyswx2y1(){pokaz(2,1,g)}
+function wyswx3y1(){pokaz(3,1,g)}
+function wyswx1y2(){pokaz(1,2,g)}
+function wyswx2y2(){pokaz(2,2,g)}
+function wyswx3y2(){pokaz(3,2,g)}
+function wyswx1y3(){pokaz(1,3,g)}
+function wyswx2y3(){pokaz(2,3,g)}
+function wyswx3y3(){pokaz(3,3,g)}
+function wstawx1y1(){postaw(1,1,g)}
+function wstawx2y1(){postaw(2,1,g)}
+function wstawx3y1(){postaw(3,1,g)}
+function wstawx1y2(){postaw(1,2,g)}
+function wstawx2y2(){postaw(2,2,g)}
+function wstawx3y2(){postaw(3,2,g)}
+function wstawx1y3(){postaw(1,3,g)}
+function wstawx2y3(){postaw(2,3,g)}
+function wstawx3y3(){postaw(3,3,g)}
+function clrx1y1(){czysc(1,1)}
+function clrx2y1(){czysc(2,1)}
+function clrx3y1(){czysc(3,1)}
+function clrx1y2(){czysc(1,2)}
+function clrx2y2(){czysc(2,2)}
+function clrx3y2(){czysc(3,2)}
+function clrx1y3(){czysc(1,3)}
+function clrx2y3(){czysc(2,3)}
+function clrx3y3(){czysc(3,3)}
+function czysc(x,y){
+document.all['x'+x+'y'+y].style.filter="alpha(opacity=100)";
+if(pos[x][y]!=1&&pos[x][y]!=2){eval("x"+x+"y"+y+pusty)}
+else{eval('x'+x+'y'+y+'.src=\'game2/g'+pos[x][y]+'.ico\'')}
+}
+function czysc_calosc(){
+pos[1][1]=pos[1][2]=pos[1][3]=pos[2][1]=pos[2][2]=pos[2][3]=pos[3][1]=pos[3][2]=pos[3][3]=0;
+czysc(1,1);czysc(1,2);czysc(1,3);czysc(2,1);czysc(2,2);czysc(2,3);czysc(3,1);czysc(3,2);czysc(3,3);
+}
+function ustaw_info(zawartosc){clearTimeout(timer);info.innerHTML=zawartosc;timer=setTimeout("czysc_info()",zawartosc.length*75)}
+function opac(warstwa){
+this.warstwa=warstwa;
+alpha+=5;
+document.all[warstwa].style.filter="alpha(opacity="+alpha+")";
+if(alpha>100){return}
+setTimeout("opac(warstwa)",10);
+}
+function czysc_info() {info.innerHTML=""}
+function sprawdz() {
+koniec1="Gra skoñczona.<br>Wygra³ gracz 1.";
+koniec2="Gra skoñczona.<br>Wygra³ gracz 2.";
+win=0;
+if(pos[1][1]==1&&pos[2][1]==1&&pos[3][1]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[1][1]==2&&pos[2][1]==2&&pos[3][1]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+if(pos[1][2]==1&&pos[2][2]==1&&pos[3][2]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[1][2]==2&&pos[2][2]==2&&pos[3][2]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+if(pos[1][3]==1&&pos[2][3]==1&&pos[3][3]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[1][3]==2&&pos[2][3]==2&&pos[3][3]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+if(pos[1][1]==1&&pos[1][2]==1&&pos[1][3]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[1][1]==2&&pos[1][2]==2&&pos[1][3]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+if(pos[2][1]==1&&pos[2][2]==1&&pos[2][3]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[2][1]==2&&pos[2][2]==2&&pos[2][3]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+if(pos[3][1]==1&&pos[3][2]==1&&pos[3][3]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[3][1]==2&&pos[3][2]==2&&pos[3][3]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+if(pos[1][1]==1&&pos[2][2]==1&&pos[3][3]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[1][1]==2&&pos[2][2]==2&&pos[3][3]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+if(pos[3][1]==1&&pos[2][2]==1&&pos[1][3]==1){wins1+=1;ustaw_info(koniec1);win=1;return}
+if(pos[3][1]==2&&pos[2][2]==2&&pos[1][3]==2){wins2+=1;ustaw_info(koniec2);win=1;return}
+}
+function gra() {
+iloscrozgrywek+=1;
+czysc_calosc();
+document.onclick=null;
+document.onkeydown=kody;
+ustaw_info("Grê rozpoczyna gracz "+g+".");
+document.all.x1y1.onmouseover=wyswx1y1;
+document.all.x1y1.onmouseout=clrx1y1;
+document.all.x1y1.onclick=wstawx1y1;
+document.all.x2y1.onmouseover=wyswx2y1;
+document.all.x2y1.onmouseout=clrx2y1;
+document.all.x2y1.onclick=wstawx2y1;
+document.all.x3y1.onmouseover=wyswx3y1;
+document.all.x3y1.onmouseout=clrx3y1;
+document.all.x3y1.onclick=wstawx3y1;
+document.all.x1y2.onmouseover=wyswx1y2;
+document.all.x1y2.onmouseout=clrx1y2;
+document.all.x1y2.onclick=wstawx1y2;
+document.all.x2y2.onmouseover=wyswx2y2;
+document.all.x2y2.onmouseout=clrx2y2;
+document.all.x2y2.onclick=wstawx2y2;
+document.all.x3y2.onmouseover=wyswx3y2;
+document.all.x3y2.onmouseout=clrx3y2;
+document.all.x3y2.onclick=wstawx3y2;
+document.all.x1y3.onmouseover=wyswx1y3;
+document.all.x1y3.onmouseout=clrx1y3;
+document.all.x1y3.onclick=wstawx1y3;
+document.all.x2y3.onmouseover=wyswx2y3;
+document.all.x2y3.onmouseout=clrx2y3;
+document.all.x2y3.onclick=wstawx2y3;
+document.all.x3y3.onmouseover=wyswx3y3;
+document.all.x3y3.onmouseout=clrx3y3;
+document.all.x3y3.onclick=wstawx3y3;
+}
+function wylaczster(){
+document.onkeydown=null;
+document.all.x1y1.onmouseover=null;
+document.all.x1y1.onmouseout=null;
+document.all.x1y1.onclick=null;
+document.all.x2y1.onmouseover=null;
+document.all.x2y1.onmouseout=null;
+document.all.x2y1.onclick=null;
+document.all.x3y1.onmouseover=null;
+document.all.x3y1.onmouseout=null;
+document.all.x3y1.onclick=null;
+document.all.x1y2.onmouseover=null;
+document.all.x1y2.onmouseout=null;
+document.all.x1y2.onclick=null;
+document.all.x2y2.onmouseover=null;
+document.all.x2y2.onmouseout=null;
+document.all.x2y2.onclick=null;
+document.all.x3y2.onmouseover=null;
+document.all.x3y2.onmouseout=null;
+document.all.x3y2.onclick=null;
+document.all.x1y3.onmouseover=null;
+document.all.x1y3.onmouseout=null;
+document.all.x1y3.onclick=null;
+document.all.x2y3.onmouseover=null;
+document.all.x2y3.onmouseout=null;
+document.all.x2y3.onclick=null;
+document.all.x3y3.onmouseover=null;
+document.all.x3y3.onmouseout=null;
+document.all.x3y3.onclick=null;
+}
+function powtorz() {
+wylaczster();
+iloscrozgr.innerText=iloscrozgrywek;
+win1.innerText=wins1+" - "+Math.round(wins1*100/iloscrozgrywek)+"%";
+win2.innerText=wins2+" - "+Math.round(wins2*100/iloscrozgrywek)+"%";
+clearTimeout(timer);
+document.onclick=gra;
+setTimeout("info.innerHTML='Kliknij, aby zagraæ ponownie.'",2000);
+}
+function kody() {
+if (event.keyCode>=48&&event.keyCode<=57) {kod+=letters[event.keyCode-48]}
+if (event.keyCode>=65&&event.keyCode<=90) {kod+=letters[event.keyCode-55]}
+if (kod.length>=20) {kod=kod.substring(kod.length-15,kod.length)}
+for (i in codes) {
+li=codes[i].length;
+if (kod.substring(kod.length-li,kod.length)==codes[i]) {kod+=" ";eval(codes_effect[i])}
+}
+}
+</script></body></html>

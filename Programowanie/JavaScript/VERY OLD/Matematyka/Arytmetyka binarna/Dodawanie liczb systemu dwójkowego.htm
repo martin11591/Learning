@@ -1,0 +1,51 @@
+<html>
+<title>Dodawanie liczb systemu dwójkowego</title>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+Wymieñ liczby do dodania w SYSTEMIE DWÓJKOWYM po przecinku:<br>
+<input id="liczby" readonly><div id="wynik">0=0</div>
+<script>
+dc=document.all;
+dc.liczby.onkeydown=pisz;
+dc.liczby.onkeyup=dodaj;
+function pisz() {
+klawisz=event.keyCode;
+dcl=dc.liczby.value.length;
+if (klawisz==8) {dc.liczby.value=dc.liczby.value.substring(0,dcl-1)}
+if (klawisz==48) {dc.liczby.value+="0"}
+if (klawisz==49) {dc.liczby.value+="1"}
+if (klawisz==110||klawisz==188) {dc.liczby.value+=","}
+if (dcl==0) {dcl=1}
+dc.liczby.size=dcl*1.165;
+}
+function dodaj() {
+dclv=dc.liczby.value;
+if (dclv=="") {dclv="0"}
+tablicaLiczby1=dclv.split(",");
+tablicaLiczby2=new Array();
+for (i in tablicaLiczby1) {tablicaLiczby2.push(naDziesietny(tablicaLiczby1[i]))}
+l=0;
+for (i in tablicaLiczby2) {l+=tablicaLiczby2[i]}
+dc.wynik.innerHTML=dclv.replace(/,/g,"+")+"="+naDwojkowy(l);
+}
+function naDwojkowy(liczba) {
+l=liczba;
+txt1="";
+while (l>=1) {
+r=l%2;
+l=Math.floor(parseFloat(l/2));
+txt1=r+txt1;
+}
+if (liczba==0) {txt1="0"}
+return txt1;
+}
+function naDziesietny(liczba) {
+l=0;
+for (var i=0; i<liczba.length; i++) {
+l+=Math.pow(2,liczba.length-i-1)*eval(liczba.substring(i,i+1));
+}
+return l;
+}
+</script>

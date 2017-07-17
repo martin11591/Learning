@@ -1,0 +1,139 @@
+<html><style>
+body{background-color:black;color:white}
+td{background-color:black;width:1000px;height:10px;position:absolute}
+</style>
+<div id="pole1">&nbsp;</div>
+<script>
+wysokosci=new Array();
+dy=new Array();
+j=new Array();
+kwadraty(3,'kwadrat',120);
+function kwadraty(ilosc,nazwa,y) {
+this.z="<table border=0>";
+this.i=1;
+this.ilosc=ilosc;
+this.nazwa=nazwa;
+this.y=y;
+kwadraty_tworz();
+}
+function kwadraty_tworz() {
+z+="<td id=\""+nazwa+i+"\" style=\"left:"+(0*(i-1))+"px;top:"+(2*(i-1))+"px;z-index:-"+(97+i)+"\"></td>";
+wysokosci.push(5*(i-1));
+dy.push(y);
+j.push(3.8+y*(i-1));
+i+=1;
+if (i>ilosc) {
+wysokosci.push(5*(i-1));
+dy.push(y);
+j.push(3.8+y*(i-1))
+;z+="</table>";
+document.all.pole1.innerHTML=z;
+i=1;
+ruch_sinus(screen.availHeight-10,nazwa);
+document.all['kwadrat1'].style.backgroundColor="#FF0000";
+document.all['kwadrat2'].style.backgroundColor="#00FF00";
+document.all['kwadrat3'].style.backgroundColor="#0000FF";
+return;
+}
+setTimeout("kwadraty_tworz()",1);
+}
+function ruch_odbity(maxwysokosc,nazwa) {
+this.maxwysokosc=maxwysokosc;
+this.nazwa=nazwa;
+id=nazwa+i;
+if (maxwysokosc<ilosc) {this.maxwysokosc=ilosc}
+wysokosci[i]+=dy[i];
+if (wysokosci[i]<0||wysokosci[i]>maxwysokosc) {dy[i]=-dy[i]}
+document.all[id].style.left=wysokosci[i];
+document.all[id].style.top=wysokosci[i];
+i+=1;
+if (i>ilosc) {i=1}
+setTimeout("ruch_odbity(maxwysokosc,nazwa)",1);
+}
+function ruch_sinus(maxwysokosc,nazwa) {
+this.maxwysokosc=maxwysokosc;
+this.nazwa=nazwa;
+id=nazwa+i;
+if (maxwysokosc<ilosc) {this.maxwysokosc=ilosc}
+wysokosci[i]=maxwysokosc/2+maxwysokosc/2*Math.sin(j[i]);
+document.all[id].style.top=wysokosci[i];
+i+=1;
+if (i>ilosc) {i=1}
+j[i]+=(maxwysokosc/2)/(maxwysokosc/2)/50;
+j[i]=j[i]%360;
+setTimeout("ruch_sinus(maxwysokosc,nazwa)",1);
+}
+</script><p style="font: small-caption">£¹cze:<form name="lacza">
+Rodzaj:<select name="podkr" style="background-color:black; color:white"><option value="underline">Podkreœlone</option>
+<option value="none">Niepodkreœlone</option></select><br>
+Kursor:<select name="kursor" style="background-color:black; color:white">
+<option value="default">Standardowy (strza³ka)</option>
+<option value="crosshair">Wybór precyzyjny</option>
+<option value="hand">Wybór ³¹cza</option>
+<option value="move">Przenieœ</option>
+<option value="e-resize">Zmiana wymiaru poziomego</option>
+<option value="n-resize">Zmiana wymiaru pionowego</option>
+<option value="nw-resize">Zmiana wymiaru po przek¹tnej 1</option>
+<option value="ne-resize">Zmiana wymiaru po przek¹tnej 2</option>
+<option value="text">Wybór tekstowy</option>
+<option value="wait">Zajêty</option>
+<option value="help">Wybór Pomocy</option></select><br>
+Kolor ³¹cza:<input type=text name="kolor" value="#0000ff" style="background-color:black; color:white; cursor:default" maxlength=7><br>
+Kolor t³a:<input type=text name="tlo" value="none" style="background-color:black; color:white; cursor:default" maxlength=7><br><br>
+Kursor nad ³¹czem:<select name="wlacz1" style="background-color:black; color:white"><option value="on">W³¹czone</option><option value="off">Wy³¹czone</option></select><br><br>
+Rodzaj:<select name="podkr2" style="background-color:black; color:white">
+<option value="underline">Podkreœlone</option>
+<option value="none">Niepodkreœlone</option></select><br>
+Kolor ³¹cza<input type=text name="kolor2" value="#000000" style="background-color:black; color:white; cursor:default" maxlength=7><br>
+Kolor t³a:<input type=text name="tlo2" value="none" style="background-color:black; color:white; cursor:default" maxlength=7><br><br>
+£¹cze odwiedzone:<select name="wlacz2" style="background-color:black; color:white"><option value="on">W³¹czone</option><option value="off" selected>Wy³¹czone</option></select><br><br>
+Rodzaj:<select name="podkr3" style="background-color:black; color:white">
+<option value="underline">Podkreœlone</option>
+<option value="none">Niepodkreœlone</option></select><br>
+Kolor ³¹cza<input type=text name="kolor3" value="#ffff00" style="background-color:black; color:white; cursor:default" maxlength=7><br>
+Kolor t³a:<input type=text name="tlo3" value="none" style="background-color:black; color:white; cursor:default" maxlength=7><br><br>
+Aktywne ³¹cze:<select name="wlacz3" style="background-color:black; color:white"><option value="on">W³¹czone</option><option value="off">Wy³¹czone</option></select><br><br>
+Rodzaj:<select name="podkr4" style="background-color:black; color:white">
+<option value="underline">Podkreœlone</option>
+<option value="none">Niepodkreœlone</option></select><br>
+Kolor ³¹cza<input type=text name="kolor4" value="#ffff00" style="background-color:black; color:white; cursor:default" maxlength=7><br>
+Kolor t³a:<input type=text name="tlo4" value="none" style="background-color:black; color:white; cursor:default" maxlength=7></form><hr>
+<fieldset>
+<form name="reszt"><legend style="font-family:Tahoma;font-size:8pt">Pozosta³a treœæ dokumentu</legend><textarea name="reszta" align=center cols=190 rows=15 style="background-color:black; color:white; cursor:default; font:menu; border:none"></textarea></fieldset></form><hr>
+<input type=button style="font:menu" value="Generuj" onClick="generuj()">
+<script language="javascript">
+function generuj()
+{
+tytul=prompt('Tytu³ strony internetowej','Tytu³ strony internetowej');
+if (tytul!=null) {
+tek=document.reszt.reszta.value;
+dlg=tek.length+1;
+tekst="";
+c1=new Image();c1.src="img/C1.bmp"
+c2=new Image();c2.src="img/C2.bmp"
+for (var i=1; i<dlg; i++) {
+if (tek.substring(i-1,i)=="<") {tekst=tekst+"&lt;"} else {tekst=tekst+tek.substring(i-1,i)}
+}
+tresc="&lt;html&gt;<br>&lt;body&gt;<br>&lt;head&gt;<br>&lt;title&gt;"+tytul+"&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;style&gt;<br>A {color: "+document.lacza.kolor.value+"; text-decoration: "+document.lacza.podkr.value+"; cursor: "+document.lacza.kursor.value;
+if (document.lacza.tlo.value!="none") {tresc=tresc+"; background: "+document.lacza.tlo.value}
+if (document.lacza.wlacz1.value=="on") {
+tresc=tresc+"}<br>A:hover {color: "+document.lacza.kolor2.value+"; text-decoration: "+document.lacza.podkr2.value;
+if (document.lacza.tlo2.value!="none") {tresc=tresc+"; background: "+document.lacza.tlo2.value}
+}
+if (document.lacza.wlacz2.value=="on") {
+tresc=tresc+"}<br>A:visited {color: "+document.lacza.kolor3.value+"; text-decoration: "+document.lacza.podkr3.value;
+if (document.lacza.tlo3.value!="none") {tresc=tresc+"; background: "+document.lacza.tlo3.value}
+}
+if (document.lacza.wlacz3.value=="on") {
+tresc=tresc+"}<br>A:active {color: "+document.lacza.kolor4.value+"; text-decoration: "+document.lacza.podkr4.value;
+if (document.lacza.tlo4.value!="none") {tresc=tresc+"; background: "+document.lacza.tlo4.value}
+}
+tresc=tresc+"}<br>&lt;/style&gt;<br>"+tekst+"<br>&lt;/body&gt;<br>&lt;/html&gt;";
+okno=window.open('','strona','fullscreen=yes,menubar=no');
+okno.document.write('<html>\n<title>Kod Ÿród³owy</title>\n<body scroll=auto bgcolor=#000084 text=white style="font-family: Tahoma; font-size: 8pt">\n');
+okno.focus();
+tresc=tresc+"\n</html>";
+okno.document.write(tresc);
+}
+}
+</script>

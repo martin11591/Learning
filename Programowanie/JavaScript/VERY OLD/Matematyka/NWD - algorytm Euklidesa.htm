@@ -1,0 +1,53 @@
+<html>
+<style>
+body,td{font-family:Trebuchet MS;font-size:10pt;font-weight:bold}
+</style>
+Liczenie NWD dwóch liczb za pomoc¹ algorytmu Euklidesa.<br>Skrypt utworzony przez Marcina Podraza.<br><br>
+<input id="la"> - liczba A<br>
+<input id="lb"> - liczba B<br>
+<div id="wyniki">NWD (A,B) = 1</div><br><button id="szczegoly" onclick="shinfo()" style="width:165px">Poka¿ szczegó³y liczenia</button>
+<table border=1 cellspacing=0><td id="info_szczegoly" style="display:none;width:300px;height:94px;vertical-align:top"></td></table>
+<script>
+var timer,timer2;
+document.all.la.onkeyup=licz;
+document.all.lb.onkeyup=licz;
+function licz() {
+k=event.keyCode;
+if(k==8){k=48}
+if(event.ctrlKey||event.shiftKey||event.altKey||k<48||k>57){return}
+clearTimeout(timer);
+clearTimeout(timer2);
+na=a=eval(parseInt(document.all.la.value));
+nb=b=eval(parseInt(document.all.lb.value));
+if(isNaN(a)) {na=a=Math.round(5000*Math.random())}
+if(isNaN(b)) {nb=b=Math.round(5000*Math.random())}
+init();
+st=1;
+stat();
+}
+function init() {
+document.all.info_szczegoly.innerText="A!=B : "+(eval(a)!=eval(b));
+if (eval(a)!=eval(b)) {
+document.all.info_szczegoly.innerText+="\nA>B : "+(eval(a)>eval(b));
+if (eval(a)>eval(b)) {a-=b;document.all.info_szczegoly.innerText+="\nA = A-B"} else {b-=a;document.all.info_szczegoly.innerText+="\nB = B-A"}
+} else {clearTimeout(timer2);document.all.info_szczegoly.innerText="WYNIK = "+a;document.all.wyniki.innerText="NWD ("+na+","+nb+") = "+a;return}
+document.all.info_szczegoly.innerText+="\nA = "+a+"\nB = "+b;
+timer=setTimeout("init()",1);
+}
+function stat() {
+document.all.wyniki.innerText="Liczenie";
+if (st==1) {document.all.wyniki.innerText+="."}
+if (st==2) {document.all.wyniki.innerText+=".."}
+if (st==3) {document.all.wyniki.innerText+="..."}
+if (st==4) {document.all.wyniki.innerText+="...."}
+if (st==5) {document.all.wyniki.innerText+="....."}
+st+=1;
+if (st>5) {st-=5}
+timer2=setTimeout("stat()",500);
+}
+function shinfo() {
+info_text=document.all.szczegoly.value.toLowerCase();
+if (info_text=="poka¿ szczegó³y liczenia") {document.all.info_szczegoly.style.display="block";document.all.szczegoly.value="Ukryj szczegó³y liczenia"}
+if (info_text=="ukryj szczegó³y liczenia") {document.all.info_szczegoly.style.display="none";document.all.szczegoly.value="Poka¿ szczegó³y liczenia"}
+}
+</script>

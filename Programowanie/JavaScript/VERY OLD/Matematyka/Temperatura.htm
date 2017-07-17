@@ -1,0 +1,69 @@
+<html>
+<style>
+body,div,input{font-family:Trebuchet MS;font-size:10pt}
+legend{font-family:Tahoma;font-size:8pt;font-weight:normal}
+</style>
+<div id="info">Temperatura:<br></div>
+<br><fieldset><legend>Podaj liczbê miejsc po przecinku</legend>
+<br>
+<input type=text id="liczbamiejsc" value="2">
+<br>
+<br>
+</fieldset>
+<br><fieldset><legend>Podaj temperaturê i jej skalê</legend>
+<br>
+<input type=text id="temp" value="0">
+<br>
+<table border=0>
+<tr>
+<td><input type=radio id="C" name="skala" checked>Celsjusz (C)</td>
+<td><input type=radio id="F" name="skala">Fahrenheit (F)</td>
+<td><input type=radio id="K" name="skala">Kelvin (K)</td>
+<td><input type=radio id="R" name="skala">R&eacute;amour (R)</td></tr></table>
+<br>
+</fieldset>
+<script>
+t=document.all.temp;
+licz();
+function licz() {
+l=Math.pow(10,document.all.liczbamiejsc.value);
+if (document.all.C.checked) {c=t.value;licz_c()}
+if (document.all.F.checked) {f=t.value;licz_f()}
+if (document.all.K.checked) {k=t.value;licz_k()}
+if (document.all.R.checked) {r=t.value;licz_r()}
+info.innerHTML=inf;
+setTimeout("licz()",1);
+}
+function licz_c() {
+if (c==""||c==null) {c=0}
+c=Math.round(l*parseFloat(c))/l;
+f=Math.round(l*(9/5*c+32))/l;
+k=Math.round(l*(c+273.16))/l;
+r=Math.round(l*(4/5*c))/l;
+inf="Temperatura:<br>"+c+"&deg;C<br>"+f+"&deg;F<br>"+k+"&deg;K<br>"+r+"&deg;R";
+}
+function licz_f() {
+if (f==""||f==null) {f=0}
+f=Math.round(l*parseFloat(f))/l;
+c=Math.round(l*(5/9*(f-32)))/l;
+k=Math.round(l*(5/9*f+255.38))/l;
+r=Math.round(l*(4/9*(f-32)))/l;
+inf="Temperatura:<br>"+c+"&deg;C<br>"+f+"&deg;F<br>"+k+"&deg;K<br>"+r+"&deg;R";
+}
+function licz_k() {
+if (k==""||k==null) {k=0}
+k=Math.round(l*parseFloat(k))/l;
+c=Math.round(l*(k-273.16))/l;
+f=Math.round(l*(9/5*k-459.69))/l;
+r=Math.round(l*(4/5*(k-273.16)))/l;
+inf="Temperatura:<br>"+c+"&deg;C<br>"+f+"&deg;F<br>"+k+"&deg;K<br>"+r+"&deg;R";
+}
+function licz_r() {
+if (r==""||r==null) {r=0}
+r=Math.round(l*parseFloat(r))/l;
+c=Math.round(l*(5/4*r))/l;
+f=Math.round(l*(9/4*r+32))/l;
+k=Math.round(l*(5/4*r+273.16))/l;
+inf="Temperatura:<br>"+c+"&deg;C<br>"+f+"&deg;F<br>"+k+"&deg;K<br>"+r+"&deg;R";
+}
+</script>

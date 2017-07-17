@@ -1,0 +1,36 @@
+<html>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+Rozszerzenia (bez kropek, oddzielaæ œrednikami):<br>
+<input id="rozszerzenia" value="psd;pdd;3ds;obj;bmp;rle;dib;tif;crw;nef;raf;orf;mrw;dcr;mos;raw;pef;srf;dng;x3f;cr2;cin;sdpx;dpx;fido;dae;gif;dcm;dc3;dic;eps;flm;kmz;jpg;jpeg;jpe;psb;exr;ai3;ai4;ai5;ai6;ai7;ai8;ps;ai;epsf;epsp;pcx;pdf;pdp;pct;pict;pxr;png;pbm;pgm;ppm;pnm;pfm;pam;mov;avi;mpg;mpeg;mp4;m4v;hdr;rgbe;xyze;sct;tga;vda;icb;vst;tif;tiff;u3d;wbm;wbmp"></input><br>
+Wyœwietlany tekst:<br><input id="tekst" value="Edytuj w Adobe Photoshop CS3"></input><br>
+Liczba:<br>ft<input id="ftLiczba" value="5"></input><br>
+Aplikacja otwieraj¹ca (lokalizacja docelowa):<br><input id="aplikacja" value="C:\Program Files\Adobe\Adobe Photoshop CS3\Photoshop.exe"></input><br>
+<button onclick="generuj()">Generuj wpis<br>rejestru</button><br>
+<textarea id="wpisWygenerowany" cols=100 rows=10></textarea>
+<script>
+dc=document.all;
+function generuj() {
+txt="Windows Registry Editor Version 5.00\n\n";
+ext=dc.rozszerzenia.value.split(';');
+lr=Math.floor(parseFloat(dc.ftLiczba.value));
+for (i in ext) {
+txt+="[HKEY_CLASSES_ROOT\\."+ext[i]+"]\n@=\"IrfanView."+ext[i]+"\"\n\n";
+txt+="[HKEY_CLASSES_ROOT\\IrfanView."+ext[i]+"\\shell]\n@=\"open\"\n\n";
+txt+="[HKEY_CLASSES_ROOT\\IrfanView."+ext[i]+"\\shell\\"+dc.tekst.value.replace(/ /g,"_").replace(/%20/g,"_")+"]\n@=\""+dc.tekst.value+"\"\n\n";
+txt+="[HKEY_CLASSES_ROOT\\IrfanView."+ext[i]+"\\shell\\"+dc.tekst.value.replace(/ /g,"_").replace(/%20/g,"_")+"\\command]\n@=\"\\\""+dc.aplikacja.value.replace(/\\/g,"\\\\").replace(/\//g,"\\\\")+"\\\" \\\"%1\\\"\"\n\n";
+lr+=1;
+}
+dc.wpisWygenerowany.value=txt;
+}
+function zera(liczba,ile) {
+liczba=liczba.toString();
+if (ile<liczba.length) {ile=liczba.length}
+ile-=liczba.length;
+str=liczba;
+for (var zeraI=1; zeraI<=ile; zeraI++) {str="0"+str}
+return str;
+}
+</script>

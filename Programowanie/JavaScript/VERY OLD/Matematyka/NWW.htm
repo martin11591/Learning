@@ -1,0 +1,15 @@
+<html><title>Najmniejsza Wspólna Wielokrotnoœæ - NWW</title><div id="pomoc" style="text-align:center;font-family:Trebuchet MS;font-size:10pt;font-weight:bold">&nbsp;</div><script>
+this.zmienna1=parseInt(prompt('Podaj pierwsz¹ zmienn¹','zmienna1'));
+this.zmienna2=parseInt(prompt('Podaj drug¹ zmienn¹','zmienna2'));
+this.wynik1=zmienna1;
+this.wynik2=zmienna2;
+pomoc.innerHTML="Liczenie...";
+licz();
+function licz() {
+while (wynik1!=wynik2) {
+if(wynik1<wynik2) {wynik1+=zmienna1}
+if(wynik2<wynik1) {wynik2+=zmienna2}
+}
+pomoc.innerHTML="NWW("+zmienna1+","+zmienna2+")="+wynik1;
+}
+</script>

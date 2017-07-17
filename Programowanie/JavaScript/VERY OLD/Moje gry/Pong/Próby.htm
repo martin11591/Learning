@@ -1,0 +1,76 @@
+<html>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<img src="images\player1.gif" id="a1" style="position:absolute" />
+<img src="images\player2.gif" id="a2" style="position:absolute" />
+<table><tr><td id="b1" style="position:absolute;background-color:red;color:black;width:10px;height:10px"></td></tr></table>
+<script>
+dc=document;
+dca=dc.all;
+rx1=dca.a1.width;
+ry1=dca.a1.height;
+rx2=dca.a2.width;
+ry2=dca.a2.height;
+x1=dc.body.clientWidth/2;
+y1=dc.body.clientHeight/2;
+x2=100;
+y2=100;
+kat=99.5;
+dx1=0;
+dy1=0;
+dx2=Math.sin(kat*Math.PI/180);
+dy2=-Math.cos(kat*Math.PI/180);
+ruch();
+function ruch() {
+sx1=x1+dx1;
+sy1=y1+dy1;
+sx2=x2+dx2;
+sy2=y2+dy2;
+if (sx1<rx1/2||sx1>dc.body.clientWidth-rx1/2) {dx1=-dx1}
+if (sy1<ry1/2||sy1>dc.body.clientHeight-ry1/2) {dy1=-dy1}
+if (sx2<rx2/2||sx2>dc.body.clientWidth-rx2/2) {dx2=-dx2}
+if (sy2<ry2/2||sy2>dc.body.clientHeight-ry2/2) {dy2=-dy2}
+odl=Math.abs(Math.sqrt((sx2-sx1)*(sx2-sx1)+(sy2-sy1)*(sy2-sy1)));
+if (odl<=rx2) {
+qw=Math.abs(sx1-sx2);
+er=Math.abs(sy1-sy2);
+if (qw<er) {qw=er}
+katdx=(sx1-sx2)/qw;
+katdy=(sy1-sy2)/qw;
+kat=((Math.atan2(katdy,katdx)*180/Math.PI)+270)%360;
+dca.b1.innerText=Math.round(kat*100)/100;
+tempx=sx1+Math.sin(kat*Math.PI/180)*rx1/2;
+tempy=sy1-Math.cos(kat*Math.PI/180)*ry1/2;
+with (dca.b1.style) {
+left=tempx-dca.b1.width/2;
+top=tempy-dca.b1.height/2;
+}
+kat+=90;
+qw=Math.abs(sx1-tempx);
+er=Math.abs(sy1-tempy);
+if (qw<er) {qw=er}
+dxkat=(sx1-tempx)/qw;
+dykat=(sy1-tempy)/qw;
+kat2=90+(kat+(Math.atan2(dykat,dxkat)*180/Math.PI))%360;
+dx2=Math.sin(kat2*Math.PI/180);
+dy2=-Math.cos(kat2*Math.PI/180);
+}
+x1+=dx1;
+y1+=dy1;
+x2+=dx2;
+y2+=dy2;
+with(dca.a1.style) {
+left=x1-rx1/2;
+top=y1-ry1/2;
+}
+with(dca.a2.style) {
+left=x2-rx2/2;
+top=y2-ry2/2;
+}
+window.status=Math.round(odl*100)/100+"    "+Math.round(sx2*100)/100+"    "+Math.round(sy2*100)/100;
+setTimeout("ruch()",1);
+}
+</script>
+</html>

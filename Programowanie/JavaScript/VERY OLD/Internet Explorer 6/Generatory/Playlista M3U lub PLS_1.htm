@@ -1,0 +1,442 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+</head>
+<body scroll=auto>
+<title>Generator playlisty M3U lub PLS</title>
+<style>
+body{background-color:black;color:white;font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+input,textarea{cursor:default}
+</style>
+Autor:Marcin Podraza<br>
+Adres e-mail:
+<script>document.write("<a href=\"mailto:marcinpodraza@poczta.onet.pl\">marcinpodraza@poczta.onet.pl</a>");
+</script>
+<br>
+UWAGI:<br>
+Skrypt nie nadaje się do dużych playlist.
+<bgsound id="muzyka1" src="" volume=0 loop=infinite></bgsound>
+<bgsound id="muzyka2" src="" volume=0 loop=infinite></bgsound>
+<table border=0>
+<tr><td><input id="plik1" type=file style="display:none"></input><button onclick="document.all.plik1.click();przepiszDane()">Wybierz plik</button></td><td><button onclick="muzykaPodglad()">Odsłuchaj</button><button id="przyciskMuzykaStop" onclick="muzykaStop()">Stop</button></td></tr><tr><td>Miejsce zapisu playlisty:</td><td><input id="miejsce" size=94><input id="miejscePlik" type=file style="display:none"><button onclick="document.all.miejscePlik.click();ustawMiejsce()" title="Wybierz plik pochodzący z danego miejsca. Plik jest nie ważny.">Wybierz miejsce</button></td></tr>
+<tr><td>Adres pliku:</td><td><input id="adres" size=94></td></tr>
+<tr title="Zostanie poprawiony przez tagi MP3."><td>Tytuł:</td><td><input id="tytul" size=94></td></tr>
+<tr><td>Czas trwania:</td><td><input id="g" size=3 value=0>:<input id="m" size=1 maxlength=2 value=0>:<input id="s" size=1 maxlength=2 value=0>, czyli <input id="ss" value=0></td></tr>
+<tr><td>Typ playlisty:</td><td><input name="typ" id="m3u" type=radio checked onclick="tworzM3U()">M3U (Winamp)<input name="typ" id="pls" type=radio onclick="tworzPLS()">PLS (Winamp)<input name="typ" id="mojaLista" type=radio onclick="tworzMojaListe()">Moja lista</td></tr>
+<tr><td>Liczba elementów:</td><td id="liczbaElementow">0</td></tr>
+<tr><td>Czas playlisty:</td><td id="calkowityCzas">0:00:00</td></tr>
+</table>
+<button onclick="dodajElement()">Dodaj element</button><button onclick="aktualizujElement()">Aktualizuj element</button><br>
+<span id="tworzeniePlaylisty" style="display:none"><span id="listaHTML"><select id="lista" onchange="pokazDane()"></select></span><button id="przyciskGora" onclick="elementWGore()">&nbsp;&uarr;&nbsp;</button><button id="przyciskUsun" onclick="usunElement()">Usuń element</button><button id="przyciskDol" onclick="elementWDol()">&nbsp;&darr;&nbsp;</button><br><button onclick="sortujZaNazwamiPlikowRosnaco()">Sortuj za nazwami<br>plików rosnąco</button><button onclick="sortujZaTytulamiRosnaco()">Sortuj za tytułami<br>rosnąco</button><br><button onclick="sortujZaNazwamiPlikowMalejaco()">Sortuj za nazwami<br>plików malejąco</button><button onclick="sortujZaTytulamiMalejaco()">Sortuj za tytułami<br>malejąco</button><br><button onclick="losujPlayliste()">Losuj<br>playlistę</button><br><textarea id="twojaPlaylista" readonly cols=120 rows=18 title="Zaznacz cały ten tekst, skopiuj do Schowka, wklej do Notatnika i zapisz jako playlistę M3U." wrap=physical></textarea></span><br><button id="przyciskOdczytajPlayliste" onclick="odczytajPlayliste()">Odczytaj elementy</button><br><span id="zapiszW">Zapisz w </span><br><textarea id="doOdczytania" cols=120 rows=18 title='Otwórz plik M3U lub PLS przez Notatnik, wklej tutaj cały tekst i kliknij "Odczytaj elementy". WAŻNE:W pierwszej linii wpisz lokalizację pliku playlisty!' wrap=physical>D:\MARTIN\Muzyka\
+</textarea><script src="..\Skrypty\Sortowanie.js"></script><script>
+dc=document.all;
+plikiAdresy=new Array();
+plikiCzasyTrwania=new Array();
+plikiTytuly=new Array();
+with (dc) {
+g.onkeyup=przeliczNaSekundy;
+m.onkeyup=przeliczNaSekundy;
+s.onkeyup=przeliczNaSekundy;
+ss.onkeyup=przeliczNaCzas;
+miejsce.onkeyup=ustawMiejsceZDanych;
+}
+sciezka=document.URL;
+sciezka=sciezka.substring(7,sciezka.lastIndexOf("\\")+1);
+dc.miejsce.value=sciezka;
+muzykaStart=0;
+muzykaI=1;
+muzykaVol1=-10000;
+muzykaVol2=-10000;
+muzykaDodaj=-1;
+dostepnoscPrzyciskow();
+window.status="Liczba elementów:0";
+tworzM3U();
+function przepiszDane() {
+adr=dc.plik1.value;
+adr=adr.replace(/\//g,"\\");
+dc.adres.value=dc.plik1.value;
+dc.tytul.value=adr.substring(adr.lastIndexOf("\\")+1,adr.lastIndexOf(".")).replace(/_/g," - ");
+}
+function przeliczNaSekundy() {
+G=Math.floor(parseFloat(dc.g.value));
+M=Math.floor(parseFloat(dc.m.value));
+S=Math.floor(parseFloat(dc.s.value));
+G=eval(G);
+M=eval(M);
+S=eval(S);
+if (isNaN(G)||G==null) {G=0}
+if (isNaN(M)||M==null) {M=0}
+if (isNaN(S)||S==null) {S=0}
+dc.ss.value=S+M*60+G*3600;
+}
+function przeliczNaCzas() {
+SS=Math.floor(parseFloat(dc.ss.value));
+SS=eval(SS);
+if (isNaN(SS)||SS==null) {SS=0}
+S=SS%60;
+M=Math.floor(SS/60)%60;
+G=Math.floor(SS/3600);
+with (dc) {
+g.value=G;
+m.value=zera(2,M);
+s.value=zera(2,S);
+}
+}
+function dostepnoscPrzyciskow() {
+if (plikiAdresy==null||plikiAdresy=="") {dc.tworzeniePlaylisty.style.display="none"} else {dc.tworzeniePlaylisty.style.display="block"}
+selInd=dc.lista.selectedIndex;
+if (selInd<=0) {dc.przyciskGora.disabled=true} else {dc.przyciskGora.disabled=false}
+if (selInd>=plikiAdresy.length-1) {dc.przyciskDol.disabled=true} else {dc.przyciskDol.disabled=false}
+if (muzykaStart==0) {dc.przyciskMuzykaStop.disabled=true} else {dc.przyciskMuzykaStop.disabled=false}
+setTimeout("dostepnoscPrzyciskow()",1);
+}
+function dodajElement() {
+adr=dc.adres.value;
+pod=dc.tytul.value;
+ctr=dc.ss.value;
+if (adr==null||adr==""||pod==null||pod==""||ctr==0||ctr==null||ctr=="") {return}
+for (i in plikiAdresy) {
+if (adr==plikiAdresy[i]) {return}
+}
+plikiAdresy.push(dc.adres.value);
+plikiTytuly.push(dc.tytul.value);
+plikiCzasyTrwania.push(dc.ss.value);
+przebudujListe(0);
+}
+function aktualizujElement() {
+selectIndex=dc.lista.selectedIndex;
+plikiAdresy[selectIndex]=dc.adres.value;
+plikiTytuly[selectIndex]=dc.tytul.value;
+plikiCzasyTrwania[selectIndex]=dc.ss.value;
+przebudujListe(1);
+dc.lista.selectedIndex=selectIndex;
+}
+function elementWGore() {
+tempArray1=new Array();
+tempArray2=new Array();
+tempArray3=new Array();
+selectIndex=dc.lista.selectedIndex;
+for (var i=0; i<plikiAdresy.length; i++) {
+if ((i+1)==selectIndex) {tempArray1.push(plikiAdresy[i+1]);tempArray2.push(plikiTytuly[i+1]);tempArray3.push(plikiCzasyTrwania[i+1]);tempArray1.push(plikiAdresy[i]);tempArray2.push(plikiTytuly[i]);tempArray3.push(plikiCzasyTrwania[i]);i=eval(i+2)}
+if (i>=plikiAdresy.length) {break}
+if (i!=selectIndex) {tempArray1.push(plikiAdresy[i]);tempArray2.push(plikiTytuly[i]);tempArray3.push(plikiCzasyTrwania[i])}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+dc.lista.selectedIndex=selectIndex-1;
+}
+function usunElement() {
+tempArray1=new Array();
+tempArray2=new Array();
+tempArray3=new Array();
+selectIndex=dc.lista.selectedIndex;
+for (i in plikiAdresy) {
+if (i!=selectIndex) {tempArray1.push(plikiAdresy[i]);tempArray2.push(plikiTytuly[i]);tempArray3.push(plikiCzasyTrwania[i])}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+}
+function elementWDol() {
+tempArray1=new Array();
+tempArray2=new Array();
+tempArray3=new Array();
+selectIndex=dc.lista.selectedIndex;
+for (var i=0; i<plikiAdresy.length; i++) {
+if (i==selectIndex) {tempArray1.push(plikiAdresy[i+1]);tempArray2.push(plikiTytuly[i+1]);tempArray3.push(plikiCzasyTrwania[i+1]);tempArray1.push(plikiAdresy[i]);tempArray2.push(plikiTytuly[i]);tempArray3.push(plikiCzasyTrwania[i]);i=eval(i+2)}
+if (i>=plikiAdresy.length) {break}
+if (i!=selectIndex) {tempArray1.push(plikiAdresy[i]);tempArray2.push(plikiTytuly[i]);tempArray3.push(plikiCzasyTrwania[i])}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+dc.lista.selectedIndex=selectIndex+1;
+}
+function przebudujListe(akt) {
+listHTML="<select id=\"lista\" onchange=\"pokazDane()\">";
+for (var i=0; i<plikiAdresy.length; i++) {listHTML+="<option value=\""+i+"\">"+plikiTytuly[i]+"</option>"}
+listHTML+="</select>";
+dc.listaHTML.innerHTML=listHTML;
+dc.liczbaElementow.innerText=plikiAdresy.length;
+window.status="Liczba elementów:"+plikiAdresy.length;
+suma=0;
+for (var i=0; i<plikiCzasyTrwania.length; i++) {suma+=eval(plikiCzasyTrwania[i])}
+dc.calkowityCzas.innerText=parseInt(suma/3600)+":"+zera(2,(parseInt(suma/60)%60))+":"+zera(2,suma%60);
+if (akt==0) {
+pokazDane();
+}
+if (dc.m3u.checked) {tworzM3U()}
+if (dc.pls.checked) {tworzPLS()}
+if (dc.mojaLista.checked) {tworzMojaListe()}
+}
+function tworzM3U() {
+dc.zapiszW.innerText="Zapisz w "+sciezka;
+dc.miejsce.value=sciezka;
+txt="#EXTM3U\n";
+for (i in plikiAdresy) {
+txt+="#EXTINF:"+plikiCzasyTrwania[i]+","+plikiTytuly[i]+"\n";
+if (sciezka==plikiAdresy[i].substring(0,sciezka.length)) {txt+=plikiAdresy[i].substring(sciezka.length)} else {
+if (sciezka.substring(0,1)==plikiAdresy[i].substring(0,1)) {txt+=plikiAdresy[i].substring(2)} else {
+txt+=plikiAdresy[i];
+}
+}
+txt+="\n";
+}
+txt+="\n";
+dc.twojaPlaylista.value=txt;
+dc.twojaPlaylista.title="Zaznacz cały ten tekst, skopiuj do Schowka, wklej do Notatnika i zapisz jako playlistę M3U.";
+}
+function tworzPLS() {
+dc.zapiszW.innerText="Zapisz w "+sciezka;
+dc.miejsce.value=sciezka;
+txt="[playlist]\n";
+for (i in plikiAdresy) {
+ij=eval(i)+1;
+txt+="File"+ij+"=";
+if (sciezka==plikiAdresy[i].substring(0,sciezka.length)) {txt+=plikiAdresy[i].substring(sciezka.length)} else {
+if (sciezka.substring(0,1)==plikiAdresy[i].substring(0,1)) {txt+=plikiAdresy[i].substring(2)} else {
+txt+=plikiAdresy[i];
+}
+}
+txt+="\nTitle"+ij+"="+plikiTytuly[i]+"\nLength"+ij+"="+plikiCzasyTrwania[i]+"\n";
+}
+txt+="NumberOfEntries="+plikiAdresy.length+"\nVersion=2\n\n";
+dc.twojaPlaylista.value=txt;
+dc.twojaPlaylista.title="Zaznacz cały ten tekst, skopiuj do Schowka, wklej do Notatnika i zapisz jako playlistę PLS.";
+}
+function tworzMojaListe() {
+dc.zapiszW.innerText="Zapisz w "+sciezka;
+dc.miejsce.value=sciezka;
+txt="";
+for (i in plikiAdresy) {
+txt+="\"";
+if (sciezka==plikiAdresy[i].substring(0,sciezka.length)) {txt+=plikiAdresy[i].substring(sciezka.length)} else {
+if (sciezka.substring(0,1)==plikiAdresy[i].substring(0,1)) {txt+=plikiAdresy[i].substring(2)} else {
+txt+=plikiAdresy[i];
+}
+}
+tempTytul=duzeLitery(plikiTytuly[i]);
+tempTytul=tempTytul.replace(/_/g," ").replace(/ - /g,"-").replace(/-/g," - ");
+txt+="\",\""+tempTytul+"\","+Math.floor(parseFloat(plikiCzasyTrwania[i]/3600))+","+(Math.floor(parseFloat(plikiCzasyTrwania[i]/60))%60)+","+(plikiCzasyTrwania[i]%60)+",\n";
+}
+txt=txt.replace(/\\/g,"\\\\");
+txt=txt.substring(0,txt.length-2);
+dc.twojaPlaylista.value=txt;
+dc.twojaPlaylista.title="Zaznacz cały ten tekst, skopiuj do Schowka, wklej do Notatnika i zapisz jako playlistę M3U.";
+}
+function sortujZaNazwamiPlikowRosnaco() {
+var tempArray=plikiAdresy;
+sortuj("plikiAdresy","nazwa","ros");
+var tempArray1=new Array();
+var tempArray2=new Array();
+var tempArray3=new Array();
+for (var j=0; j<tempArray.length; j++) {
+for (var i=0; i<tempArray.length; i++) {
+if (tempArray[i]==plikiAdresy[j]) {tempArray1.push(tempArray[i]);tempArray2.push(plikiTytuly[i]);tempArray3.push(plikiCzasyTrwania[i])}
+}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+}
+function sortujZaNazwamiPlikowMalejaco() {
+var tempArray=plikiAdresy;
+sortuj("plikiAdresy","nazwa","mal");
+var tempArray1=new Array();
+var tempArray2=new Array();
+var tempArray3=new Array();
+for (var j=0; j<tempArray.length; j++) {
+for (var i=0; i<tempArray.length; i++) {
+if (tempArray[i]==plikiAdresy[j]) {tempArray1.push(tempArray[i]);tempArray2.push(plikiTytuly[i]);tempArray3.push(plikiCzasyTrwania[i])}
+}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+}
+function sortujZaTytulamiRosnaco() {
+var tempArray=plikiTytuly;
+sortuj("plikiTytuly","nazwa","ros");
+var tempArray1=new Array();
+var tempArray2=new Array();
+var tempArray3=new Array();
+for (var j=0; j<tempArray.length; j++) {
+for (var i=0; i<tempArray.length; i++) {
+if (tempArray[i]==plikiTytuly[j]) {tempArray1.push(plikiAdresy[i]);tempArray2.push(tempArray[i]);tempArray3.push(plikiCzasyTrwania[i])}
+}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+}
+function sortujZaTytulamiMalejaco() {
+var tempArray=plikiTytuly;
+sortuj("plikiTytuly","nazwa","mal");
+var tempArray1=new Array();
+var tempArray2=new Array();
+var tempArray3=new Array();
+for (var j=0; j<tempArray.length; j++) {
+for (var i=0; i<tempArray.length; i++) {
+if (tempArray[i]==plikiTytuly[j]) {tempArray1.push(plikiAdresy[i]);tempArray2.push(tempArray[i]);tempArray3.push(plikiCzasyTrwania[i])}
+}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+}
+function losujPlayliste() {
+tempArray1=new Array();
+tempArray2=new Array();
+tempArray3=new Array();
+zaznaczone=plikiAdresy[dc.lista.selectedIndex];
+losowanie=new Array();
+while (losowanie.length<plikiAdresy.length) {
+los=Math.floor(plikiAdresy.length*Math.random());
+powtorzyloSie=0;
+for (var i=0; i<losowanie.length; i++) {
+if (los==losowanie[i]) {powtorzyloSie=1;break}
+}
+if (powtorzyloSie==0) {losowanie.push(los);tempArray1.push(plikiAdresy[los]);tempArray2.push(plikiTytuly[los]);tempArray3.push(plikiCzasyTrwania[los])}
+}
+plikiAdresy=tempArray1;
+plikiTytuly=tempArray2;
+plikiCzasyTrwania=tempArray3;
+przebudujListe(0);
+for (var i=0; i<plikiAdresy.length; i++) {
+if (plikiAdresy[i]==zaznaczone) {dc.lista.selectedIndex=i;break}
+}
+}
+function ustawMiejsce() {
+plikZMiejsca=dc.miejscePlik.value;
+if (plikZMiejsca==null||plikZMiejsca=="") {return}
+sciezka=plikZMiejsca.substring(0,plikZMiejsca.lastIndexOf("\\")+1);
+dc.miejsce.value=sciezka;
+if (dc.m3u.checked) {tworzM3U()}
+if (dc.pls.checked) {tworzPLS()}
+}
+function ustawMiejsceZDanych() {
+plikZMiejsca=dc.miejsce.value;
+if (plikZMiejsca==null||plikZMiejsca=="") {return}
+sciezka=plikZMiejsca.substring(0,plikZMiejsca.lastIndexOf("\\")+1);
+if (dc.m3u.checked) {tworzM3U()}
+if (dc.pls.checked) {tworzPLS()}
+}
+function muzykaPodglad() {
+muzykaStart=1;
+dc["muzyka"+muzykaI].src=dc.adres.value;
+var timer;
+clearTimeout(timer);
+muzykaDodaj=-muzykaDodaj;
+muzykaPrzejscie(muzykaI);
+muzykaI+=1;
+if (muzykaI>2) {muzykaI-=2}
+}
+function muzykaPrzejscie(j) {
+this.j=j;
+dc["muzyka"+j].volume=eval("muzykaVol"+j);
+dc["muzyka"+eval(j+muzykaDodaj)].volume=eval("muzykaVol"+eval(j+muzykaDodaj));
+eval("muzykaVol"+j+"+=50");
+eval("muzykaVol"+eval(j+muzykaDodaj)+"-=50");
+eval("if (muzykaVol"+j+">0) {muzykaVol"+j+"=0;clearTimeout(timer)}");
+eval("if (muzykaVol"+eval(j+muzykaDodaj)+"<-10000) {muzykaVol"+eval(j+muzykaDodaj)+"=-10000;dc['muzyka'+eval(j+muzykaDodaj)].src=''}");
+timer=setTimeout("muzykaPrzejscie(j)",1);
+}
+function muzykaStop() {
+muzykaStart=0;
+var timer;
+clearTimeout(timer);
+muzykaDodaj=-muzykaDodaj;
+muzykaPrzejscie(muzykaI);
+muzykaI+=1;
+if (muzykaI>2) {muzykaI-=2}
+}
+function pokazDane() {
+selInd=dc.lista.selectedIndex;
+dc.adres.value=plikiAdresy[selInd];
+dc.tytul.value=plikiTytuly[selInd];
+dc.ss.value=plikiCzasyTrwania[selInd];
+przeliczNaCzas();
+}
+function odczytajPlayliste() {
+zawartosc=dc.doOdczytania.value;
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+typPlaylisty=zawartosc;
+if (typPlaylisty.indexOf("\n")==-1) {return} else {typPlaylisty=typPlaylisty.substring(0,typPlaylisty.indexOf("\n")-1)}
+if (typPlaylisty!="#EXTM3U"&&typPlaylisty!="[playlist]") {alert ("To nie jest prawidłowa playlista!");return};
+tryb=confirm("Czy chcesz, aby odczytane elementy dodać do Twojej playlisty, czy dodać je do nowej playlisty?\nOK - dodaj do mojej playlisty\nAnuluj - dodaj do nowej playlisty");
+zawartosc=dc.doOdczytania.value;
+if (tryb==false) {plikiAdresy=new Array();plikiTytuly=new Array();plikiCzasyTrwania=new Array();sciezka=zawartosc.substring(0,zawartosc.indexOf("\n")-1)}
+if (sciezka.charAt(sciezka.length-1)!="\\"&&sciezka.charAt(sciezka.length-1)!="\/") {sciezka+="\\"}
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+if (typPlaylisty=="#EXTM3U") {odczytajM3U()}
+if (typPlaylisty=="[playlist]") {odczytajPLS()}
+}
+function odczytajM3U() {
+while (zawartosc.length>0) {
+Tytul=zawartosc.substring(zawartosc.indexOf(",")+1,zawartosc.indexOf("\n")-1);
+CzasTrwania=zawartosc.substring(zawartosc.indexOf(":")+1,zawartosc.indexOf(","));
+plikiTytuly.push(Tytul);
+plikiCzasyTrwania.push(eval(Math.floor(parseFloat(CzasTrwania))));
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+Adres=zawartosc.substring(0,zawartosc.indexOf("\n")-1);
+if (Adres.substring(0,1)!="\\"&&Adres.substring(1,2)!=":") {Adres=sciezka+Adres}
+if (Adres.substring(0,1)=="\\") {Adres=sciezka.substring(0,2)+Adres}
+plikiAdresy.push(Adres);
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+if (zawartosc.indexOf("\n")==-1) {zawartosc=""}
+}
+przebudujListe(0);
+dc.lista.selectedIndex=0;
+pokazDane();
+}
+function odczytajPLS() {
+while (zawartosc.length>0) {
+Adres=zawartosc.substring(zawartosc.indexOf("=")+1,zawartosc.indexOf("\n")-1);
+if (Adres.substring(0,1)!="\\"&&Adres.substring(1,2)!=":") {Adres=sciezka+Adres}
+if (Adres.substring(0,1)=="\\") {Adres=sciezka.substring(0,2)+Adres}
+plikiAdresy.push(Adres);
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+Tytul=zawartosc.substring(zawartosc.indexOf("=")+1,zawartosc.indexOf("\n")-1)
+plikiTytuly.push(Tytul);
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+CzasTrwania=zawartosc.substring(zawartosc.indexOf("=")+1,zawartosc.indexOf("\n")-1);
+plikiCzasyTrwania.push(eval(Math.floor(parseFloat(CzasTrwania))));
+zawartosc=zawartosc.substring(zawartosc.indexOf("\n")+1);
+if (zawartosc.substring(0,6)=="Number"||zawartosc.indexOf("\n")==-1) {zawartosc=""}
+}
+przebudujListe(0);
+dc.lista.selectedIndex=0;
+pokazDane();
+}
+function usunPolskieZnaki(tekst) {
+return tekst.replace(/Ą/g,"A").replace(/Ć/g,"C").replace(/Ę/g,"E").replace(/Ł/g,"L").replace(/Ń/g,"N").replace(/Ó/g,"O").replace(/Ś/g,"S").replace(/Ź/g,"Z").replace(/Ż/g,"Z").replace(/ą/g,"a").replace(/ć/g,"c").replace(/ę/g,"e").replace(/ł/g,"l").replace(/ń/g,"n").replace(/ó/g,"o").replace(/ś/g,"s").replace(/€/g,"u").replace(/ź/g,"z").replace(/ż/g,"z");
+}
+function zera(ile,liczba) {
+liczba=liczba.toString();
+if (ile<liczba.length) {ile=liczba.length}
+ile-=liczba.length;
+str=liczba;
+for (var zeraI=1; zeraI<=ile; zeraI++) {str="0"+str}
+return str;
+}
+function duzeLitery(tekst) {
+str="";
+tekst=tekst.toString();
+do {
+if (tekst.lastIndexOf(" ")==-1) {str+=tekst.charAt(0).toUpperCase()+tekst.substring(1);break} else {
+str+=tekst.charAt(0).toUpperCase()+tekst.substring(1,tekst.indexOf(" ")+1);
+tekst=tekst.substring(tekst.indexOf(" ")+1);
+}
+} while (tekst.length>0);
+return str;
+}
+</script>

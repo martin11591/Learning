@@ -1,0 +1,27 @@
+1.K¹t od œrodka do punktu uderzenia (wzi¹œæ pod uwagê, czy wspó³rzêdne okreœlaj¹ œrodek czy te¿ róg)
+
+	qw=Math.abs(xobiekt-xcel);
+	er=Math.abs(yobiekt-ycel);
+	if (qw<er) {qw=er}
+	katdx=(xobiekt-xcel)/qw;
+	katdy=(yobiekt-ycel)/qw;
+	kat=Math.atan2(katdy,katdx)*180/Math.PI;
+
+2.ZnajdŸ k¹t padaj¹cy
+
+	tempx=xcel;
+	tempy=ycel;
+	odl=Math.abs(Math.sqrt((xobiekt-xcel)*(xobiekt-xcel)+(yobiekt-ycel)*(yobiekt-ycel)));
+	tempx+=Math.sin(kat*Math.PI/180)*odl;
+	tempy-=Math.cos(kat*Math.PI/180)*odl;
+
+3.Okreœl k¹t odbity
+
+	qw=Math.abs(xcel-tempx);
+	er=Math.abs(ycel-tempy);
+	if (qw<er) {qw=er}
+	dxkat=(xcel-tempx)/qw;
+	dykat=(ycel-tempy)/qw;
+	kat2=90-Math.atan2(dykat,dxkat)*180/Math.PI;
+	dx=Math.sin(kat2*Math.PI/180);
+	dy=-Math.cos(kat2*Math.PI/180);

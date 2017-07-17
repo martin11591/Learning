@@ -1,0 +1,33 @@
+<html>
+<title>Zamienianie liczby systemu dziesiêtnego na liczbê systemu dwójkowego</title>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<input id="arg" maxlength=16>&nbsp;<input id="obl" type=checkbox onclick="oblicz()">Poka¿ obliczenia<div id="wynik">0=0</div>
+<script>
+dc=document.all;
+dc.arg.onkeyup=oblicz;
+function oblicz() {
+ar=Math.floor(parseFloat(dc.arg.value));
+ob=dc.obl.checked;
+if (isNaN(ar)) {return}
+dc.wynik.innerHTML=licz(ar,ob,"field");
+}
+function licz(liczba,obliczenia,typ) {
+if (typ=="alert") {znak="\n"} else {znak="<br>"}
+l=liczba;
+txt1="";
+txt2="";
+while (l>=1) {
+if (obliczenia==true) {txt1+=l+":2="}
+r=l%2;
+l=Math.floor(parseFloat(l/2));
+if (obliczenia==true) {txt1+=l+" r. "+r+znak}
+txt2=r+txt2;
+}
+txt1=txt2+znak+znak+txt1;
+if (liczba==0) {txt1="0=0"}
+return liczba+"="+txt1;
+}
+</script>

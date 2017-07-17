@@ -1,0 +1,657 @@
+<html>
+<body scroll=auto>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+</head>
+<style>
+body{font-family:Tahoma;font-size:8pt;font-weight:bold;cursor:default}
+table.poleInfo{font-family:Tahoma;font-size:8pt;font-weight:normal}
+table.poleInfo.tr,td{padding:0px}
+td.poleImg{width:72px;height:72px;text-align:center;vertical-align:middle;padding:10px}
+img.znak{width:72px;height:72px}
+</style>
+<table class=poleInfo align=center border=0 style="text-align:center;veritcal-align:middle;width:100%">
+<tr><td>Ilość rozgrywek</td><td>Ilość remisów</td><td>Ilość wygranych gracza 1</td><td>Ilość wygranych gracza 2</td><td>Średni czas gracza 1</td><td>Łączny czas gracza 1</td><td>Średni czas gracza 2</td><td>Łączny czas gracza 2</td><td>Średni czas ruchu</td><td>Łączny czas</td></tr>
+<tr><td>Matches</td><td>Draws</td><td>Player 1's wins</td><td>Player 2's wins</td><td>Player 1's average time</td><td>Player 1's total time</td><td>Player 2's average time</td><td>Player 2's total time</td><td>Avg. time of movement</td><td>Total time</td></tr>
+<tr><td id="muchPlayed">0</td><td id="muchDrawed">0 - 0.00%</td><td id="winBy1">0 - 0.00%</td><td id="winBy2">0 - 0.00%</td><td id="player1AverageTime">0:00:00.000</td><td id="player1TotalTime">0:00:00.000</td><td id="player2AverageTime">0:00:00.000</td><td id="player2TotalTime">0:00:00.000</td><td id="moveAverageTime">0:00:00.000</td><td id="matchesTotalTime">0:00:00.000</td></tr><tr><td id="poleStat" colspan=10 style="font-size:32pt"></td></tr></table>
+<table id="poleGry" align=center cellpadding=5 cellspacing=2 border=1 bordercolor=black frame=void style="position:absolute">
+<tr><td class=poleImg><img id="polea1" class="znak" src="img\empty.png"></img></td><td class=poleImg><img id="poleb1" class="znak" src="img\empty.png"></img></td><td class=poleImg><img id="polec1" class="znak" src="img\empty.png"></img></td></tr>
+<tr><td class=poleImg><img id="polea2" class="znak" src="img\empty.png"></img></td><td class=poleImg><img id="poleb2" class="znak" src="img\empty.png"></img></td><td class=poleImg><img id="polec2" class="znak" src="img\empty.png"></img></td></tr>
+<tr><td class=poleImg><img id="polea3" class="znak" src="img\empty.png"></img></td><td class=poleImg><img id="poleb3" class="znak" src="img\empty.png"></img></td><td class=poleImg><img id="polec3" class="znak" src="img\empty.png"></img></td></tr>
+</table>
+<img id="winnerImg" src="img\empty.png" style="width:284px;height:284px;z-index:-100;position:absolute;filter:alpha(opacity=50)"></img>
+<script>
+
+//////////////////////////////////////////////////////////////////////////////////
+//	 									//
+//	 Prosta gra: Kółko i krzyżyk						//
+//	 Simple game: Circle and cross						//
+//	 									//
+//	 Uwzględnia trzy poziomy trudności					//
+//	 Includes three levels of difficulty					//
+//	 									//
+//	 Na łatwym komputer strzela losowo					//
+//	 On easy the computer shooting randomly					//
+//	 									//
+//	 Na średnim komputer broni się gdy musi					//
+//	 On medium the computer defense self if he must				//
+//	 									//
+//	 Na trudnym komputer stara się ułożyć linię jako pierwszy		//
+//	 (jeszcze nie zaprogramowano)						//
+//	 On hard the computer try to make the line as first			//
+//	 (not programmed yet)							//
+//	 									//
+//	 									//
+//	 									//
+//	 Testowane na Internet Explorer 6 i Mozilla Firefox 3.5.1		//
+//	 Tested on Internet Explorer 6 and Mozilla Firefox 3.5.1		//
+// 										//
+//	 Gra zaprogramowana przez Marcina Podraza				//
+//	 The game programmed by Marcin Podraza					//
+//	 									//
+//	 Jestem pewien, że kod źródłowy może być bardziej przejrzysty		//
+//	 ale napisałem tą grę aby przetestować moje umiejętności progr. ;) 	//
+//	 I am sure that the source code may be more clean,			//
+//	 but I wrote this game to test my programming skills ;)			//
+//	 									//
+//	 Przepraszam za mój angielski :)					//
+//	 I am sorry for my english :)						//
+//	   									//
+//////////////////////////////////////////////////////////////////////////////////
+
+dc=document;
+dca=function(id) {
+if (dc.all) return dc.all[id];
+else
+return dc.getElementById(id);
+}
+emptyField=new Image();
+emptyField.src="img\\empty.png";
+crossField=new Image();
+crossField.src="img\\cross.png";
+circleField=new Image();
+circleField.src="img\\circle.png";
+emptyFieldInv=new Image();
+emptyFieldInv.src="img\\emptyInv.png";
+crossFieldInv=new Image();
+crossFieldInv.src="img\\crossInv.png";
+circleFieldInv=new Image();
+circleFieldInv.src="img\\circleInv.png";
+lineA1toC1=new Image();
+lineA1toC1.src="img\\lineA1toC1.png";
+lineA2toC2=new Image();
+lineA2toC2.src="img\\lineA2toC2.png";
+lineA3toC3=new Image();
+lineA3toC3.src="img\\lineA3toC3.png";
+lineA1toA3=new Image();
+lineA1toA3.src="img\\lineA1toA3.png";
+lineB1toB3=new Image();
+lineB1toB3.src="img\\lineB1toB3.png";
+lineC1toC3=new Image();
+lineC1toC3.src="img\\lineC1toC3.png";
+lineA1toC3=new Image();
+lineA1toC3.src="img\\lineA1toC3.png";
+lineC1toA3=new Image();
+lineC1toA3.src="img\\lineC1toA3.png";
+snd=new Image();
+snd.src="D:\\MARTIN\\Muzyka\\Z gier\\Need for Speed Undercover\\20 - Pendulum - 9.000 Miles.mp3";
+snd.html=document.createElement("embed");
+snd.html.setAttribute("src",unescape(snd.src));
+snd.html.setAttribute("type","application/x-mplayer2");
+snd.html.setAttribute("pluginspage","http:\/\/www.microsoft.com\/Windows\/MediaPlayer\/download\/default.asp");
+snd.html.setAttribute("id","bgSnd");
+snd.html.setAttribute("volume",0);
+snd.html.setAttribute("loop","-1");
+snd.html.setAttribute("ShowDisplay","0");
+snd.html.setAttribute("ShowStatusBar","0");
+snd.html.setAttribute("ShowControls","0");
+//document.body.appendChild(snd.html);
+Array.prototype.sum=function() {
+sumTmp=0;
+for (sumI in this) {
+sumTmp+=toNumber(this[sumI]);
+}
+return sumTmp;
+}
+Array.prototype.random=function() {
+return this[Math.round(Math.random()*(this.length-1))];
+}
+alpha=100;
+player1Wins=0;
+player2Wins=0;
+player1AvgTimeArr=new Array();
+player1AvgTime=0;
+player2AvgTimeArr=new Array();
+player2AvgTime=0;
+player1ToTime=0;
+player2ToTime=0;
+moveAvgTimeArr=new Array();
+totalTime=0;
+startTimer=0;
+runTimer=0;
+stopTimer=0;
+overallWins=0;
+draws=0;
+matches=0;
+gameStarted=0;
+gameMoves=0;
+field="";
+player=0;
+centerObject('poleGry');
+centerObject('winnerImg');
+window.onresize=window.onscroll=function() {centerObject('poleGry');centerObject('winnerImg')}
+setInfo("poleStat","Naciśnij dowolny klawisz, aby rozpocząć grę.<br>Press any key to start the game.",0);
+dc.onclick=dc.oncontextmenu=function() {initGame();dc.onclick=dc.oncontextmenu=function() {return false};return false}
+this.typingCriteria=new RegExp("","gi");
+this.typingOnce=true;
+this.typingEval="dc.onclick=dc.onkeydown=null;dc.oncontextmenu=function() {return false};initGame()";
+dc.onkeydown=typing;
+function centerObject(obj) {
+ob=dca(obj);
+obH=ob.clientWidth;
+obW=ob.clientHeight;
+winH=dc.body.clientWidth;
+winW=dc.body.clientHeight;
+with (ob.style) {
+left=winH/2-obH/2+dc.body.scrollLeft;
+top=winW/2-obW/2+dc.body.scrollTop;
+}
+}
+function setInfo(id,txt,time) {
+var infoTimer;
+this.id=id;
+txt=txt.toString();
+dca(id).innerHTML=txt;
+alpha=100;
+dca(id).style.filter="alpha(opacity="+alpha+")";
+clearInterval(infoTimer);
+time=toNumber(time);
+if (time<=1000) {clearInterval(infoTimer);return}
+if (time>1000) {
+timeStep=time/150;
+infoTimer=setInterval(function() {
+if (time<=0) {clearTimeout(infoTimer);return}
+alpha-=1;
+dca(id).style.filter="alpha(opacity="+alpha+")";
+if (alpha<=0) {
+dca(id).innerHTML="";
+dca(id).style.filter="alpha(opacity="+alpha+")";
+alpha=100;
+clearInterval(infoTimer);
+}
+},timeStep);
+}
+}
+function initGame() {
+game=new Object();
+game.place=function(field,player) {
+var fieldTimer;
+field=field.toString();
+field=field.substring(0,2);
+field=field.toLowerCase();
+player=toNumber(player);
+if (player<0) {player=0}
+if (player>2) {player=2}
+test=testField(field);
+if (test==-1) {setInfo("poleStat","Nieznany błąd pola. Wybierz inne pole.<br>Unknown field error. Choose another field.",0)}
+if (test==1) {setInfo("poleStat","Pole zajęte przez "+((numPlayers==1&&player==1)?"Ciebie":"Gracza 1")+". Wybierz inne pole.<br>The field marked by "+((numPlayers==1&&player==1)?"You":"Player 1")+". Choose another field.",0)}
+if (test==2) {setInfo("poleStat","Pole zajęte przez Gracza 2. Wybierz inne pole.<br>The field marked by Player 2. Choose another field.",0)}
+if (test==0) {
+eval("game.board."+field+"="+player+";");
+dca("pole"+field).src=(player==0?emptyField.src:player==1?crossField.src:circleField.src);
+alphaField=0;
+fieldTimer=setInterval(function() {
+if (alphaField>=100) {clearTimeout(fieldTimer)}
+alphaField+=1;
+dca("pole"+field).style.filter="alpha(opacity="+alphaField+")";
+},1);
+return test;
+}
+}
+player=1+Math.round(Math.random());
+setInfo("poleStat","Liczba graczy (1 lub 2) ?",0);
+this.typingCriteria=new RegExp("[12]","g");
+this.typingOnce=true;
+this.typingEval="numPlayers=toNumber(conv);setInfo(\"poleStat\",(numPlayers==1?\"Jeden ludzki gracz\":\"Dwóch ludzkich graczy\")+\" będzie grać.<br>\"+(numPlayers==1?\"One human player\":\"Two human players\")+\" will be play.\",3000);(numPlayers==1?setTimeout(\"setDifficulty()\",3000):setTimeout(\"beginGame(2,player)\",3000))";
+dc.onkeydown=typing;
+}
+function setDifficulty() {
+setInfo("poleStat","Wybierz poziom trudności: 1 - Łatwy, 2 - Średni, 3 - Trudny<br>Choose level of difficulty: 1 - Easy, 2 - Medium, 3 - Hard",0);
+this.typingCriteria=new RegExp("[123]","g");
+this.typingOnce=true;
+this.typingEval="difficult=toNumber(conv);setInfo(\"poleStat\",\"Poziom trudności został ustawiony na \"+(difficult==1?\"łatwy\":difficult==2?\"średni\":\"trudny\")+\".<br>Difficult set to \"+(difficult==1?\"easy\":difficult==2?\"medium\":\"hard\")+\".\",3000);setTimeout(\"beginGame(1,player)\",3000)";
+dc.onkeydown=typing;
+}
+function clearGameBoard() {
+game.board={
+a1:0, b1:0, c1:0,
+a2:0, b2:0, c2:0,
+a3:0, b3:0, c3:0
+}
+dca("polea1").src=emptyField.src;
+dca("poleb1").src=emptyField.src;
+dca("polec1").src=emptyField.src;
+dca("polea2").src=emptyField.src;
+dca("poleb2").src=emptyField.src;
+dca("polec2").src=emptyField.src;
+dca("polea3").src=emptyField.src;
+dca("poleb3").src=emptyField.src;
+dca("polec3").src=emptyField.src;
+dca("winnerImg").src=emptyField.src;
+dca("winnerImg").style.zIndex=-100;
+}
+function toNumber(tmp) {
+tmp=tmp.toString();
+tmp=tmp.replace(/[^0-9.]/g,"");
+if (tmp.indexOf(".")!=-1) {
+if (tmp.match(/[.]/g).length>1) {tmp=tmp.substring(0,tmp.indexOf(".",tmp.indexOf(".")+1))}
+}
+if (tmp==".") {tmp=0}
+tmp=eval(tmp);
+return (tmp!=undefined)?tmp:"isNaN";
+}
+function round(tmp,ile,how) {
+tmp=toNumber(tmp);
+tmp=Math.round(tmp*Math.pow(10,ile))/Math.pow(10,ile);
+tmp=tmp.toString();
+if (tmp.indexOf(".")==-1&&ile>0) {
+tmp+=".";
+}
+for (i=tmp.substring(tmp.indexOf(".")+1).length; i<ile; i++) {tmp+="0"}
+return (how=="s")?tmp:toNumber(tmp);
+}
+function typing(e) {
+if (window.event) {keynum=event.keyCode}
+else
+if (e.which) {keynum=e.which}
+conv=String.fromCharCode(keynum);
+typingTest=typingCriteria.test(conv);
+if (typingTest==true) {
+if (typingOnce==true) {
+dc.onkeydown=null;
+eval(typingEval);
+return false;
+}
+return true;
+}
+else return false;
+}
+function hoverIn() {
+field=this.id;
+field=field.toString();
+field=field.toLowerCase();
+field=field.substring(4);
+test=testField(field);
+if (test==0) {
+dca("pole"+field).src=(player==0?emptyField.src:player==1?crossField.src:circleField.src);
+}
+return false;
+}
+function hoverOut() {
+field=this.id;
+field=field.toString();
+field=field.toLowerCase();
+field=field.substring(4);
+test=testField(field);
+if (test==0) {
+dca("pole"+field).src=emptyField.src;
+}
+return false;
+}
+function testField(field) {
+field=field.toString();
+field=field.substring(0,2);
+field=field.toLowerCase();
+if (field=="") {return}
+result=0;
+eval("if (game.board."+field+"==undefined) {result=-1}");
+if (result==-1) {return -1}
+eval("if (game.board."+field+"!=0) {result=game.board."+field+"}");
+return result;
+}
+function testFieldIsThreated(field) {
+field=field.toString();
+field=field.substring(0,2);
+field=field.toLowerCase();
+if (field=="") {return -1}
+if (eval("game.board."+field)==undefined) {return -1}
+if (field=="a1") {
+if ((game.board.b1==game.board.c1)&&(game.board.b1!=0&&game.board.c1!=0)) {return game.board.b1} // horizontal line on top
+if ((game.board.b2==game.board.c3)&&(game.board.b2!=0&&game.board.c3!=0)) {return game.board.b2} // diagonal line from left top corner to right bottom corner
+if ((game.board.a2==game.board.a3)&&(game.board.a2!=0&&game.board.a3!=0)) {return game.board.a2} // vertical line on left side
+}
+if (field=="b1") {
+if ((game.board.a1==game.board.c1)&&(game.board.a1!=0&&game.board.c1!=0)) {return game.board.a1} // horizontal line on top
+if ((game.board.b2==game.board.b3)&&(game.board.b2!=0&&game.board.b3!=0)) {return game.board.b2} // vertical line on middle
+}
+if (field=="c1") {
+if ((game.board.b1==game.board.a1)&&(game.board.b1!=0&&game.board.a1!=0)) {return game.board.b1} // horizontal line on top
+if ((game.board.b2==game.board.a3)&&(game.board.b2!=0&&game.board.a3!=0)) {return game.board.b2} // diagonal line from right top corner to left bottom corner
+if ((game.board.c2==game.board.c3)&&(game.board.c2!=0&&game.board.c3!=0)) {return game.board.c2} // vertical line on right side
+}
+if (field=="a2") {
+if ((game.board.b2==game.board.c2)&&(game.board.b2!=0&&game.board.c2!=0)) {return game.board.b2} // horizontal line on middle
+if ((game.board.a1==game.board.a3)&&(game.board.a1!=0&&game.board.a3!=0)) {return game.board.a1} // vertical line on left side
+}
+if (field=="b2") {
+if ((game.board.a1==game.board.c3)&&(game.board.a1!=0&&game.board.c3!=0)) {return game.board.a1} // diagonal line from left top corner to right bottom corner
+if ((game.board.b1==game.board.b3)&&(game.board.b1!=0&&game.board.b3!=0)) {return game.board.b1} // vertical line on middle
+if ((game.board.a3==game.board.c1)&&(game.board.a3!=0&&game.board.c1!=0)) {return game.board.a3} // diagonal line from right top corner to left bottom corner
+if ((game.board.c2==game.board.a2)&&(game.board.c2!=0&&game.board.a2!=0)) {return game.board.c2} // horizontal line on middle
+}
+if (field=="c2") {
+if ((game.board.b2==game.board.a2)&&(game.board.b2!=0&&game.board.a2!=0)) {return game.board.b2} // horizontal line on middle
+if ((game.board.c1==game.board.c3)&&(game.board.c1!=0&&game.board.c3!=0)) {return game.board.c1} // vertical line on right side
+}
+if (field=="a3") {
+if ((game.board.b3==game.board.c3)&&(game.board.b3!=0&&game.board.c3!=0)) {return game.board.b3} // horizontal line on bottom
+if ((game.board.b2==game.board.c1)&&(game.board.b2!=0&&game.board.c1!=0)) {return game.board.b2} // diagonal line from left bottom corner to right top corner
+if ((game.board.a2==game.board.a1)&&(game.board.a2!=0&&game.board.a1!=0)) {return game.board.a2} // vertical line on left side
+}
+if (field=="b3") {
+if ((game.board.a3==game.board.c3)&&(game.board.a3!=0&&game.board.c3!=0)) {return game.board.a3} // horizontal line on bottom
+if ((game.board.b2==game.board.b1)&&(game.board.b2!=0&&game.board.b1!=0)) {return game.board.b2} // vertical line on middle
+}
+if (field=="c3") {
+if ((game.board.b3==game.board.a3)&&(game.board.b3!=0&&game.board.a3!=0)) {return game.board.b3} // horizontal line on bottom
+if ((game.board.b2==game.board.a1)&&(game.board.b2!=0&&game.board.a1!=0)) {return game.board.b2} // diagonal line from right bottom corner to left top corner
+if ((game.board.c2==game.board.c1)&&(game.board.c2!=0&&game.board.c1!=0)) {return game.board.c2} // vertical line on right side
+}
+return 0;
+}
+function testThreatedFields(byWho) {
+fieldsToTest=new Array("a1","b1","c1","a2","b2","c2","a3","b3","c3");
+fieldsThreated=new Array();
+for (fieldsI=0; fieldsI<fieldsToTest.length; fieldsI++) {
+if (testFieldIsThreated(fieldsToTest[fieldsI])==byWho&&testField(fieldsToTest[fieldsI])==0) {
+fieldsThreated.push(fieldsToTest[fieldsI]);
+}
+}
+return fieldsThreated;
+}
+function testGameRules() {
+// Test for game rules - three player's symbol on one line (straight or diagonal) has win
+if (game.board.a1!=0&&game.board.b1!=0&&game.board.c1!=0&&game.board.a1==game.board.b1&&game.board.b1==game.board.c1) {return {testPlayer: game.board.a1, testLine: "a1b1c1"}} // Player [game.board.a1] win, horizontal line on top
+if (game.board.a2!=0&&game.board.b2!=0&&game.board.c2!=0&&game.board.a2==game.board.b2&&game.board.b2==game.board.c2) {return {testPlayer: game.board.a2, testLine: "a2b2c2"}} // Player [testPlayer] win, horizontal line on middle
+if (game.board.a3!=0&&game.board.b3!=0&&game.board.c3!=0&&game.board.a3==game.board.b3&&game.board.b3==game.board.c3) {return {testPlayer: game.board.a3, testLine: "a3b3c3"}} // Player [testPlayer] win, horizontal line on bottom
+if (game.board.a1!=0&&game.board.a2!=0&&game.board.a3!=0&&game.board.a1==game.board.a2&&game.board.a2==game.board.a3) {return {testPlayer: game.board.a1, testLine: "a1a2a3"}} // Player [testPlayer] win, vertical line on left side
+if (game.board.b1!=0&&game.board.b2!=0&&game.board.b3!=0&&game.board.b1==game.board.b2&&game.board.b2==game.board.b3) {return {testPlayer: game.board.b1, testLine: "b1b2b3"}} // Player [testPlayer] win, vertical line on middle
+if (game.board.c1!=0&&game.board.c2!=0&&game.board.c3!=0&&game.board.c1==game.board.c2&&game.board.c2==game.board.c3) {return {testPlayer: game.board.c1, testLine: "c1c2c3"}} // Player [testPlayer] win, vertical line on top side
+if (game.board.a1!=0&&game.board.b2!=0&&game.board.c3!=0&&game.board.a1==game.board.b2&&game.board.b2==game.board.c3) {return {testPlayer: game.board.a1, testLine: "a1b2c3"}} // Player [testPlayer] win, diagonal line from left top corner to right bottom corner
+if (game.board.c1!=0&&game.board.b2!=0&&game.board.a3!=0&&game.board.c1==game.board.b2&&game.board.b2==game.board.a3) {return {testPlayer: game.board.a3, testLine: "c1b2a3"}} // Player [testPlayer] win, diagonal line from right top corner to left bottom corner
+// Test for fill out gameboard
+if (game.board.a1!=0&&game.board.b1!=0&&game.board.c1!=0&&game.board.a2!=0&&game.board.b2!=0&&game.board.c2!=0&&game.board.a3!=0&&game.board.b3!=0&&game.board.c3!=0) {return {testPlayer: 0, testLine: "no"}} // Draw
+return {testPlayer: null, testLine: null}
+}
+function beginGame(numberOfPlayers,player) {
+numberOfPlayers=toNumber(numberOfPlayers);
+if (isNaN(numberOfPlayers)) {numberOfPlayers=1}
+if (numberOfPlayers<1) {numberOfPlayers=1}
+if (numberOfPlayers>2) {numberOfPlayers=2}
+if (gameStarted==0) {
+clearGameBoard();
+if (player<=0||player==undefined||isNaN(player)) {player=1+Math.round(Math.random())}
+}
+if (numberOfPlayers==1) {
+if (player==1&&gameStarted==0) {info="Ty rozpoczynasz grę.<br>You start the game.";setInterface(player)}
+if (player==2&&gameStarted==0) {info="Komputer rozpoczyna grę.<br>Computer start the game."}
+if (gameStarted==0) {setInfo("poleStat",info,0);gameStarted=1}
+if (gameStarted==1) {
+if (player==1) {info="Teraz Ty.<br>Now You."}
+if (player==2) {info="Teraz Komputer.<br>Now Computer."}
+setInfo("poleStat",info,0);
+if (player==1) {setInterface(player)}
+if (player==2) {
+timerDate=new Date();
+startTimer=timerDate.getTime();
+if (difficult==1) {
+// Computer "thinking" on easy
+// Simple shooting randomly field
+do
+{
+x=String.fromCharCode(Math.round(Math.random()*2)+65).toLowerCase();
+y=Math.round(Math.random()*2+1);
+field=x+y;
+test=testField(field);
+}
+while (test!=0);
+setTimeout(function() {
+game.place(field,player);
+timerDate=new Date();
+stopTimer=timerDate.getTime();
+diff=stopTimer-startTimer;
+player2AvgTimeArr.push(diff);
+player2AvgTime=Math.round(player2AvgTimeArr.sum()/player2AvgTimeArr.length);
+player2ToTime+=diff;
+moveAvgTimeArr.push(diff);
+moveAvgTime=Math.round(moveAvgTimeArr.sum()/moveAvgTimeArr.length);
+totalTime+=diff;
+timeInfo();
+test=testGameRules();
+if (test.testPlayer!=null) {stopGame(test.testPlayer,test.testLine)}
+else {
+player+=1;
+if (player<1) {player=2}
+if (player>2) {player=1}
+beginGame(numPlayers,player);
+}
+},Math.round(Math.random()*2499+501));
+}
+if (difficult==2) {
+fields=new Array("a1","b1","c1","a2","b2","c2","a3","b3","c3");
+threatedFields=testThreatedFields(1);
+if (threatedFields.length>0) {
+randomize=Math.round(Math.random()*(threatedFields.length-1));
+field=threatedFields[randomize];
+} else {
+do
+{
+x=String.fromCharCode(Math.round(Math.random()*2)+65).toLowerCase();
+y=Math.round(Math.random()*2+1);
+field=x+y;
+test=testField(field);
+}
+while (test!=0);
+}
+setTimeout(function() {
+game.place(field,player);
+timerDate=new Date();
+stopTimer=timerDate.getTime();
+diff=stopTimer-startTimer;
+player2AvgTimeArr.push(diff);
+player2AvgTime=Math.round(player2AvgTimeArr.sum()/player2AvgTimeArr.length);
+player2ToTime+=diff;
+moveAvgTimeArr.push(diff);
+moveAvgTime=Math.round(moveAvgTimeArr.sum()/moveAvgTimeArr.length);
+totalTime+=diff;
+timeInfo();
+test=testGameRules();
+if (test.testPlayer!=null) {stopGame(test.testPlayer,test.testLine)}
+else {
+player+=1;
+if (player<1) {player=2}
+if (player>2) {player=1}
+beginGame(numPlayers,player);
+}
+},Math.round(Math.random()*1749+251));
+}
+if (difficult==3) {
+fields=new Array("a1","b1","c1","a2","b2","c2","a3","b3","c3");
+// Defense
+threatedFields=testThreatedFields();
+if (threatedFields.length>0) {
+randomize=Math.round(Math.random()*(threatedFields.length-1));
+field=threatedFields[randomize];
+} else {
+// Attack
+fieldsOwnerships=new Array(game.board.a1,game.board.b1,game.board.c1,game.board.a2,game.board.b2,game.board.c2,game.board.a3,game.board.b3,game.board.c3);
+for (attackI=0; attackI<fields.length; attackI++) {
+
+}
+}
+return;
+}
+gameMoves+=1;
+}
+}
+}
+if (numberOfPlayers==2) {
+if (gameStarted==1) {
+if (player==1) {info="Teraz Gracz 1.<br>Now Player 1."}
+if (player==2) {info="Teraz Gracz 2.<br>Now Player 2."}
+setInfo("poleStat",info,0);
+}
+if (gameStarted==0) {info="Gracz "+player+" rozpoczyna grę.<br>Player "+player+" start the game.";setInfo("poleStat",info,0);gameStarted=1}
+setInterface(player);
+}
+}
+function setInterface(player) {
+this.player=player;
+if (numPlayers==1&&player==1||numPlayers==2) {
+timerDate=new Date();
+startTimer=timerDate.getTime();
+dca("polea1").onmouseover=hoverIn;dca("polea1").onmouseout=hoverOut;
+dca("poleb1").onmouseover=hoverIn;dca("poleb1").onmouseout=hoverOut;
+dca("polec1").onmouseover=hoverIn;dca("polec1").onmouseout=hoverOut;
+dca("polea2").onmouseover=hoverIn;dca("polea2").onmouseout=hoverOut;
+dca("poleb2").onmouseover=hoverIn;dca("poleb2").onmouseout=hoverOut;
+dca("polec2").onmouseover=hoverIn;dca("polec2").onmouseout=hoverOut;
+dca("polea3").onmouseover=hoverIn;dca("polea3").onmouseout=hoverOut;
+dca("poleb3").onmouseover=hoverIn;dca("poleb3").onmouseout=hoverOut;
+dca("polec3").onmouseover=hoverIn;dca("polec3").onmouseout=hoverOut;
+dca("polea1").onclick=dca("polea1").oncontextmenu=fieldChosen;
+dca("poleb1").onclick=dca("poleb1").oncontextmenu=fieldChosen;
+dca("polec1").onclick=dca("polec1").oncontextmenu=fieldChosen;
+dca("polea2").onclick=dca("polea2").oncontextmenu=fieldChosen;
+dca("poleb2").onclick=dca("poleb2").oncontextmenu=fieldChosen;
+dca("polec2").onclick=dca("polec2").oncontextmenu=fieldChosen;
+dca("polea3").onclick=dca("polea3").oncontextmenu=fieldChosen;
+dca("poleb3").onclick=dca("poleb3").oncontextmenu=fieldChosen;
+dca("polec3").onclick=dca("polec3").oncontextmenu=fieldChosen;
+}
+}
+function unsetInterface() {
+dca("polea1").onmouseover=dca("polea1").onmouseout=null;
+dca("poleb1").onmouseover=dca("poleb1").onmouseout=null;
+dca("polec1").onmouseover=dca("polec1").onmouseout=null;
+dca("polea2").onmouseover=dca("polea2").onmouseout=null;
+dca("poleb2").onmouseover=dca("poleb2").onmouseout=null;
+dca("polec2").onmouseover=dca("polec2").onmouseout=null;
+dca("polea3").onmouseover=dca("polea3").onmouseout=null;
+dca("poleb3").onmouseover=dca("poleb3").onmouseout=null;
+dca("polec3").onmouseover=dca("polec3").onmouseout=null;
+dca("polea1").onclick=null;dca("polea1").oncontextmenu=function() {return false}
+dca("poleb1").onclick=null;dca("poleb1").oncontextmenu=function() {return false}
+dca("polec1").onclick=null;dca("polec1").oncontextmenu=function() {return false}
+dca("polea2").onclick=null;dca("polea2").oncontextmenu=function() {return false}
+dca("poleb2").onclick=null;dca("poleb2").oncontextmenu=function() {return false}
+dca("polec2").onclick=null;dca("polec2").oncontextmenu=function() {return false}
+dca("polea3").onclick=null;dca("polea3").oncontextmenu=function() {return false}
+dca("poleb3").onclick=null;dca("poleb3").oncontextmenu=function() {return false}
+dca("polec3").onclick=null;dca("polec3").oncontextmenu=function() {return false}
+}
+function fieldChosen() {
+if (numPlayers==1&&player==1||numPlayers==2) {field=this.id}
+field=field.toString();
+field=field.toLowerCase();
+field=field.substring(4);
+unsetInterface();
+test=game.place(field,player);
+timerDate=new Date();
+stopTimer=timerDate.getTime();
+diff=stopTimer-startTimer;
+moveAvgTimeArr.push(diff);
+moveAvgTime=Math.round(moveAvgTimeArr.sum()/moveAvgTimeArr.length);
+totalTime+=diff;
+if (player==1) {
+player1AvgTimeArr.push(diff);
+player1AvgTime=Math.round(player1AvgTimeArr.sum()/player1AvgTimeArr.length);
+player1ToTime+=diff;
+}
+if (player==2) {
+player2AvgTimeArr.push(diff);
+player2AvgTime=Math.round(player2AvgTimeArr.sum()/player2AvgTimeArr.length);
+player2ToTime+=diff;
+}
+timeInfo();
+if (test!=0) {setTimeout("beginGame(numPlayers,player)",3000);return}
+test=testGameRules();
+gameMoves+=1;
+if (test.testPlayer!=null) {stopGame(test.testPlayer,test.testLine);return}
+player+=1;
+if (player<1) {player=2}
+if (player>2) {player=1}
+beginGame(numPlayers,player);
+}
+function stopGame(winner,line) {
+winner=toNumber(winner);
+if (winner<0) {winner=0}
+if (winner>2) {winner=2}
+line=line.toString();
+line=line.substring(0,6).toLowerCase().replace(/[^a-c1-3]/g,"");
+matches+=1;
+if (winner==0) {
+draws+=1;
+setInfo("poleStat","Linia nie ułożona. Brak wolnych pól. Remis.<br>The line is not maked. Out of free fields. Draw.",3500);
+}
+if (winner==1) {
+player1Wins+=1;
+overallWins+=1;
+setInfo("poleStat","Linia ułożona. Wygrał"+(numPlayers==1?"eś.":" Gracz 1.")+"<br>The line is maked. "+(numPlayers==1?"You":"Player 1")+" win.",3500);
+dca("winBy1").innerHTML=player1Wins+" - "+round(player1Wins*100/overallWins,2,"s")+"%";
+dca("winBy2").innerHTML=player2Wins+" - "+round(player2Wins*100/overallWins,2,"s")+"%";
+}
+if (winner==2) {
+player2Wins+=1;
+overallWins+=1;
+setInfo("poleStat","Linia ułożona. Wygrał "+(numPlayers==1?"Komputer.":"Gracz 2.")+"<br>The line is maked. "+(numPlayers==1?"Computer":"Player 2")+" win.",3500);
+dca("winBy1").innerHTML=player1Wins+" - "+round(player1Wins*100/overallWins,2,"s")+"%";
+dca("winBy2").innerHTML=player2Wins+" - "+round(player2Wins*100/overallWins,2,"s")+"%";
+}
+showWinnerLine(line);
+dca("muchPlayed").innerHTML=matches;
+dca("muchDrawed").innerHTML=draws+" - "+round(draws*100/matches,2,"s")+"%";
+gameStarted=0;
+gameMoves=0;
+field="";
+player+=1;
+if (player<1) {player=2}
+if (player>2) {player=1}
+timeInfo();
+setTimeout(function() {
+setInfo("poleStat","Naciśnij dowolny klawisz, aby rozpocząć grę.<br>Press any key to start the game.",0);
+dc.onclick=dc.oncontextmenu=function() {beginGame(numPlayers,player);dc.onclick=dc.oncontextmenu=function() {return false};return false}
+this.typingCriteria=new RegExp("","gi");
+this.typingOnce=true;
+this.typingEval="dc.onclick=dc.onkeydown=null;dc.oncontextmenu=function() {return false};beginGame(numPlayers,player)";
+dc.onkeydown=typing;
+},3500);
+}
+function fillChars(fillNumber,howMuch,char,where) {
+fillNumber=fillNumber.toString();
+nLen=fillNumber.length;
+for (fillI=1; fillI<=howMuch-nLen; fillI++) {
+if (where==0) {fillNumber=char+fillNumber}
+if (where==1) {fillNumber=fillNumber+char}
+}
+return fillNumber;
+}
+function showWinnerLine(line) {
+line=line.substring(0,6).toLowerCase().replace(/[^a-c1-3]/g,"");
+if (line.length<6||!line||line=="undefined") {return}
+eval("dca(\"winnerImg\").src=line"+line.substring(0,2).toUpperCase()+"to"+line.substring(4,6).toUpperCase()+".src;");
+dca("winnerImg").style.zIndex=100;
+}
+function playTimerFunction() {
+}
+function timeInfo() {
+dca("player1AverageTime").innerHTML=Math.floor(player1AvgTime/1000/60/60)+":"+fillChars(Math.floor(player1AvgTime/1000/60%60),2,"0",0)+":"+fillChars(Math.floor(player1AvgTime/1000%60),2,"0",0)+"."+fillChars(player1AvgTime%1000,3,"0",0);
+dca("player1TotalTime").innerHTML=Math.floor(player1ToTime/1000/60/60)+":"+fillChars(Math.floor(player1ToTime/1000/60%60),2,"0",0)+":"+fillChars(Math.floor(player1ToTime/1000%60),2,"0",0)+"."+fillChars(player1ToTime%1000,3,"0",0);
+dca("player2AverageTime").innerHTML=Math.floor(player2AvgTime/1000/60/60)+":"+fillChars(Math.floor(player2AvgTime/1000/60%60),2,"0",0)+":"+fillChars(Math.floor(player2AvgTime/1000%60),2,"0",0)+"."+fillChars(player2AvgTime%1000,3,"0",0);
+dca("player2TotalTime").innerHTML=Math.floor(player2ToTime/1000/60/60)+":"+fillChars(Math.floor(player2ToTime/1000/60%60),2,"0",0)+":"+fillChars(Math.floor(player2ToTime/1000%60),2,"0",0)+"."+fillChars(player2ToTime%1000,3,"0",0);
+dca("moveAverageTime").innerHTML=Math.floor(moveAvgTime/1000/60/60)+":"+fillChars(Math.floor(moveAvgTime/1000/60%60),2,"0",0)+":"+fillChars(Math.floor(moveAvgTime/1000%60),2,"0",0)+"."+fillChars(moveAvgTime%1000,3,"0",0);
+dca("matchesTotalTime").innerHTML=Math.floor(totalTime/1000/60/60)+":"+fillChars(Math.floor(totalTime/1000/60%60),2,"0",0)+":"+fillChars(Math.floor(totalTime/1000%60),2,"0",0)+"."+fillChars(totalTime%1000,3,"0",0);
+}
+</script>
+</body>
+</html>

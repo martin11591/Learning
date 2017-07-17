@@ -1,0 +1,114 @@
+<html>
+<body scroll=no>
+<style>
+body{background-color:black;color:white;font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<div id="weaponInfo" style="position:absolute;z-index:-1;left:7px;top:0px;font-family:LCD;font-size:36pt">0\100</div>
+<img id="fala" src="images\falaUderzeniowa.png" style="position:absolute;display:none"></img>
+<input type=file id="plikmuz" style="display:none" size=1 onchange="muzyka()"><button id="bgmBtn" onclick="dc.plikmuz.click()" title="Wybierz plik muzyczny" style="font-family:Tahoma;font-size:8pt;width:130px;height:32px;position:absolute">Wybierz utwór muzyczny<br>do odgrania w tle</button>
+<button id="startGameBtn" onclick="startGame()" style="position:absolute">Rozpocznij grê</button>
+<img id="celownik" src="images\celownik.gif" style="position:absolute;left:0px;top:0px;z-index:1;display:none"></img>
+<span id="cele" style="display:none"></span>
+<bgsound id="d0" src="" loop=infinite></bgsound><bgsound id="d1" src=""></bgsound><bgsound id="d2" src=""></bgsound><bgsound id="d3" src=""></bgsound><bgsound id="d4" src=""></bgsound><bgsound id="d5" src=""></bgsound><bgsound id="d6" src=""></bgsound><bgsound id="d7" src=""></bgsound><bgsound id="d8" src=""></bgsound><bgsound id="d9" src=""></bgsound><bgsound id="d10" src=""></bgsound><bgsound id="d11" src=""></bgsound><bgsound id="d12" src=""></bgsound><bgsound id="d13" src=""></bgsound><bgsound id="d14" src=""></bgsound><bgsound id="d15" src=""></bgsound><bgsound id="d16" src=""></bgsound><bgsound id="d17" src=""></bgsound><bgsound id="d18" src=""></bgsound><bgsound id="d19" src=""></bgsound><bgsound id="d20" src=""></bgsound><bgsound id="d21" src=""></bgsound><bgsound id="d22" src=""></bgsound><bgsound id="d23" src=""></bgsound><bgsound id="d24" src=""></bgsound><bgsound id="d25" src=""></bgsound><bgsound id="d26" src=""></bgsound><bgsound id="d27" src=""></bgsound><bgsound id="d28" src=""></bgsound><bgsound id="d29" src=""></bgsound><bgsound id="d30" src=""></bgsound><bgsound id="d31" src=""></bgsound><bgsound id="d32" src=""></bgsound><bgsound id="d33" src=""></bgsound><bgsound id="d34" src=""></bgsound><bgsound id="d35" src=""></bgsound><bgsound id="d36" src=""></bgsound><bgsound id="d37" src=""></bgsound><bgsound id="d38" src=""></bgsound><bgsound id="d39" src=""></bgsound><bgsound id="d40" src=""></bgsound><bgsound id="d41" src=""></bgsound><bgsound id="d42" src=""></bgsound><bgsound id="d43" src=""></bgsound><bgsound id="d44" src=""></bgsound><bgsound id="d45" src=""></bgsound><bgsound id="d46" src=""></bgsound><bgsound id="d47" src=""></bgsound><bgsound id="d48" src=""></bgsound><bgsound id="d49" src=""></bgsound><bgsound id="d50" src=""></bgsound><bgsound id="d51" src=""></bgsound><bgsound id="d52" src=""></bgsound><bgsound id="d53" src=""></bgsound><bgsound id="d54" src=""></bgsound><bgsound id="d55" src=""></bgsound><bgsound id="d56" src=""></bgsound><bgsound id="d57" src=""></bgsound><bgsound id="d58" src=""></bgsound><bgsound id="d59" src=""></bgsound><bgsound id="d60" src=""></bgsound><bgsound id="d61" src=""></bgsound><bgsound id="d62" src=""></bgsound><bgsound id="d63" src=""></bgsound><bgsound id="d64" src=""></bgsound><bgsound id="d65" src=""></bgsound><bgsound id="d66" src=""></bgsound><bgsound id="d67" src=""></bgsound><bgsound id="d68" src=""></bgsound><bgsound id="d69" src=""></bgsound><bgsound id="d70" src=""></bgsound><bgsound id="d71" src=""></bgsound><bgsound id="d72" src=""></bgsound><bgsound id="d73" src=""></bgsound><bgsound id="d74" src=""></bgsound><bgsound id="d75" src=""></bgsound><bgsound id="d76" src=""></bgsound><bgsound id="d77" src=""></bgsound><bgsound id="d78" src=""></bgsound><bgsound id="d79" src=""></bgsound><bgsound id="d80" src=""></bgsound><bgsound id="d81" src=""></bgsound><bgsound id="d82" src=""></bgsound><bgsound id="d83" src=""></bgsound><bgsound id="d84" src=""></bgsound><bgsound id="d85" src=""></bgsound><bgsound id="d86" src=""></bgsound><bgsound id="d87" src=""></bgsound><bgsound id="d88" src=""></bgsound><bgsound id="d89" src=""></bgsound><bgsound id="d90" src=""></bgsound><bgsound id="d91" src=""></bgsound><bgsound id="d92" src=""></bgsound><bgsound id="d93" src=""></bgsound><bgsound id="d94" src=""></bgsound><bgsound id="d95" src=""></bgsound><bgsound id="d96" src=""></bgsound><bgsound id="d97" src=""></bgsound><bgsound id="d98" src=""></bgsound><bgsound id="d99" src=""></bgsound><bgsound id="d100" src=""></bgsound><bgsound id="d101" src=""></bgsound><bgsound id="d102" src=""></bgsound><bgsound id="d103" src=""></bgsound><bgsound id="d104" src=""></bgsound><bgsound id="d105" src=""></bgsound><bgsound id="d106" src=""></bgsound><bgsound id="d107" src=""></bgsound><bgsound id="d108" src=""></bgsound><bgsound id="d109" src=""></bgsound><bgsound id="d110" src=""></bgsound><bgsound id="d111" src=""></bgsound><bgsound id="d112" src=""></bgsound><bgsound id="d113" src=""></bgsound><bgsound id="d114" src=""></bgsound><bgsound id="d115" src=""></bgsound><bgsound id="d116" src=""></bgsound><bgsound id="d117" src=""></bgsound><bgsound id="d118" src=""></bgsound><bgsound id="d119" src=""></bgsound><bgsound id="d120" src=""></bgsound><bgsound id="d121" src=""></bgsound><bgsound id="d122" src=""></bgsound><bgsound id="d123" src=""></bgsound><bgsound id="d124" src=""></bgsound><bgsound id="d125" src=""></bgsound><bgsound id="d126" src=""></bgsound><bgsound id="d127" src=""></bgsound><bgsound id="d128" src=""></bgsound>
+<script>
+dc=document.all;
+self.moveTo(-5,-5);
+self.resizeTo(screen.availWidth+10,screen.availHeight+10);
+setInterval('dc.bgmBtn.style.left=document.body.scrollLeft+document.body.clientWidth-130;dc.bgmBtn.style.top=document.body.scrollTop-1;dc.startGameBtn.style.left=document.body.scrollLeft+document.body.clientWidth/2-dc.startGameBtn.clientWidth/2;dc.startGameBtn.style.top=document.body.scrollTop+document.body.clientHeight/2-dc.startGameBtn.clientHeight/2',1);
+dd=1;
+odtw=1;
+reload=1;
+setTimeout('alert("Nie strzelaj zbyt szybko, poniewa¿ przegl¹darka mo¿e siê wy³¹czyæ z niewiadomych przyczyn!")',1);
+var falaTimer,falaIn;
+function startGame() {
+ammo1=8;
+ammo2=100;
+dc.cele.innerHTML="";
+obiekty=new Array();
+liczbaCeli=5;
+for (var i=1; i<=liczbaCeli; i++) {dodajObiekt("images\\cel.gif",i,0,0,0,0)}
+dc.celownik.style.display="block";
+dc.cele.style.display="block";
+document.ondragstart=anuluj;
+document.oncontextmenu=anuluj;
+dc.bgmBtn.style.display="none";
+dc.startGameBtn.style.display="none";
+document.onmousemove=celowanie;
+document.onclick=ster;
+}
+function endGame() {
+document.onclick=null;
+document.onmousemove=null;
+document.oncontextmenu=null;
+document.ondragstart=null;
+dc.cele.style.display="none";
+dc.celownik.style.display="none";
+dc.bgmBtn.style.display="block";
+dc.startGameBtn.style.display="block";
+}
+function anuluj() {return false}
+function dodajObiekt(obraz,inx,X,Y,DX,DY) {
+dc.cele.innerHTML+="<img id=\"cel"+inx+"\" src=\""+obraz+"\" style=\"position:absolute\"></img>";
+this.x=X;
+this.y=Y;
+this.dx=DX;
+this.dy=DY;
+eval("this.h="+dc['cel'+inx].width+";");
+eval("this.w="+dc['cel'+inx].height+";");
+}
+function celowanie() {
+x=event.clientX-dc.celownik.width/2;
+y=event.clientY-dc.celownik.height/2;
+with (dc.celownik.style) {left=x;top=y}
+}
+function ster() {
+if (ammo1<=0&&ammo2<=0) {endGame();return false}
+if (reload==1) {
+dc['d'+dd].src='sounds\\Reload.mp3';
+if (ammo2>8) {ammo2-=8} else {ammo2-=ammo2}
+setTimeout("reload=0;dc.weaponInfo.innerText=ammo1+'\\\\'+ammo2",1044);
+reload=2;
+}
+if (reload==2) {return false}
+if (ammo1<=0) {return false}
+if (reload==0) {
+ammo1-=1;
+dc.weaponInfo.innerText=ammo1+"\\"+ammo2;
+dc["d"+dd].src="sounds\\Shot.mp3";
+odtw+=1;
+if (odtw>12) {odtw-=12}
+dd+=1;
+if (dd>128) {dd-=128}
+}
+if (ammo1<1) {
+if (ammo2>8) {ammo1+=8} else {ammo1+=ammo2}
+if (ammo2>0) {reload=1}
+odtw=1;
+dd+=1;
+if (dd>128) {dd-=128}
+setTimeout("ster()",100);
+}
+}
+function muzyka() {
+dc.d0.src=dc.plikmuz.value;
+}
+function falaUderzeniowa(x,y) {
+this.x=x;
+this.y=y;
+falaInit();
+with (dc.fala.style) {left=x-w/2;top=y-h/2;width=w;height=h}
+if (h>320||w>320) {dc.fala.style.display="none";clearTimeout(falaTimer);return}
+w+=50;
+h+=50;
+zderzenia();
+falaTimer=setTimeout("falaUderzeniowa(x,y)",1);
+}
+function falaInit() {
+if (falaIn==1) {return}
+w=1;
+h=1;
+falaIn=1;
+dc.fala.style.display="block";
+}
+function zderzenia() {}
+</script>

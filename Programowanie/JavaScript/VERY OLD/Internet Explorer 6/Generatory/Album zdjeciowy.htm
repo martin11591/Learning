@@ -1,0 +1,246 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+<meta http-equiv="page-enter" content="blendtrans(duration=0.15)">
+<meta http-equiv="page-exit" content="blendtrans(duration=0.15)">
+<title>Generator albumu zdjęciowego</title>
+</head><style>
+body,select,input,textarea{cursor:default;font-family:Trebuchet MS;font-size:10pt;font-weight:bold}
+body,textarea{scrollbar-track-color:white}
+a{color:red}
+a:hover{text-decoration:underline}
+</style>
+<body>
+Lista obrazów:<br>
+<textarea id="lista_obrazow" cols=72 rows=5 readonly></textarea><br>
+<form name="obrazy">
+<input id="dodaj_obraz" type=file size=72 title="Ścieżka obrazu"> - obraz<br>
+<button id="dodaj_obraz_button" onclick="dodaj()" title="Dodaj obraz do albumu">Dodaj obraz</button><br>
+</form>
+<form name="listy_obrazow">
+<div id="lista_obrazow2"></div><br>
+</form>
+<table border=1><td id="podglad" style="text-align:center;vertical-align:middle;border:none;margin:0px" style="display:block" title="Podgląd"></td></table>
+<form name="ustawienia">
+<input id="wielkosc_miniatur" size=3 maxlength=3 value=96> - wielkość miniatur (w pikselach)<br>
+<input id="liczba_kolumn" size=1 maxlength=1 value=5> - liczba kolumn<br>
+<input id="grubosc_obramowania" size=2 maxlength=2 value=3> - grubość obramowania (w pikselach)<br>
+<input id="kolor_obramowania" size=25 maxlength=19 value="#FF0000"> - kolor obramowania<br>
+<input id="kolor_tla" size=25 maxlength=19 value="#000000"> - kolor tła<br>
+<input id="kolor_napisow" size=25 maxlength=19 value="#FFFFFF"> - kolor napisów<br>
+<input id="nazwa_pliku" type=checkbox checked>Pokazać nazwy plików<br>
+<input id="muzyka" type=checkbox checked onclick="pokaz_muzyka()">Muzyka w tle<br>
+<input id="plik_muzyczny" type=file size=72 title="Plik muzyki w tle"><br>
+Otwieranie poprzez kliknięcie:<br>
+<input id="pojedyncze" name="klikniecia" type=radio>Pojedyncze<br>
+<input id="dwukrotne" name="klikniecia" type=radio checked>Dwukrotne<br>
+<input id="zmien_suwaki" type=checkbox onclick="pokaz_suwak()">Zmień ustawienia suwaków (tylko Internet Explorer 5.5 i nowszy)<br>
+<div id="suwaki" style="display:none">
+<input id="basecolor" size=25 maxlength=19 value="#000000"> - kolor powierzchni suwaka i strzałek oraz rynny suwaka (scrollbar-base-color)<br>
+<input id="facecolor" size=25 maxlength=19 value="#FFFFFF"> - kolor powierzchni suwaka i strzałek, a także kolor składowy rynny suwaka (scrollbar-face-color)<br>
+<input id="arrowcolor" size=25 maxlength=19 value="#000000"> - kolor strzałek (scrollbar-arrow-color)<br>
+<input id="highlightcolor" size=25 maxlength=19 value="#FFFFFF"> - kolor składowy rynny suwaka (scrollbar-highlight-color)<br>
+<input id="shadowcolor" size=25 maxlength=19 value="#FFFFFF"> - kolor płytszego cienia (scrollbar-shadow-color)<br>
+<input id="darkshadowcolor" size=25 maxlength=19 value="#000000"> - kolor głębszego cienia (scrollbar-darkshadow-color)<br>
+<input id="dlightcolor" size=25 maxlength=19 value="#000000"> - kolor zewnętrznego cienia (scrollbar-3dlight-color)<br>
+<input id="trackcolor" size=25 maxlength=19 value="#000000"> - kolor rynny suwaka (scrollbar-track-color)
+</div>
+Pokaż jako:<br>
+<input id="kod" name="pokaz_jako" type=radio>Kod źródłowy<br>
+<input id="strona" name="pokaz_jako" type=radio checked>Strona<br>
+<input id="tytul" size=72 value="Mój album zdjęciowy"> - tytuł albumu<br>
+<input type="reset" onclick="setTimeout('pokaz_wszystko()',1)" value="Ustawienia standardowe" title="Powróć do ustawień standardowych"><br>
+</form>
+<button onclick="tworz()">Utwórz album zdjęciowy</button>
+<script>
+var obrazy=new Array();
+var nazwy=new Array();
+var typy=new Array();
+function zloz_liste() {
+var lista="";
+var lista2="<select id=\"obraz_podglad\" onchange=\"ustaw_p()\">\n";
+l=document.all.lista_obrazow;
+l2=document.all.lista_obrazow2;
+j=0;
+for (i in obrazy) {
+nazwa=obrazy[i].substring(obrazy[i].lastIndexOf("\/")+1,obrazy[i].lastIndexOf("."));
+lista+=(j+1)+". "+nazwa+"\n";
+lista2+="<option value=\""+obrazy[i]+"\">"+nazwa+"</option>\n";
+j+=1;
+}
+lista2+="</select><button onclick=\"usun()\">Usuń obraz</button>";
+l.innerText=lista;
+l2.innerHTML=lista2;
+if (obrazy!="") {l2.style.display="block"} else {l2.style.display="none";document.all.podglad.innerHTML=""}
+}
+function dodaj() {
+f=document.obrazy.dodaj_obraz.value;
+f=f.replace(/\\/g,"\/");
+if (f==""||f==null) {return}
+for (i in obrazy) {
+if (f==obrazy[i]) {return}
+}
+obrazy.push(f);
+nazwa=f.substring(f.lastIndexOf("\/")+1,f.lastIndexOf("."));
+nazwy.push(nazwa);
+typ=f.substring(f.lastIndexOf(".")+1,f.length).toUpperCase();
+typy.push(typ);
+zloz_liste();
+ustaw_p();
+}
+function ustaw_p() {
+plik=document.listy_obrazow.obraz_podglad.value;
+ind=document.listy_obrazow.obraz_podglad.selectedIndex;
+if (obrazy=="") {return}
+nazwa=obrazy[ind].substring(obrazy[ind].lastIndexOf("\/")+1,obrazy[ind].lastIndexOf("."));
+podg="<img id=\"obrazekPodglad\" src=\""+plik+"\"></img>";
+document.all.podglad.innerHTML=podg;
+xx=document.all.obrazekPodglad.width;
+yy=document.all.obrazekPodglad.height;
+if(xx>yy){hh=320;ww=Math.round(yy/(xx/320))}
+else{ww=240;hh=Math.round(xx/(yy/240))}
+podg="<img id=\"obrazekPodglad\" src=\""+plik+"\" width="+hh+" height="+ww+"></img>";
+document.all.podglad.innerHTML=podg;
+}
+function usun() {
+ind=document.listy_obrazow.obraz_podglad.selectedIndex;
+var lista3=new Array();
+var nazwy2=new Array();
+var typy2=new Array();
+j=0;
+for (i in obrazy) {
+if (j!=ind) {lista3.push(obrazy[i]);nazwy2.push(nazwy[i]);typy2.push(typy[i])} else {sind=j}
+j+=1;
+}
+obrazy=lista3;
+nazwy=nazwy2;
+typy=typy2;
+zloz_liste();
+if (sind>obrazy.length-1) {sind=obrazy.length-1}
+document.listy_obrazow.obraz_podglad.selectedIndex=sind;
+ustaw_p();
+}
+function pokaz_muzyka() {
+a=document.ustawienia.muzyka;
+b=document.ustawienia.plik_muzyczny;
+if (a.checked) {b.style.display="block"} else {b.style.display="none"}
+}
+function pokaz_suwak() {
+a=document.ustawienia.zmien_suwaki;
+b=document.all.suwaki;
+if (a.checked) {b.style.display="block"} else {b.style.display="none"}
+}
+function pokaz_wszystko() {pokaz_muzyka();pokaz_suwak()}
+function tworz() {
+var zaw;
+a=document.ustawienia.kod.checked;
+b=document.ustawienia.strona.checked;
+this.suw=document.ustawienia.zmien_suwaki.checked;
+this.basea=document.ustawienia.basecolor;this.basec=basea.value;
+this.facea=document.ustawienia.facecolor;this.facec=facea.value;
+this.arrowa=document.ustawienia.arrowcolor;this.arrowc=arrowa.value;
+this.highlighta=document.ustawienia.highlightcolor;this.highlightc=highlighta.value;
+this.shadowa=document.ustawienia.shadowcolor;this.shadowc=shadowa.value;
+this.darkshadowa=document.ustawienia.darkshadowcolor;this.darkshadowc=darkshadowa.value;
+this.dlighta=document.ustawienia.dlightcolor;this.dlightc=dlighta.value;
+this.tracka=document.ustawienia.trackcolor;this.trackc=tracka.value;
+this.muz=document.ustawienia.muzyka.checked;
+this.pmuza=document.ustawienia.plik_muzyczny;this.pmuzc=pmuza.value;
+this.koltloa=document.ustawienia.kolor_tla;this.koltloc=koltloa.value;
+this.koltxta=document.ustawienia.kolor_napisow;this.koltxtc=koltxta.value;
+this.tytula=document.ustawienia.tytul;this.tytulc=tytula.value;
+this.wlkminiatura=document.ustawienia.wielkosc_miniatur;this.wlkminiaturc=parseInt(wlkminiatura.value);
+this.grobra=document.ustawienia.grubosc_obramowania;this.grobrc=parseInt(grobra.value);
+this.kolobra=document.ustawienia.kolor_obramowania;this.kolobrc=kolobra.value;
+this.lkola=document.ustawienia.liczba_kolumn;this.lkolc=parseInt(lkola.value);
+this.poj=document.ustawienia.pojedyncze.checked;
+this.dwu=document.ustawienia.dwukrotne.checked;
+this.pokaznazwy=document.ustawienia.nazwa_pliku.checked;
+if (wlkminiaturc<96||wlkminiaturc==null) {alert ("Nie podano wielkości miniatur lub jest za mała (limit wynosi 96)!");wlkminiatura.focus();return}
+if (lkolc<3||lkolc==null) {alert ("Nie podano liczby kolumn lub jest za mała (limit wynosi 3)!");lkola.focus();return}
+if (grobrc<0||grobrc==null) {alert ("Nie podano grubości obramowania lub jest za mała (limit wynosi 0)!");grobra.focus();return}
+if (kolobrc==""||kolobrc==null) {alert ("Nie podano koloru obramowania!");kolobra.focus();return}
+if (koltloc==""||koltloc==null) {alert ("Nie podano koloru tła!");koltloa.focus();return}
+if (koltxtc==""||koltxtc==null) {alert ("Nie podano koloru napisów!");koltxta.focus();return}
+if (muz) {
+if (pmuzc==""||pmuzc==null) {alert ("Nie podano pliku muzycznego!");pmuza.focus();return}
+}
+if (suw) {
+if (basec==""||basec==null) {alert ("Nie podano koloru powierzchni suwaka i strzałek oraz rynny suwaka (scrollbar-base-color)!");basea.focus();return}
+if (facec==""||facec==null) {alert ("Nie podano koloru powierzchni suwaka i strzałek, a także kolor składowy rynny suwaka (scrollbar-face-color)!");facea.focus();return}
+if (arrowc==""||arrowc==null) {alert ("Nie podano koloru strzałek (scrollbar-arrow-color)!");arrowa.focus();return}
+if (highlightc==""||highlightc==null) {alert ("Nie podano koloru składowego rynny suwaka (scrollbar-highlight-color)!");highlighta.focus();return}
+if (shadowc==""||shadowc==null) {alert ("Nie podano koloru płytszego cienia (scrollbar-shadow-color)!");shadowa.focus();return}
+if (darkshadowc==""||darkshadowc==null) {alert ("Nie podano koloru głębszego cienia (scrollbar-darkshadow-color)!");darkshadowa.focus();return}
+if (dlightc==""||dlightc==null) {alert ("Nie podano koloru zewnętrznego cienia (scrollbar-3dlight-color)!");dlighta.focus();return}
+if (trackc==""||trackc==null) {alert ("Nie podano koloru rynny suwaka (scrollbar-track-color)!");tracka.focus();return}
+}
+if (tytulc==""||tytulc==null) {alert ("Nie podano tytułu strony!");tytula.focus();return}
+if (a) {tworz_a()}
+if (b) {tworz_b()}
+}
+function tworz_a() {
+zaw="&lt;HTML&gt;<br>\n&lt;BODY SCROLL=AUTO&gt;<br>\n&lt;TITLE&gt;"+tytulc+"&lt;/TITLE&gt;<br>\n&lt;STYLE&gt;<br>\nBODY {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BACKGROUND-COLOR: "+koltloc+"; <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLOR: "+koltxtc+"; ";
+if (suw) {
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-BASE-COLOR: "+basec+"; ";
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-FACE-COLOR: "+facec+"; ";
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-ARROW-COLOR: "+arrowc+"; ";
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-HIGHLIGHT-COLOR: "+highlightc+"; ";
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-SHADOW-COLOR: "+shadowc+"; ";
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-DARKSHADOW-COLOR: "+darkshadowc+"; ";
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-3DLIGHT-COLOR: "+dlightc+"; ";
+zaw+="<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCROLLBAR-TRACK-COLOR: "+trackc;
+}
+zaw+="<br>}<br>IMG {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WIDTH: "+wlkminiaturc+"px; <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HEIGHT: "+wlkminiaturc+"px;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BORDER-WIDTH: "+grobrc+"px "+grobrc+"px "+grobrc+"px "+grobrc+"px; <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BORDER-COLOR: RED; <br>}<br></STYLE>";
+zaw+="&lt;SCRIPT&gt;<br>function otworz(plik) {<br>window.open(plik);<br>}<br>&lt;\/SCRIPT&gt;<br>";
+if (obrazy!="") {zaw+="&lt;TABLE BORDER=0&gt;<br>"}
+var k=1;
+for (i in obrazy) {
+if (k==1) {zaw+=" &lt;TR&gt;<br>"}
+zaw+="&nbsp;&nbsp;&lt;TD&gt;<br>&nbsp;&nbsp;&nbsp;&lt;IMG SRC=\""+obrazy[i]+"\" title=\"Obraz:"+nazwy[i]+"<br>Typ:"+typy[i]+"\"";
+if (poj) {zaw+=" onclick"}
+if (dwu) {zaw+=" ondblclick"}
+zaw+="=\"otworz(\'"+obrazy[i]+"\')\"&gt;&lt;/IMG&gt;<br>&nbsp;&nbsp;&lt;/TD&gt;<br>";
+k+=1;
+if (k>lkolc) {zaw+="&nbsp;&nbsp;&lt;/TD&gt;<br>&nbsp;&lt;/TR&gt;<br>&nbsp;&lt;TR&gt;<br>";k-=lkolc}
+}
+if (obrazy!=""&&k<=lkolc) {zaw+="&nbsp;&nbsp;&lt;/TD&gt;<br>&nbsp;&lt;/TR&gt;<br>&lt;/TABLE&gt;<br>"}
+if (muz) {zaw+="&lt;EMBED SRC=\""+pmuzc+"\" LOOP=TRUE STYLE=\"DISPLAY: none\"&gt;&lt;/EMBED&gt;<br>"}
+zaw+="</BODY></HTML>";
+aa=window.open();
+aa.document.write("<HTML>\n<BODY STYLE=\"BACKGROUND-COLOR: darkblue; COLOR: white; CURSOR: default; FONT-FAMILY: Tahoma; FONT-SIZE: 8pt\">\n<TITLE>Kod źródłowy - "+tytulc+"</TITLE>\n"+zaw+"\n</BODY>\n</HTML>");
+}
+function tworz_b() {
+zaw="<HTML>\n<BODY SCROLL=AUTO>\n<TITLE>"+tytulc+"</TITLE>\n<STYLE>\nBODY {\n\tBACKGROUND-COLOR: "+koltloc+"; \n\tCOLOR: "+koltxtc+"; ";
+if (suw) {
+zaw+="\n\tSCROLLBAR-BASE-COLOR: "+basec+"; ";
+zaw+="\n\tSCROLLBAR-FACE-COLOR: "+facec+"; ";
+zaw+="\n\tSCROLLBAR-ARROW-COLOR: "+arrowc+"; ";
+zaw+="\n\tSCROLLBAR-HIGHLIGHT-COLOR: "+highlightc+"; ";
+zaw+="\n\tSCROLLBAR-SHADOW-COLOR: "+shadowc+"; ";
+zaw+="\n\tSCROLLBAR-DARKSHADOW-COLOR: "+darkshadowc+"; ";
+zaw+="\n\tSCROLLBAR-3DLIGHT-COLOR: "+dlightc+"; ";
+zaw+="\n\tSCROLLBAR-TRACK-COLOR: "+trackc;
+}
+zaw+="\n}\nIMG {\n\tWIDTH: "+wlkminiaturc+"px; \n\tHEIGHT: "+wlkminiaturc+"px;\n\tBORDER-COLOR: "+kolobrc+"; \n}\nTD {\n\tTEXT-ALIGN: center; \n}\n</STYLE>\n";
+zaw+="<SCRIPT>\nfunction otworz(plik) {\nwindow.open(plik);\n}\n<\/SCRIPT>\n";
+if (obrazy!="") {zaw+="<TABLE BORDER=0>\n"}
+var k=1;
+for (i in obrazy) {
+if (k==1) {zaw+=" <TR>\n"}
+zaw+="  <TD>\n   <IMG SRC=\""+obrazy[i]+"\" title=\"Obraz:"+nazwy[i]+"\nTyp:"+typy[i]+"\"";
+if (poj) {zaw+=" onclick"}
+if (dwu) {zaw+=" ondblclick"}
+zaw+="=\"otworz(\'"+obrazy[i]+"\')\" BORDER="+grobrc+"></IMG>";
+if (pokaznazwy) {zaw+="<BR>\n   "+nazwy[i]}
+zaw+="\n  </TD>\n";
+k+=1;
+if (k>lkolc) {zaw+="  </TD>\n </TR>\n <TR>\n";k-=lkolc}
+}
+if (obrazy!=""&&k<=lkolc) {zaw+="  </TD>\n </TR>\n</TABLE>\n"}
+if (muz) {zaw+="<EMBED SRC=\""+pmuzc+"\" LOOP=TRUE STYLE=\"DISPLAY: none\"></EMBED>\n"}
+zaw+="</BODY>\n</HTML>";
+aa=window.open();
+aa.document.write(zaw);
+}
+</script></body>

@@ -1,0 +1,27 @@
+1.	b2 		O	Startuje gracz 2
+2.	b1 		X
+3.	c1 		O
+4.	a3 		X
+5.	c3 		O
+6.	a1/c2		X	Gracz 1 blokuje jedno z dwóch
+7.	a1/c2 		O	Gracz 2 wygrywa
+
+1.	c1		X	Startuje gracz 1
+2.	b2		O
+3.	a3		X
+4.	a1/c3		O
+5.	a1/c3		X
+6.	c2/b3		O	Gracz 2 blokuje jedno z dwóch
+7.	c2/b3		X	Gracz 1 wygrywa
+
+     |     | 
+     |     |   
+     |     |   
+-----+-----+-----
+     | \ / | /-\    
+     |  X  | | |    
+     | / \ | \-/    
+-----+-----+-----
+     |     |     
+     |     |     
+     |     |     

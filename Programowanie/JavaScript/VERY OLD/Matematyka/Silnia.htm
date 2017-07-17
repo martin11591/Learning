@@ -1,0 +1,14 @@
+<html><div id="pomoc" style="text-align:center;font-family:Trebuchet MS;font-size:10pt;font-weight:bold">Silnia z liczby wynosi .</div><script>
+var liczba;
+while(liczba==null||liczba==""||isNaN(liczba)){
+liczba=prompt('Podaj liczbê do obliczenia silni. Maksymalna liczba, jak¹ komputer potrafi obliczyæ wynosi 170,60254477848.','170.60254477848');
+}
+if(liczba.toLowerCase()=="pi") {liczba=Math.PI}
+liczba=eval(liczba);
+pomoc.innerHTML="Silnia liczby "+liczba+" wynosi "+Silnia(liczba)+".<br>"+liczba+"!="+Silnia(liczba);
+function Silnia(a) {
+if (a>1) a*=Silnia(a-1);
+else a=1;
+return a;
+}
+</script>

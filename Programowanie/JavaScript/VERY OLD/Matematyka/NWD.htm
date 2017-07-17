@@ -1,0 +1,55 @@
+<html><title>Najwiêkszy Wspólny Dzielnik - NWD</title>
+<div id="pomoc" style="text-align:center;font-family:Trebuchet MS;font-size:10pt;font-weight:bold">&nbsp;</div><div id="pomoc2" style="text-align:center;font-family:Trebuchet MS;font-size:10pt;font-weight:bold">&nbsp;</div><div id="pomoc3" style="text-align:center;font-family:Trebuchet MS;font-size:10pt;font-weight:bold">&nbsp;</div><div id="pomoc4" style="text-align:center;font-family:Trebuchet MS;font-size:10pt;font-weight:bold">&nbsp;</div><script src="E:\MARTIN\DHTML\skrypty\liczebnik.js"></script><script>
+this.zmienna1=parseInt(prompt('Podaj pierwsz¹ zmienn¹','zmienna1'));
+this.zmienna2=parseInt(prompt('Podaj drug¹ zmienn¹','zmienna2'));
+this.wynik1=zmienna1;
+this.wynik2=zmienna2;
+if(zmienna1>zmienna2){zmax=zmienna1;i=1}else{zmax=zmienna2;i=2}
+i1=1;
+i2=1;
+nwd=0;
+dziel1=0;
+dziel2=0;
+inf="NWD("+zmienna1+","+zmienna2+")=";
+inf1="Dzielniki "+zmienna1+":";
+inf2="Dzielniki "+zmienna2+":";
+m1=0;
+m2=0;
+s1=0;
+s2=0;
+licz_czas();
+licz();
+function licz() {
+if(i1>zmax||i2>zmax){i1=zmax;liczby_pierwsze();clearTimeout(timer);pomoc.innerHTML=inf1;pomoc2.innerHTML=inf2;pomoc3.innerHTML=inf;pomoc4.innerHTML="Wyliczono w czasie:"+cz;return}
+if(zmienna1%i1==0){inf1+=i1+",";dziel1+=1;}
+if(zmienna2%i2==0){inf2+=i2+",";dziel2+=1;}
+if(zmienna1%i1==0&&zmienna2%i2==0){nwd=i1}
+if(i1<=zmienna1){i1+=1}
+if(i2<=zmienna2){i2+=1}
+pomoc.innerHTML=inf1;
+pomoc2.innerHTML=inf2;
+pomoc3.innerHTML=inf+nwd;
+pomoc3.innerHTML=pomoc3.innerHTML+"<br>Liczenie:"+Math.round(eval('i'+i)*100/zmax)+"%";
+setTimeout("licz()",1);
+}
+function licz_czas() {
+cz="";
+if (s2>9) {s2-=10;s1+=1}
+if (s1>5) {s1-=6;m2+=1}
+if (m2>9) {m2-=10;m1+=1}
+if (m1!=0) {cz+=m1}
+if (m2!=0) {m=parseInt(m1.toString()+m2.toString());cz+=m2+Liczebnik(m," minut","a ","y "," ")}
+if (s1!=0) {cz+=s1}
+s=parseInt(s1.toString()+s2.toString());
+cz+=s2+Liczebnik(s," sekund","a.","y.",".");
+pomoc4.innerHTML="Czas liczenia:"+cz;
+s2+=1;
+timer=setTimeout("licz_czas()",1000);
+}
+function liczby_pierwsze() {
+inf+=nwd;
+if (dziel1==2) {inf+="<br>Liczba "+zmienna1+" jest liczb¹ pierwsz¹."}
+if (dziel2==2) {inf+="<br>Liczba "+zmienna2+" jest liczb¹ pierwsz¹."}
+return;
+}
+</script>

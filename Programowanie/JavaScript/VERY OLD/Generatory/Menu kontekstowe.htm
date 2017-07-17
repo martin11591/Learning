@@ -1,0 +1,115 @@
+<html>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+tr{background-color:Menu}
+</style>
+UWAGA! Radzê nie klikaæ pozycji w menu, poniewa¿ dzia³a normalnie!<br>
+<button onclick="dodajElementZwykly()">Dodaj<br>element</button>
+<button onclick="generujKodZrodlowy()">Generuj kod<br>Ÿród³owy</button>
+<div id="edytowanyObiekt" style="display:none">&nbsp;</div>
+<div id="twojeMenu" style="position:absolute;display:none;z-index:400">&nbsp;</div>
+<script>
+with (document.all.edytowanyObiekt) {
+ondragstart=anuluj;
+oncontextmenu=anuluj;
+}
+document.oncontextmenu=pokazMenu;
+liczba=1;
+liczbaR=0;
+var ht,timer;
+var menuK=new Array();
+HR="menu_img\\hr.gif";
+ROZWIN="menu_img\\rozwin.gif";
+function anuluj() {return false}
+function dodajElementZwykly() {
+var tekst=prompt("Na pocz¹tku napisz literê (jeœli to ma byæ odnoœnik to \"l\", jeœli kreska to \"k\", np ltekst) i tekst w menu","lTekst");
+if (tekst==null) {return}
+prw=tekst.substring(0,1).toLowerCase();
+if (prw!="k") {var ikona=prompt("Okreœl plik graficzny reprezentuj¹cy ikonê (np. ..\\..\\Ikony\\Ikona 1.ico), lub jeœli nie chesz ikony, to kliknij \"Anuluj\"","..\\..\\Ikony\\Ikona 1.ico");var link=prompt("Link, odnoœnik","E:\\MARTIN\\")}
+menuK.push(tekst);
+if (prw!="k") {
+menuK.push(ikona.replace(/\\/g,"\/"));
+if (link.indexOf("javascript:")==-1) {menuK.push("file://"+link.replace(/\\/g,"\/"))}
+else {menuK.push(link)}
+}
+odswiez();
+}
+function generujKodZrodlowy() {
+var kolorTla=prompt("Kolor  t³a (w hex, np. #FF0000 lub wed³ug nazw, np. Menu)","Menu");
+var kolorTekstu=prompt("Kolor  tekstu (w hex, np. #FF0000 lub wed³ug nazw, np. MenuText)","MenuText");
+var kolorTlaZaznaczony=prompt("Kolor  t³a, gdy element jest zaznaczony (w hex, np. #FF0000 lub wed³ug nazw, np. Highlight)","Highlight");
+var kolorTekstuZaznaczony=prompt("Kolor  tekstu, gdy element jest zaznaczony (w hex, np. #FF0000 lub wed³ug nazw, np. HighlightText)","HighlightText");
+var czcionka=prompt("Czcionka (np. \"Tahoma 8pt\" lub np. \"menu\")","menu");
+}
+function odswiez() {
+ht="<table id=\"menu"+liczbaR+"\" cellspacing=0 style=\"border:double 3px;border-color:#c0c0c0;font:menu\">";
+c=0;
+for (var i=0; i<menuK.length; i++) {
+prw=menuK[i].substring(0,1).toLowerCase();
+if (prw=="l") {
+txt=menuK[i].substring(1);
+ht+="<tr style=\"height:17px\" onmouseover=\"zaznacz(\'menu"+liczbaR+"\',"+c+",1)\" onmouseout=\"zaznacz(\'menu"+liczbaR+"\',"+c+",0)\" onclick=\"javascript:window.location.href=\'"+menuK[i+2]+"\'\"><td style=\"text-indent:1px\"><img src=\"";
+if (menuK[i+1]==null) {ht+="\" width=13 height=13 style=\"visibility:hidden\"></img>&nbsp;"} else {ht+=menuK[i+1]+"\" width=13px height=13px style=\"vertical-align:middle\"></img>&nbsp;"}
+ht+=menuK[i].substring(1)+"<img src=\"\" width=19px height=13px style=\"visibility:hidden;vertical-align:middle\"></img></td>";
+i+=1;
+c+=1;
+ht+="</tr>";
+}
+if (prw=="k") {ht+="<tr><td colspan=2><img src=\""+HR+"\" width=100% height=7px style=\"align:right\"></img></td></tr>";c+=1}
+}
+ht+="</table>";
+document.all.edytowanyObiekt.style.display="block";
+document.all.edytowanyObiekt.innerHTML=ht;
+}
+function zaznacz(tablica,wiersz,zazn) {
+tablica=document.getElementById(tablica);
+if (zazn==0) {
+with (tablica.rows[wiersz].style) {
+backgroundColor="Menu";
+color="MenuText";
+}
+}
+if (zazn==1) {
+with (tablica.rows[wiersz].style) {
+backgroundColor="Highlight";
+color="HighlightText";
+}
+}
+}
+function pokazMenu() {
+if (ht==undefined) {return false}
+document.onclick=schowajMenu;
+document.all.edytowanyObiekt.style.display="none";
+document.all.edytowanyObiekt.innerHTML="";
+document.all.twojeMenu.innerHTML=ht;
+x=event.clientX;
+y=event.clientY;
+tM=document.all.twojeMenu.style;
+tM.left=x;
+tM.top=y;
+tM.filter="alpha(opacity=0)";
+tM.display="block";
+op=0;
+clearTimeout(timer);
+alpha("twojeMenu");
+return false;
+}
+function alpha(id) {
+this.id=id;
+tM=document.all[id].style;
+tM.filter="alpha(opacity="+op+")";
+op+=15;
+if (op>100) {tM.filter="alpha(opacity=100)";op=0;return}
+timer=setTimeout("alpha(id)",1);
+}
+function schowajMenu() {
+clearTimeout(timer);
+document.all.twojeMenu.innerHTML="";
+tM=document.all.twojeMenu.style;
+tM.display="none";
+document.all.edytowanyObiekt.innerHTML=ht;
+document.all.edytowanyObiekt.style.display="block";
+document.onclick=null;
+}
+</script>

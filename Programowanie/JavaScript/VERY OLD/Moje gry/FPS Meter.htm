@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Przykładowy dokument XHTML5</title>
+  </head>
+  <body>
+    <div id="fpsMeter">FPS: <span id="fpsCount"></span></div>
+    <script type="text/javascript">
+      fpsLimit=1000/24;
+      fps=new Array();
+      for (var i=0; i<1000; i++) fps[i]=0;
+      fps.sum=function() {
+        newSum=0;
+        for (var i=0; i<1000; i++) newSum+=this[i];
+        return newSum;
+      }
+      var timer, fpsA=0, fpsB=0, frames=0, avg=0;
+      loop();
+      function loop() {
+        fpsB=new Date().getMilliseconds();
+        fps[fpsB]=1;
+        if (fpsB<fpsA) {
+          for (fpsA; fpsA<1000; fpsA++) fps[fpsA]=0;
+          fpsA=fpsA%1000;
+        }
+        for (fpsA; fpsA<fpsB; fpsA++) fps[fpsA]=0;
+        fpsA=fpsB+1;
+        fpsA=fpsA%1000;
+        fpsCnt=fps.sum();
+        avg=(avg+fps.sum())/2;
+        avgB=Math.round(avg*100).toString();
+        avgB=avgB.substr(0,avgB.length-2)+"."+avgB.substr(-2,2);
+        document.getElementById("fpsCount").innerHTML=fpsCnt+"\tAVG FPS:"+avgB+"\tFrames:"+frames;
+        frames++;
+        /*fpsLimit+=-30+Math.random()*60;
+        if (fpsLimit<1) fpsLimit=1;
+        if (fpsLimit>60) fpsLimit=60;*/
+        timer=setTimeout("loop()",fpsLimit);
+      }
+    </script>
+  </body>
+</html>

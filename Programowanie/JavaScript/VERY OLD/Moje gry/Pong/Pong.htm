@@ -1,0 +1,132 @@
+<html>
+<body scroll=no>
+<title>Pong</title>
+<style>
+body{background-color:black;color:White;font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+img.num{width:39px;height:61px}
+img.numDw{width:8px;height:61px}
+img.plr{position:absolute;width:64px;height:64px}
+</style>
+<div id="score" style="text-align:center;z-index:-1">
+<img class=num src="images\nic.gif" id="p1n1" />
+<img class=num src="images\nic.gif" id="p1n2" />
+<img class=num src="images\nic.gif" id="p1n3" />
+<img class=numDw src="images\dw.gif" />
+<img class=num src="images\nic.gif" id="p2n1" />
+<img class=num src="images\nic.gif" id="p2n2" />
+<img class=num src="images\nic.gif" id="p2n3" />
+</div>
+<span style="z-index:1">
+<img class=plr id="obj1" src="images\player1.gif" style="clip:rect (0 64 64 48)"/>
+<img class=plr id="obj2" src="images\player2.gif" style="clip:rect (0 16 64 0)"/>
+<img id="obj0" src="images\ball.gif" style="position:absolute;width:32px;height:32px" />
+<img id="a1" src="images\ball.gif" style="position:absolute" />
+</span>
+<script>
+dc=document;
+dca=dc.all;
+setNum(1,0);
+setNum(2,0);
+//dca.obj1.style.left=-48;
+//dca.obj2.style.left=dc.body.clientWidth-16;
+dca.obj1.style.left=100;
+dca.obj2.style.left=500;
+dca.obj0.style.left=dc.body.clientWidth/2-dca.obj0.width/2;
+dca.obj0.style.top=dc.body.clientHeight/2-dca.obj0.height/2;
+x=new Array();
+y=new Array();
+r=new Array();
+dx=new Array();
+dy=new Array();
+r[0]=dca.obj0.width/2;
+x[0]=dca.obj0.style.pixelLeft+r[0];
+y[0]=dca.obj0.style.pixelTop+r[0];
+r[1]=dca.obj1.width/2;
+x[1]=dca.obj1.style.pixelLeft+r[0];
+y[1]=dca.obj1.style.pixelTop+r[0];
+r[2]=dca.obj2.width/2;
+x[2]=dca.obj2.style.pixelLeft+r[0];
+y[2]=dca.obj2.style.pixelTop+r[0];
+// startAngle=360*Math.random();
+startAngle=297;
+dx[0]=Math.sin(startAngle*Math.PI/180)*3;
+dy[0]=-Math.cos(startAngle*Math.PI/180)*3;
+dx[1]=0;
+dy[1]=0;
+dx[2]=0;
+dy[2]=0;
+dc.onmousemove=sterowanie;
+ruch();
+function ruch() {
+for (var i=0; i<x.length; i++) {
+if (i!=1&&i!=2) {
+sx=x[i]+dx[i];
+sy=y[i]+dy[i];
+if (sx<r[i]||sx>dc.body.clientWidth-r[i]) {dx[i]=-dx[i]}
+if (sy<r[i]||sy>dc.body.clientHeight-r[i]) {dy[i]=-dy[i]}
+for (var j=1; j<r.length; j++) {
+odl=Math.abs(Math.sqrt((x[j]-x[i])*(x[j]-x[i])+(y[j]-y[i])*(y[j]-y[i])));
+if (j==1) {window.status=Math.floor(odl)}
+if (odl<=r[j]) {
+qw=Math.abs(x[i]-x[j]);
+er=Math.abs(y[i]-y[j]);
+if (qw<er) {qw=er}
+ddx=(x[i]-x[j])/qw;
+ddy=(y[i]-y[j])/qw;
+angle=Math.atan2(ddy,ddx)*180/Math.PI+90;
+dx[i]+=Math.sin(angle*Math.PI/180);
+dy[i]-=Math.cos(angle*Math.PI/180);
+if (j>2) {
+dx[j]-=Math.sin(angle*Math.PI/180);
+dy[j]+=Math.cos(angle*Math.PI/180);
+}
+with (dca.a1.style) {
+left=x[j]-r[j];
+top=y[j]-r[j];
+}
+}
+}
+x[i]+=dx[i];
+y[i]+=dy[i];
+with (dca["obj"+i].style) {
+left=x[i]-r[i];
+top=y[i]-r[i];
+}
+}
+}
+setTimeout("ruch()",1);
+}
+function sterowanie() {
+}
+function setOneNum(id,num) {
+num=num.toString().substring(0,1);
+if (num==" ") {num="nic"}
+document.all[id].src="images\\"+num+".gif";
+}
+function setNum(pNum,num) {
+pNum=Math.floor(parseFloat(pNum));
+num=Math.floor(parseFloat(num)).toString();
+if (pNum<=1) {
+num=zera(num.substring(num.length-3),3," ","przed");
+num=num.split("");
+for (var i=0; i<3; i++) {setOneNum("p"+pNum+"n"+(i+1),num[i])}
+}
+if (pNum>=2) {
+num=zera(num.substring(num.length-3),3," ","po");
+num=num.split("");
+for (var i=0; i<3; i++) {setOneNum("p"+pNum+"n"+(i+1),num[i])}
+}
+}
+function zera(liczba,ile,znak,przedPo) {
+liczba=liczba.toString();
+przedPo=przedPo.toString().toLowerCase();
+len=liczba.length;
+if (przedPo=="przed") {przedPo="-1"}
+if (przedPo=="po") {przedPo="1"}
+for (var i=1; i<=(ile-len); i++) {
+if (przedPo=="-1") {liczba=znak+liczba}
+if (przedPo=="1") {liczba=liczba+znak}
+}
+return liczba;
+}
+</script>

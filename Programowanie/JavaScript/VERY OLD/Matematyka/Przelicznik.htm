@@ -1,0 +1,326 @@
+<html>
+<head>
+<title>Przelicznik</title>
+</head>
+<style>
+input.mono{font-family:Lucida Console}
+input.wynik{font-family:Lucida Console;border:none}
+</style>
+<body bgcolor="white" style="font-family:Trebuchet MS;font-size:10pt;font-weight:bold">
+<form name="calc">
+Podaj: 
+<input type="text" class=mono name="liczba"><br>
+<select name="konwersja" style="font-family:Verdana;text-transform:uppercase" onchange="Przelicz()">
+<option value="km2m">kilometry na mile
+<option value="m2km">mile na kilometry
+<option value="cm2in">centymetry na cale
+<option value="in2cm">cale na centymetry
+<option value="ft2m">stopy na metry
+<option value="m2ft">metry na stopy
+<option value="tb2gb">terabajty na gigabajty
+<option value="tb2mb">terabajty na megabajty
+<option value="tb2kb">terabajty na kilobajty
+<option value="tb2b">terabajty na bajty
+<option value="gb2tb">gigabajty na terabajty
+<option value="gb2mb">gigabajty na megabajty
+<option value="gb2kb">gigabajty na kilobajty
+<option value="gb2b">gigabajty na bajty
+<option value="mb2tb">megabajty na terabajty
+<option value="mb2gb">megabajty na gigabajty
+<option value="mb2kb">megabajty na kilobajty
+<option value="mb2b">megabajty na bajty
+<option value="kb2tb">kilobajty na terabajty
+<option value="kb2gb">kilobajty na gigabajty
+<option value="kb2mb">kilobajty na megabajty
+<option value="kb2b">kilobajty na bajty
+<option value="b2tb">bajty na terabajty
+<option value="b2gb">bajty na gigabajty
+<option value="b2mb">bajty na megabajty
+<option value="b2kb">bajty na kilobajty
+<option value="pt2in">punkty na cale
+<option value="pt2cm">punkty na centymetry
+<option value="in2pt">cale na punkty
+<option value="cm2pt">centymetry na punkty
+<option value="nm2hx">liczba na hex
+<option value="hx2nm">hex na liczbê
+<option value="cdspd2trB">szybkoœæ napêdu CD na szybkoœæ transferu (B)
+<option value="cdtrB2spd">szybkoœæ transferu (B) na szybkoœæ napêdu CD
+<option value="cdspd2trKB">szybkoœæ napêdu CD na szybkoœæ transferu (KB)
+<option value="cdtrKB2spd">szybkoœæ transferu (KB) na szybkoœæ napêdu CD
+<option value="dvdspd2trB">szybkoœæ napêdu DVD na szybkoœæ transferu (B)
+<option value="dvdtrB2spd">szybkoœæ transferu (B) na szybkoœæ napêdu DVD
+<option value="dvdspd2trKB">szybkoœæ napêdu DVD na szybkoœæ transferu (KB)
+<option value="dvdtrKB2spd">szybkoœæ transferu (KB) na szybkoœæ napêdu DVD
+</select>
+<br>
+<br>
+<input type=checkbox id="grupowanie" onclick="grupuj();Przelicz()">Grupowanie cyfr<br><br>
+Wynik: <input type="text" class=wynik name="wynik" readonly><input type="text" class=wynik name="jednostka" readonly>
+  
+</form>
+ 
+</body>
+<script>
+dlg();
+document.onkeyup=Przelicz;
+function dlg(){
+aa=document.calc.liczba;
+ab=document.calc.wynik;
+if(aa.value.length<5){aa.size=5}else{aa.size=aa.value.length}
+if(ab.value.length<2){ab.size=2}else{ab.size=ab.value.length+1}
+setTimeout("dlg()",1);
+}
+statlicz();
+function statlicz(){
+if(document.calc.liczba.value==""){
+document.calc.konwersja.disabled=true;
+}
+else{
+document.calc.konwersja.disabled=false;
+}
+setTimeout("statlicz()",1);
+}
+function Przelicz(){
+var typ_konwersji=document.calc.konwersja.value;
+argument=document.calc.liczba.value;
+if (typ_konwersji!="hx2nm") {var argument=parseFloat(argument)}
+if (typ_konwersji!="hx2nm") {if (isNaN(argument)) {argument=0}}
+if(typ_konwersji=="km2m"){
+document.calc.wynik.value=argument/1.609;
+document.calc.jednostka.value="mil";
+}
+if(typ_konwersji=="m2km"){
+document.calc.wynik.value=Math.round(argument*1.609);
+document.calc.jednostka.value="km";
+}
+if(typ_konwersji=="cm2in"){
+document.calc.wynik.value=argument/2.54;
+document.calc.jednostka.value="in";
+}
+if(typ_konwersji=="in2cm"){
+document.calc.wynik.value=Math.round(argument*2.54);
+document.calc.jednostka.value="cm";
+}
+if(typ_konwersji=="ft2m"){
+document.calc.wynik.value=argument*0.3048;
+document.calc.jednostka.value="m";
+}
+if(typ_konwersji=="m2ft"){
+document.calc.wynik.value=Math.round(argument/0.3048);
+document.calc.jednostka.value="ft";
+}
+if(typ_konwersji=="tb2gb"){
+document.calc.wynik.value=argument*1024;
+document.calc.jednostka.value="GB";
+}
+if(typ_konwersji=="tb2mb"){
+document.calc.wynik.value=argument*1024*1024;
+document.calc.jednostka.value="MB";
+}
+if(typ_konwersji=="tb2kb"){
+document.calc.wynik.value=argument*1024*1024*1024;
+document.calc.jednostka.value="KB";
+}
+if(typ_konwersji=="tb2b"){
+document.calc.wynik.value=argument*1024*1024*1024*1024;
+document.calc.jednostka.value="B";
+}
+if(typ_konwersji=="gb2tb"){
+document.calc.wynik.value=Math.round(argument/1024*1000)/1000;
+document.calc.jednostka.value="TB";
+}
+if(typ_konwersji=="gb2mb"){
+document.calc.wynik.value=argument*1024;
+document.calc.jednostka.value="MB";
+}
+if(typ_konwersji=="gb2kb"){
+document.calc.wynik.value=argument*1024*1024;
+document.calc.jednostka.value="KB";
+}
+if(typ_konwersji=="gb2b"){
+document.calc.wynik.value=argument*1024*1024*1024;
+document.calc.jednostka.value="B";
+}
+if(typ_konwersji=="mb2tb"){
+document.calc.wynik.value=Math.round(argument/1024/1024*1000)/1000;
+document.calc.jednostka.value="TB";
+}
+if(typ_konwersji=="mb2gb"){
+document.calc.wynik.value=Math.round(argument/1024*1000)/1000;
+document.calc.jednostka.value="GB";
+}
+if(typ_konwersji=="mb2kb"){
+document.calc.wynik.value=argument*1024;
+document.calc.jednostka.value="KB";
+}
+if(typ_konwersji=="mb2b"){
+document.calc.wynik.value=argument*1024*1024;
+document.calc.jednostka.value="B";
+}
+if(typ_konwersji=="kb2tb"){
+document.calc.wynik.value=Math.round(argument/1024/1024/1024*1000)/1000;
+document.calc.jednostka.value="TB";
+}
+if(typ_konwersji=="kb2gb"){
+document.calc.wynik.value=Math.round(argument/1024/1024*1000)/1000;
+document.calc.jednostka.value="GB";
+}
+if(typ_konwersji=="kb2mb"){
+document.calc.wynik.value=Math.round(argument/1024*1000)/1000;
+document.calc.jednostka.value="MB";
+}
+if(typ_konwersji=="kb2b"){
+document.calc.wynik.value=argument*1024;
+document.calc.jednostka.value="B";
+}
+if(typ_konwersji=="b2tb"){
+document.calc.wynik.value=Math.round(argument/1024/1024/1024/1024*1000)/1000;
+document.calc.jednostka.value="TB";
+}
+if(typ_konwersji=="b2gb"){
+document.calc.wynik.value=Math.round(argument/1024/1024/1024*1000)/1000;
+document.calc.jednostka.value="GB";
+}
+if(typ_konwersji=="b2mb"){
+document.calc.wynik.value=Math.round(argument/1024/1024*1000)/1000;
+document.calc.jednostka.value="MB";
+}
+if(typ_konwersji=="b2kb"){
+document.calc.wynik.value=Math.round(argument/1024*1000)/1000;
+document.calc.jednostka.value="KB";
+}
+if(typ_konwersji=="pt2in"){
+document.calc.wynik.value=Math.round(argument/72*1000)/1000;
+document.calc.jednostka.value="in";
+}
+if(typ_konwersji=="pt2cm"){
+document.calc.wynik.value=Math.round(argument/72*2.54*1000)/1000;
+document.calc.jednostka.value="cm";
+}
+if(typ_konwersji=="in2pt"){
+document.calc.wynik.value=Math.round(argument*72*1000)/1000;
+document.calc.jednostka.value="pt";
+}
+if(typ_konwersji=="cm2pt"){
+document.calc.wynik.value=Math.round(argument*72/2.54*1000)/1000;
+document.calc.jednostka.value="pt";
+}
+if(typ_konwersji=="nm2hx"){
+j=1;
+while (j<=argument) {j*=16}
+j/=16;
+hex="";
+while (j>=1) {
+dz=Math.floor(Math.abs(argument/j));
+if (dz>=0&&dz<=9) {hex+=(dz.toString()).substring(0,1)}
+if (dz==10) {hex+="A"}
+if (dz==11) {hex+="B"}
+if (dz==12) {hex+="C"}
+if (dz==13) {hex+="D"}
+if (dz==14) {hex+="E"}
+if (dz==15) {hex+="F"}
+argument-=dz*j;
+j/=16;
+}
+ile=1;
+while (ile<hex.length) {ile*=2}
+document.calc.wynik.value=zera(hex,ile);
+document.calc.jednostka.value="";
+}
+if(typ_konwersji=="hx2nm"){
+argument=argument.toString();
+j=Math.pow(16,argument.length-1);
+l=0;
+for (var i=0; i<argument.length; i++) {
+zn=argument.substring(i,i+1).toUpperCase();
+if (zn=="1") {l+=j}
+if (zn=="2") {l+=j*2}
+if (zn=="3") {l+=j*3}
+if (zn=="4") {l+=j*4}
+if (zn=="5") {l+=j*5}
+if (zn=="6") {l+=j*6}
+if (zn=="7") {l+=j*7}
+if (zn=="8") {l+=j*8}
+if (zn=="9") {l+=j*9}
+if (zn=="A") {l+=j*10}
+if (zn=="B") {l+=j*11}
+if (zn=="C") {l+=j*12}
+if (zn=="D") {l+=j*13}
+if (zn=="E") {l+=j*14}
+if (zn=="F") {l+=j*15}
+j/=16;
+}
+document.calc.wynik.value=l;
+document.calc.jednostka.value="";
+}
+if(typ_konwersji!="nm2hx") {
+if (document.all.grupowanie.checked) {grupuj()}
+}
+if(typ_konwersji=="cdspd2trB") {
+document.calc.wynik.value=argument*153600;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.jednostka.value="B\\s";
+}
+if(typ_konwersji=="cdtrB2spd") {
+document.calc.wynik.value=argument/153600;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.wynik.value+="x";
+document.calc.jednostka.value="";
+}
+if(typ_konwersji=="cdspd2trKB") {
+document.calc.wynik.value=argument*150;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.jednostka.value="KB\\s";
+}
+if(typ_konwersji=="cdtrKB2spd") {
+document.calc.wynik.value=argument/150;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.wynik.value+="x";
+document.calc.jednostka.value="";
+}
+if(typ_konwersji=="dvdspd2trB") {
+document.calc.wynik.value=argument*1444864;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.jednostka.value="B\\s";
+}
+if(typ_konwersji=="dvdtrB2spd") {
+document.calc.wynik.value=argument/1444864;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.wynik.value+="x";
+document.calc.jednostka.value="";
+}
+if(typ_konwersji=="dvdspd2trKB") {
+document.calc.wynik.value=argument*1385;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.jednostka.value="KB\\s";
+}
+if(typ_konwersji=="dvdtrKB2spd") {
+document.calc.wynik.value=argument/1385;
+if (document.all.grupowanie.checked) {grupuj()}
+document.calc.wynik.value+="x";
+document.calc.jednostka.value="";
+}
+}
+function grupuj() {
+arg=document.calc.wynik.value;
+if (arg.lastIndexOf(".")!=-1) {rarg=arg.substring(arg.lastIndexOf("."),arg.length);arg=arg.substring(0,arg.lastIndexOf("."))}
+else {rarg=""}
+narg="";
+len=(arg.toString()).length;
+init();
+document.calc.wynik.value=narg;
+}
+function init() {
+if (len<=3) {narg=arg.substring(0,len)+narg+rarg;return}
+narg=" "+arg.substring(len-3,len)+narg;
+len-=3;
+init();
+}
+function zera(liczba,dlugoscLiczby) {
+liczba=liczba.toString();
+liczbaZer=dlugoscLiczby-liczba.length;
+for (var i=1; i<=liczbaZer; i++) {liczba="0"+liczba}
+return liczba;
+}
+</script>
+</html>

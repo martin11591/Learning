@@ -1,0 +1,19 @@
+<html><style>
+body{margin-left:0px;margin-right:0px;background-color:black;color:white}
+div{text-align:center}
+</style><body scroll=no onload="ruch()"><div style="background-color:red;position:relative;top:30px" id="pas1">Tekst 1</div><div style="background-color:green;position:absolute;top:0px" id="pas2">Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 Tekst 2 </div><script>
+z1=1;
+z2=2;
+y=0;
+dy=2;
+function ruch() {
+document.all.pas2.style.top=y;
+document.all.pas1.style.zIndex=z1;
+document.all.pas2.style.zIndex=z2;
+sy=y+dy;
+if (sy<0) {z1=1;z2=2;dy=-dy}
+if (sy>148) {z1=2;z2=1;dy=-dy}
+y=y+dy;
+setTimeout("ruch()",1);
+}
+</script></body>

@@ -1,0 +1,72 @@
+<html><body scroll=no onload="ruch()"><style>
+div{text-align:left;vertical-align:top;font-family:Tahoma;font-size:8pt}
+td{text-align:left;vertical-align:top;font-family:Tahoma;font-size:8pt}
+</style><img src="E:\MARTIN\Obrazy\Kolo.gif" id="a1" style="position:absolute"></img><div id="pozycje" style="position:absolute;z-index:3;display:none"><table border=0><tr style="color:red;font-weight:bold"><td>Obiekt</td><td>Kursor</td></tr><tr><td id="objx">X:</td><td id="curx">X:</td></tr><tr><td id="objy">Y:</td><td id="cury">Y:</td></tr></table><div id="spd">&nbspSzybkoœæ:</div></div>
+<script>
+poz=-1;
+rx=document.all.a1.width;
+ry=document.all.a1.height;
+dx=0;
+dy=0;
+x1=document.body.clientWidth/2-rx/2;;
+y1=document.body.clientHeight/2-ry/2
+this.mx=document.body.clientWidth;
+this.my=document.body.clientHeight;
+szybkosc=2;
+document.onmousemove=sterowanie;
+document.onmousedown=sterowanie;
+document.onkeydown=sterowanie;
+document.oncontextmenu=anuluj;
+document.ondragstart=anuluj;
+function sterowanie() {
+rx=document.all.a1.width;
+ry=document.all.a1.height;
+if (event.keyCode==107) {document.all.a1.style.width=document.all.a1.width+1;document.all.a1.style.height=document.all.a1.height+1}
+if (event.keyCode==109) {document.all.a1.style.width=document.all.a1.width-1;document.all.a1.style.height=document.all.a1.height-1}
+if (event.keyCode==73) {
+poz=-poz;
+if (poz==1) {aa=setTimeout("poz=-1",2500)}
+if (poz==-1) {clearTimeout(aa)}
+}
+if (event.button==1) {szybkosc=szybkosc+1}
+if (event.button==2) {
+szybkosc=szybkosc-1;
+if (szybkosc<1) {szybkosc=1}
+}
+if (event.keyCode==13) {document.all.a1.style.width=rx;document.all.a1.style.height=ry}
+x2=document.body.scrollLeft+event.clientX-rx/2;
+y2=document.body.scrollTop+event.clientY-ry/2;
+qw=Math.abs(x2-x1)
+er=Math.abs(y2-y1)
+if (qw<er) {qw=er}
+dx=szybkosc*(x2-x1)/qw;
+dy=szybkosc*(y2-y1)/qw;
+curx.innerHTML="X:"+Math.round(x2+20);
+cury.innerHTML="Y:"+Math.round(y2+20);
+spd.innerHTML="&nbspSzybkoœæ:"+Math.round(szybkosc);
+}
+function ruch() {
+sx=x1+dx;
+sy=y1+dy;
+if (sx<0||sx>document.body.clientWidth-document.all.a1.width) {dx=-dx}
+if (sy<0||sy>document.body.clientHeight-document.all.a1.height) {dy=-dy}
+x1=x1+dx;
+y1=y1+dy;
+if (x1<0) {x1=0}
+if (y1<0) {y1=0}
+if (x1>document.body.clientWidth-rx) {x1=document.body.clientWidth-rx}
+if (y1>document.body.clientHeight-ry) {y1=document.body.clientHeight-ry}
+document.all.a1.style.left=x1;
+document.all.a1.style.top=y1;
+objx.innerHTML="X:"+Math.round(x1);
+objy.innerHTML="Y:"+Math.round(y1);
+document.all.pozycje.style.left=document.body.scrollLeft+document.body.clientWidth/2-35
+document.all.pozycje.offsetWidth/2
+document.all.pozycje.style.top=document.body.scrollTop+document.body.clientHeight/2-35
+document.all.pozycje.offsetHeight/2
+if (poz==-1) {document.all.pozycje.style.display="none"}
+if (poz==1) {document.all.pozycje.style.display="block"}
+setTimeout("ruch()",1);
+}
+function anuluj() {return false;}
+</script>

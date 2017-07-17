@@ -1,0 +1,63 @@
+<html><body style="background-image:url(..\..\Gry\Moje gry\game1\Siec_frame_000.bmp)" scroll=no>
+<style>
+td{background-color:transparent;position:absolute;height:15px}
+button{font-family:Verdana;font-weight:600}
+</style>
+<table id="plat">
+<td><button style="width:100%"></button></td>
+<td><button style="width:100%"></button></td>
+<td><button style="width:100%"></button></td>
+<td><button style="width:100%"></button></td>
+<td><button style="width:100%"></button></td>
+<td><button style="width:100%"></button></td>
+</table>
+<script>
+platformy=document.getElementById('plat');
+i=0;
+j=0;
+z=0;
+dy=1;
+dz=0.1675;
+setInterval("dy+=0.35;dz+=0.05",3000);
+mx=document.body.clientWidth-20;
+my=document.body.clientHeight;
+setInterval("mx=document.body.clientWidth-20;my=document.body.clientHeight",1);
+max=platformy.rows[0].cells.length-1;
+rozstaw=my/(max+1)-10;
+init();
+platformy.rows[0].cells[max].style.left=0;
+platformy.rows[0].cells[max].style.width=mx+18;
+i=0;
+ruch();
+function init() {
+a=platformy.rows[0].cells[i].style;
+wid=150+Math.random()*200;
+a.width=wid;
+a.left=Math.random()*(mx-wid);
+a.top=(i*rozstaw)+"px";
+i+=1;
+if (i>max) {return}
+init();
+}
+function zmiany(aa) {
+a=platformy.rows[0].cells[aa].style;
+wid=150+Math.random()*200;
+a.width=wid;
+a.left=Math.random()*(mx-wid);
+if (j%50==0) {a.left=0;a.width=mx+18;platformy.rows[0].cells[aa].innerHTML="<button style=\"width:100%\">"+j+"</button>"}
+a.top=-20;
+}
+function ruch() {
+document.body.style.backgroundPositionY=z;
+a=platformy.rows[0].cells[i].style;
+y=a.pixelTop;
+y+=dy;
+a.top=y;
+if (y>my) {j+=1;zmiany(i)}
+i+=1;
+z+=dz;
+window.status="Platforma nr. "+j;
+if (i>max) {i-=max+1}
+setTimeout ("ruch()",1);
+}
+</script>

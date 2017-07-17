@@ -1,0 +1,43 @@
+<html>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250" />
+<textarea id="textIn" cols=80 rows=24></textarea><br />
+Czas potrzebny na wprowadzenie:<input id="timeH" size=1 />:<input id="timeM" size=1 />:<input id="timeS" size=1 /><br />
+<button id="countBtn" onclick="count()">Zlicz!</button><br />
+<div id="result"></div>
+<script>
+function $(id) {
+  return document.getElementById(id);
+}
+function count() {
+  iTxt=$("textIn").value.toString();
+  sumA=0;
+  test=new RegExp("[`0-9a-z\\-\\=\\[\\]\\\\;\\'\\,.\/\\n\\t ]","g");
+  try {sumA=iTxt.match(test).length} catch(err) {sumA=0};
+  sumB=0;
+  test=new RegExp('[~\\!@#\\$%\\^&\\*\\(\\)_\\+\\{\\}\\|:\\"<>\\?A-Z]+',"g");
+  iTxt.replace(test,function(x) {
+    if (x.length<2) sumB+=1; else {sumB+=1; sumA+=x.length-1};
+  });
+  test=new RegExp('[ąćęłńóśźż]+',"g");
+  iTxt.replace(test,function(x) {
+    if (x.length<2) sumB+=1; else {sumB+=1; sumA+=x.length-1};
+  });
+  sumC=0;
+  test=new RegExp("[ĄĆĘŁŃÓŚŹŻ]+","g");
+  iTxt.replace(test,function(x) {
+    if (x.length<2) sumC+=1; else {sumC+=1; sumA+=x.length-1};
+  });
+  sum=sumA+(sumB*2)+(sumC*3);
+  tH=parseInt($("timeH").value);
+  tM=parseInt($("timeM").value);
+  tS=parseInt($("timeS").value);
+  tH=isNaN(tH)?0:tH;
+  tM=isNaN(tM)?0:tM;
+  tS=isNaN(tS)?0:tS;
+  t=tH*3600+tM*60+tS;
+  if (t<1) t=1;
+  txt="<span title=\"`-=[]\\;\',.\/ oraz klawisz tabulatora, wszystkie cyfry i małe litery\">Liczba naciśnięć pojedynczego klawisza: "+sumA+"<\/span><br \/><span title='~!@#$%^&*()_+{}|:\"<>? oraz spacja (odstęp) i wszystkie duże litery'>Liczba naciśnięć dwóch klawiszy na raz: "+sumB+"<\/span><br />Liczba naciśnięć trzech klawiszy na raz: "+sumC+"<br />Liczba naciśnięć klawiszy łącznie: "+sum+"<br /><br />Nie uwzględnia usuwania znaków, ruchu kursora, naciśnięć klawiszy wyłącznie funkcyjnych oraz Locków; zlicza tylko z dostępnego tekstu.<br /><br />Średnie tempo wprowadzania: "+(sum/t)+" klawiszy na sekundę.";
+  $("result").innerHTML=txt;
+}
+</script>
+</html>

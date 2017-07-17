@@ -1,0 +1,26 @@
+<html>
+<textarea id="zrodlo" rows=10 cols=50 title="Tutaj ma byÊ tekst, z ktÛrego chcesz usunπÊ polskie znaki"></textarea><br><button onclick="usunPolskieZnaki()">UsuÒ polskie znaki</button><br><textarea id="wynik" rows=10 cols=50 title="Tutaj bÍdzie tekst z usuniÍtymi polskimi znakami"></textarea>
+<script>
+function usunPolskieZnaki() {
+a=document.all.zrodlo.value;
+a=a.replace(/•/g,"A");
+a=a.replace(/∆/g,"C");
+a=a.replace(/ /g,"E");
+a=a.replace(/£/g,"L");
+a=a.replace(/—/g,"N");
+a=a.replace(/”/g,"O");
+a=a.replace(/å/g,"S");
+a=a.replace(/è/g,"Z");
+a=a.replace(/Ø/g,"Z");
+a=a.replace(/π/g,"a");
+a=a.replace(/Ê/g,"c");
+a=a.replace(/Í/g,"e");
+a=a.replace(/≥/g,"l");
+a=a.replace(/Ò/g,"n");
+a=a.replace(/Û/g,"o");
+a=a.replace(/ú/g,"s");
+a=a.replace(/ü/g,"z");
+a=a.replace(/ø/g,"z");
+document.all.wynik.value=a;
+}
+</script>

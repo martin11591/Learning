@@ -1,0 +1,95 @@
+<html>
+<style>
+body {background-color:black;color:white}
+img {width:64px;height:96px}
+img.dk {width:24px;height:96px}
+input {background-color:transparent;color:white;border-style:solid}
+</style>
+<button id="licznikStop" onclick="blur();licznik_stop()">Start</button><button id="licznikZeruj" onclick="blur();licznik_zeruj()">Zeruj</button><br>Przy zerowaniu ustaw odliczanie na <input id="godziny" size=1 maxlength=2 value="00">:<input id="minuty" size=1 maxlength=2 value="01">:<input id="sekundy" size=1 maxlength=2 value="00">.<input id="ssekundy" size=1 maxlength=3 value="000">
+<div id="tekst" style="font-family:Lucida Handwriting;font-size:3cm;letter-spacing:-10px"></div>
+<div style="display:none">
+<form name="licznik">
+<img id="godz1" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img id="godz2" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img class=dk src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\dk.png"></img>
+<img id="min1" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img id="min2" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img class=dk src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\dk.png"></img>
+<img id="sek1" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img id="sek2" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img class=dk src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\k.png"></img>
+<img id="ssek1" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img id="ssek2" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+<img id="ssek3" src="E:\MARTIN\DHTML\DHTML cd\img\cyfry-lcd\0.png"></img>
+</form>
+</div>
+<script>
+var timer;
+start=-1;
+licznik_zeruj();
+cyfry="E:\/MARTIN\/DHTML\/DHTML cd\/img\/cyfry-lcd\/";
+function stoper() {
+licznikA=new Date();
+licznikT=licznikS-licznikA.getTime();
+if (licznikT<0) {clearTimeout(timer);licznik_stop();return}
+h=licznikT/3600000%100;
+m=licznikT/60000%60;
+s=licznikT/1000%60;
+ss=licznikT%1000;
+if (h<10) {h="0"+h} else {h=h.toString()}
+if (m<10) {m="0"+m} else {m=m.toString()}
+if (s<10) {s="0"+s} else {s=s.toString()}
+if (ss<100) {ss="0"+ss} else {ss=ss.toString()}
+if (ss<10) {ss="00"+ss} else {ss=ss.toString()}
+h1=h.substring(0,1);
+h2=h.substring(1,2);
+m1=m.substring(0,1);
+m2=m.substring(1,2);
+s1=s.substring(0,1);
+s2=s.substring(1,2);
+ss1=ss.substring(0,1);
+ss2=ss.substring(1,2);
+ss3=ss.substring(2,3);
+document.all.tekst.innerText=h1+h2+":"+m1+m2+":"+s1+s2+"."+ss1+ss2+ss3;
+timer=setTimeout("stoper()",1);
+}
+function ustaw_czas(g1,g2,m1,m2,s1,s2,ss1,ss2,ss3) {
+document.licznik.godz1.src=cyfry+h1+".png";
+document.licznik.godz2.src=cyfry+h2+".png";
+document.licznik.min1.src=cyfry+m1+".png";
+document.licznik.min2.src=cyfry+m2+".png";
+document.licznik.sek1.src=cyfry+s1+".png";
+document.licznik.sek2.src=cyfry+s2+".png";
+document.licznik.ssek1.src=cyfry+ss1+".png";
+document.licznik.ssek2.src=cyfry+ss2+".png";
+document.licznik.ssek3.src=cyfry+ss3+".png";
+}
+function licznik_zeruj() {
+a=document.all;
+lh=parseInt(a.godziny.value);
+lm=parseInt(a.minuty.value);
+ls=parseInt(a.sekundy.value);
+lss=parseInt(a.ssekundy.value);
+if (lh<0||isNaN(lh)) {lh=0}
+if (lm<0||isNaN(lm)) {lm=0}
+if (lm>59) {lm=59}
+if (ls<0||isNaN(ls)) {ls=0}
+if (ls>59) {ls=59}
+if (lss<0||isNaN(lss)) {lss=0}
+if (lss>999) {lss=999}
+licznikA=new Date();
+licznikS=licznikA.getTime()+3600000*lh+60000*lm+1000*ls+lss;
+if (lh<10) {lh="0"+lh}
+if (lm<10) {lm="0"+lm}
+if (ls<10) {ls="0"+ls}
+if (lss<100) {lss="0"+lss}
+if (lss<10) {lss="0"+lss}
+document.all.tekst.innerText=lh+":"+lm+":"+ls+"."+lss;
+}
+function licznik_stop() {
+start=-start;
+if (start==1) {licznik_zeruj();stoper();document.all.licznikStop.innerText="Stop"}
+if (start==-1) {clearTimeout(timer);document.all.licznikStop.innerText="Start"}
+}
+</script>
+</html>

@@ -1,0 +1,132 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns="http://www.w3.org/TR/REC-html40">
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+b\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<body scroll=no>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<img src="Kula1.gif" id="cel" style="position:absolute"></img>
+<img src="Kula2.gif" id="gracz" style="position:absolute"></img>
+<v:rect id="kompas" style="position:absolute;width:127px;height:127px;z-index:-100;display:none" filled="f" fillcolor="white [7]" stroked="f">
+<v:imagedata src="Kompas.gif" />
+</v:rect>
+<script>
+dc=document.all;
+celX=document.body.clientWidth/2-dc.cel.width/2;
+celY=document.body.clientHeight/2-dc.cel.height/2;
+with (dc.cel.style) {left=celX;top=celY}
+celDX=0;
+celDY=0;
+masaCel=1;
+graczX=0;
+graczY=0;
+masaGracz=1;
+gX1=0;
+gY1=0;
+graczDX=0;
+graczDY=0;
+kompasWidoczny=-1;
+var kompasTimer;
+kolizja=0;
+ruchObiektow();
+document.body.onmousemove=mysz;
+document.body.onkeyup=klawiatura;
+function zderzenie() {
+celR=dc.cel.width;
+for (var i=0; i<=6.3; i+=0.1) {
+colX1=celX+Math.sin(i)*celR;
+colY1=celY-Math.cos(i)*celR;
+colX2=celX-Math.sin(i)*celR;
+colY2=celY+Math.cos(i)*celR;
+if (graczX>=colX1&&graczY>=colY1&&graczX<=colX2&&graczY<=colY2) {kolizja=1}
+if (kolizja==1) {
+kolizja=0;
+qw=Math.abs(celX-graczX);
+er=Math.abs(celY-graczY);
+if (qw<er) {qw=er}
+colDX=(celX-graczX)/qw;
+colDY=(celY-graczY)/qw;
+deg=Math.atan2(colDY,colDX)*180/Math.PI+90;
+celDX=Math.sin(deg*Math.PI/180)*(masaGracz+Math.abs(graczDX));
+celDY=-Math.cos(deg*Math.PI/180)*(masaGracz+Math.abs(graczDY));
+qw=Math.abs(graczX-celX);
+er=Math.abs(graczY-celY);
+if (qw<er) {qw=er}
+colDX=(graczX-celX)/qw;
+colDY=(graczY-celY)/qw;
+deg=Math.atan2(colDY,colDX)*180/Math.PI+90;
+graczDX=Math.sin(deg*Math.PI/180)*(masaCel+Math.abs(celDX));
+graczDY=-Math.cos(deg*Math.PI/180)*(masaCel+Math.abs(celDY));
+}
+}
+}
+function mysz() {
+gX2=event.clientX-dc.gracz.width/2;
+gY2=event.clientY-dc.gracz.height/2;
+if (gX2<gX1) {graczDX-=0.25}
+if (gX2>gX1) {graczDX+=0.25}
+if (gY2<gY1) {graczDY-=0.25}
+if (gY2>gY1) {graczDY+=0.25}
+gX1=gX2;
+gY1=gY2;
+}
+function klawiatura() {
+key=String.fromCharCode(event.keyCode).toLowerCase();
+if (key=="k") {
+kompasWidoczny=-kompasWidoczny;
+if (kompasWidoczny==-1) {clearTimeout(kompasTimer);dc.kompas.style.display="none"}
+if (kompasWidoczny==1) {kompasTimer=setTimeout("dc.kompas.style.display='none';kompasWidoczny=-kompasWidoczny",5000);dc.kompas.style.display="block"}
+}
+}
+function ruchObiektow() {
+if (graczDX<-20) {graczDX=-20}
+if (graczDX>20) {graczDX=20}
+if (graczDY<-20) {graczDY=-20}
+if (graczDY>20) {graczDY=20}
+if (celDX<-20) {celDX=-20}
+if (celDX>20) {celDX=20}
+if (celDY<-20) {celDY=-20}
+if (celDY>20) {celDY=20}
+graczSX=graczX+graczDX;
+graczSY=graczY+graczDY;
+if (graczSX<0||graczSX>document.body.clientWidth-dc.gracz.width) {graczDX=-graczDX}
+if (graczSY<0||graczSY>document.body.clientHeight-dc.gracz.height) {graczDY=-graczDY}
+graczX+=graczDX;
+graczY+=graczDY;
+if (graczX<0) {graczX=0}
+if (graczX>document.body.clientWidth-dc.gracz.width) {graczX=document.body.clientWidth-dc.gracz.width}
+if (graczY<0) {graczY=0}
+if (graczY>document.body.clientHeight-dc.gracz.height) {graczY=document.body.clientHeight-dc.gracz.height}
+with (dc.gracz.style) {left=graczX;top=graczY}
+with (dc.kompas.style) {left=graczX-63.5+dc.gracz.width/2;top=graczY-63.5+dc.gracz.height/2}
+graczDX/=1.005;
+graczDY/=1.005;
+celSX=celX+celDX;
+celSY=celY+celDY;
+if (celSX<0||celSX>document.body.clientWidth-dc.cel.width) {celDX=-celDX}
+if (celSY<0||celSY>document.body.clientHeight-dc.cel.height) {celDY=-celDY}
+celX+=celDX;
+celY+=celDY;
+if (celX<0) {celX=0}
+if (celX>document.body.clientWidth-dc.cel.width) {celX=document.body.clientWidth-dc.cel.width}
+if (celY<0) {celY=0}
+if (celY>document.body.clientHeight-dc.cel.height) {celY=document.body.clientHeight-dc.cel.height}
+with (dc.cel.style) {left=celX;top=celY}
+celDX/=1.005;
+celDY/=1.005;
+qwK=Math.abs(celX-graczX);
+erK=Math.abs(celY-graczY);
+if (qwK<erK) {qwK=erK}
+komDX=(celX-graczX)/qwK;
+komDY=(celY-graczY)/qwK;
+deg=Math.atan2(komDY,komDX)*180/Math.PI+90;
+dc.kompas.rotation=deg;
+zderzenie();
+setTimeout("ruchObiektow()",1);
+}
+</script>

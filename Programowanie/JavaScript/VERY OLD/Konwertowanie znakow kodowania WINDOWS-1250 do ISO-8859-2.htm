@@ -1,0 +1,29 @@
+<html>
+<title>Konwertowanie znaków kodowania WINDOWS-1250 do ISO-8859-2</title>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<textarea id="zrodlo" rows=10 cols=50 title="Tekst w kodowaniu windows-1250"></textarea><br><button onclick="konwertuj()">Konwertuj</button><br><textarea id="wynik" rows=10 cols=50 title="Tekst w kodowaniu ISO-8859-2" readonly></textarea><br>
+Konwertuj znaki kodowania <select id="konwertujZnaki" onchange="opisy()"><option value="WINtoISO">windows-1250 na ISO-8859-2</option><option value="ISOtoWIN">ISO-8859-2 na windows-1250</option></select>
+<script>
+dc=document.all;
+function opisy() {
+sel=dc.konwertujZnaki.value.toLowerCase();
+if (sel=="wintoiso") {dc.zrodlo.title="Tekst w kodowaniu windows-1250";dc.wynik.title="Tekst w kodowaniu ISO-8859-2"}
+if (sel=="isotowin") {dc.zrodlo.title="Tekst w kodowaniu ISO-8859-2";dc.wynik.title="Tekst w kodowaniu windows-1250"}
+}
+function konwertuj() {
+sel=dc.konwertujZnaki.value.toLowerCase();
+a=dc.zrodlo.value;
+if (sel=="wintoiso") {
+a=a.replace(/Œ/g,"¦");
+a=a.replace(/¹/g,"±");
+a=a.replace(/œ/g,"¶");
+a=a.replace(/Ÿ/g,"¼");
+}
+if (sel=="isotowin") {
+}
+document.all.wynik.value=a;
+}
+</script>

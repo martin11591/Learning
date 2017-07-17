@@ -1,0 +1,34 @@
+<html>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<input id="stopnie" value="90">&deg;<button onclick="ustaw()">Ustaw</button><hr id="obiekt" style="color:#FF0000;position:absolute;width:10px;height:10px;z-index:-1">
+<script>
+dc=document.all;
+var timer,x,y,dx,dy;
+x=(document.body.clientWidth-5)/2;
+y=(document.body.clientHeight-5)/2;
+dx=(2*Math.random()-1)*2;
+dy=(2*Math.random()-1)*2;
+ruch();
+function ustaw() {
+x=(document.body.clientWidth-5)/2;
+y=(document.body.clientHeight-5)/2;
+dx=Math.sin(dc.stopnie.value*Math.PI/180)*2;
+dy=-Math.cos(dc.stopnie.value*Math.PI/180)*2;
+clearTimeout(timer);
+ruch();
+}
+function ruch() {
+sx=x+dx;
+sy=y+dy;
+if (sx<0||sx>document.body.clientWidth-10) {dx=-dx}
+if (sy<0||sy>document.body.clientHeight-10) {dy=-dy}
+x=x+dx;
+y=y+dy;
+with(dc.obiekt.style) {left=x;top=y}
+window.status=dx+"    "+dy;
+timer=setTimeout("ruch()",1);
+}
+</script>

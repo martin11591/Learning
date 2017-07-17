@@ -1,0 +1,129 @@
+<html>
+<style>
+body{background-color:black;color:white;font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+img{position:relative;top:-18px}
+</style>
+<hr><img src="E:/MARTIN/Obrazy/Slide.ico" id="slider1"></img><br><hr><img src="E:/MARTIN/Obrazy/Slide.ico" id="slider2"></img><br><hr><img src="E:/MARTIN/Obrazy/Slide.ico" id="slider3"></img><br><input type=checkbox id="wszystkie">Przesuñ wszystkie jednoczeœnie<br><div id="info">&nbsp;</div><script>
+hred="00";
+hgreen="00";
+hblue="00";
+red=0;
+green=0;
+blue=0;
+hired="FF";
+higreen="FF";
+hiblue="FF";
+ired=255;
+igreen=255;
+iblue=255;
+x1=0;
+x2=0;
+x3=0;
+all();
+function licz(liczba) {
+l1=parseInt(liczba/16);
+if(l1>=0&&l1<=9){hex=l1.toString()}
+if(l1==10){hex="A"}
+if(l1==11){hex="B"}
+if(l1==12){hex="C"}
+if(l1==13){hex="D"}
+if(l1==14){hex="E"}
+if(l1==15){hex="F"}
+l2=liczba%16;
+if(l2>=0&&l2<=9){hex+=l2.toString()}
+if(l2==10){hex+="A"}
+if(l2==11){hex+="B"}
+if(l2==12){hex+="C"}
+if(l2==13){hex+="D"}
+if(l2==14){hex+="E"}
+if(l2==15){hex+="F"}
+return hex;
+}
+setInterval("this.mx=document.body.clientWidth-31;info.innerHTML='R:'+red+'<br>G:'+green+'<br>B:'+blue+'<br>#'+hred+hgreen+hblue",1);
+document.all.slider1.ondragstart=drag1;
+document.all.slider2.ondragstart=drag2;
+document.all.slider3.ondragstart=drag3;
+function drag1() {
+x1=event.clientX-18;
+if (x1<0) {x1=0}
+if (x1>mx) {x1=mx}
+slider1.style.left=x1;
+red=Math.round(x1*255/mx);
+ired=255-red;
+hred=licz(red);
+hired=licz(ired);
+document.body.style.backgroundColor="#"+hred+hgreen+hblue;
+document.body.style.color="#"+hired+higreen+hiblue;
+return false;
+}
+function drag2() {
+x2=event.clientX-18;
+if (x2<0) {x2=0}
+if (x2>mx) {x2=mx}
+slider2.style.left=x2;
+green=Math.round(x2*255/mx);
+igreen=255-green
+hgreen=licz(green);
+higreen=licz(igreen);
+document.body.style.backgroundColor="#"+hred+hgreen+hblue;
+document.body.style.color="#"+hired+higreen+hiblue;
+return false;
+}
+function drag3() {
+x3=event.clientX-18;
+if (x3<0) {x3=0}
+if (x3>mx) {x3=mx}
+slider3.style.left=x3;
+blue=Math.round(x3*255/mx);
+iblue=255-blue;
+hblue=licz(blue);
+hiblue=licz(iblue);
+document.body.style.backgroundColor="#"+hred+hgreen+hblue;
+document.body.style.color="#"+hired+higreen+hiblue;
+return false;
+}
+function drag() {
+x1=event.clientX-18;
+if (x1<0) {x1=0}
+if (x1>mx) {x1=mx}
+x2=x1;
+x3=x1;
+slider1.style.left=x1;
+slider2.style.left=x2;
+slider3.style.left=x3;
+red=Math.round(x1*255/mx);
+ired=255-red;
+hred=licz(red);
+hired=licz(ired);
+green=red;
+blue=red;
+hgreen=hred;
+hblue=hred;
+document.body.style.backgroundColor="#"+hred+hred+hred;
+document.body.style.color="#"+hired+hired+hired;
+return false;
+}
+function all() {
+if(document.all.wszystkie.checked){
+x2=x1;
+x3=x1;
+slider2.style.left=x2;
+slider3.style.left=x3;
+green=red;
+blue=red;
+hgreen=hred;
+hblue=hred;
+document.body.style.backgroundColor="#"+hred+hred+hred;
+document.body.style.color="#"+hired+hired+hired;
+document.all.slider1.ondragstart=drag;
+document.all.slider2.ondragstart=drag;
+document.all.slider3.ondragstart=drag;
+}
+else{
+document.all.slider1.ondragstart=drag1;
+document.all.slider2.ondragstart=drag2;
+document.all.slider3.ondragstart=drag3;
+}
+setTimeout("all()",1);
+}
+</script>

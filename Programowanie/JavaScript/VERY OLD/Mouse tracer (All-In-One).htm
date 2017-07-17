@@ -1,0 +1,238 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Śledzenie myszy</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body	{ font-family: Trebuchet MS; font-size: 10pt; font-weight: bold }
+</style>
+</head>
+<body>
+<script type="text/javascript">
+/* <![CDATA[ */
+
+//	keyboard.js
+
+keyboard=new Object(function(e)
+{
+	if (!e) {e=event};
+	keyboard.eventType=e.type;
+	keyboard.keyCode=(e.which?e.which:e.keyCode);
+	keyboard.keyChar=String.fromCharCode(keyboard.keyCode);
+	keyboard.altKey=e.altKey;
+	keyboard.shiftKey=e.shiftKey;
+	keyboard.ctrlKey=e.ctrlKey;
+	test=true;
+	change=false;
+	toReturnCode=keyboard.keyCode;
+	toReturnChar=keyboard.keyChar;
+	toReturnCode2=keyboard.keyCode;
+	toReturnChar2=keyboard.keyChar;
+	for (var i=0; i<keyboard.rules.length; i++)
+	{
+		if (typeof(keyboard.rules[i])=="function")
+		{
+			if (keyboard.rules[i]()=="STOP") {test=false;break};
+		};
+	};
+	if (toReturnChar2!=toReturnChar) {toReturnCode=toReturnChar.charCodeAt(0);change=true};
+	if (toReturnCode2!=toReturnCode) {toReturnChar=String.fromCharCode(toReturnCode);change=true};
+	if (!e.which&&change)
+	{
+		e.keyCode=toReturnCode;
+	}
+	else
+	{
+		if (change)
+		{
+			if (test) {document.getElementById(this.id).value+=toReturnChar};
+			test=false;
+		};
+	};
+	return test;
+});
+
+//	keyboard_rules.js
+
+keyboard.rules=[
+];
+
+//	mouse.js
+
+mouse=new Object(function(e)
+{
+	if (!e) {e=event};
+	mouse.eventType=e.type;
+	mouse.altKey=e.altKey;
+	mouse.shiftKey=e.shiftKey;
+	mouse.ctrlKey=e.ctrlKey;
+	mouse.docPosX=e.clientX;
+	mouse.docPosY=e.clientY;
+	mouse.scrPosX=e.screenX;
+	mouse.scrPosY=e.screenY;
+	test=true;
+	for (var i=0; i<mouse.rules.length; i++)
+	{
+		if (typeof(mouse.rules[i])=="function")
+		{
+			if (mouse.rules[i]()=="STOP") {test=false;break};
+		};
+	};
+	return test;
+});
+
+//	insertObjects.js
+
+function $(id)
+{
+	if (document.all) {return document.all[id]} else {return document.getElementById(id)};
+};
+
+function insertfObjects(num)
+{
+	fObjects=new Array();
+	fObjects.objs=new Array();
+	fObjects.len=num;
+
+	for (var fI=0; fI<fObjects.len; fI++)
+	{
+		fObjects.push({x: Math.round(Math.random()*(90)), y: Math.round(Math.random()*(90)), w: 10, h: 10, dx: 0, dy: 0, maxSpd: 5+5*fObjects.len/fI});
+		obj=document.createElement("div");
+		obj.setAttribute("class","box");
+		obj.setAttribute("id","box"+fI);
+		with (obj.style)
+		{
+			position=document.all?"absolute":"fixed";
+			left=fObjects[fI].x+"px";
+			top=fObjects[fI].y+"px";
+			width=fObjects[fI].w+"px";
+			height=fObjects[fI].h+"px";
+			backgroundColor="#FF0000";
+		};
+		fObjects.objs.push(obj);
+		document.body.appendChild(fObjects.objs[fI]);
+	};
+	
+	obj=document.createElement("div");
+	obj.setAttribute("id","logWindow");
+	obj.style.position=document.all?"absolute":"fixed";
+	fObjects.objs.push(obj);
+	document.body.appendChild(fObjects.objs[fObjects.objs.length-1]);
+};
+
+function removefObjects()
+{
+	if (!fObjects.objs) {return};
+	for (fI=0; fI<fObjects.objs.length; fI++)
+	{
+		document.body.removeChild(fObjects.objs[fI]);
+	};
+	delete(fObjects);
+};
+
+//	animInit.js
+
+insertfObjects(3);
+
+fObjects.animationRefresh=20;
+fObjects.fpsRefresh=250;
+setTimeout("fObjects.fpsInit=true",5000);
+
+//	animateObjects.js
+
+document.onmousemove=mouse;
+
+mouse.rules=[];
+
+mouse.docPosX=screen.width/2;
+mouse.docPosY=screen.height/2;
+
+fObjects.move=function(num)
+{
+	if (num<0||num>fObjects.len) {return};
+	fObjects.qw=Math.abs(fObjects[num].x-mouse.docPosX);
+	fObjects.er=Math.abs(fObjects[num].y-mouse.docPosY);
+	if (fObjects.qw<fObjects.er) {fObjects.qw=fObjects.er};
+	fObjects[num].dx+=-(fObjects[num].x-mouse.docPosX)/fObjects.qw;
+	fObjects[num].dy+=-(fObjects[num].y-mouse.docPosY)/fObjects.qw;
+	if (Math.abs(fObjects[num].dx)>fObjects[num].maxSpd) {fObjects[num].dx=fObjects[num].dx<0?-fObjects[num].maxSpd:fObjects[num].maxSpd};
+	if (Math.abs(fObjects[num].dy)>fObjects[num].maxSpd) {fObjects[num].dy=fObjects[num].dy<0?-fObjects[num].maxSpd:fObjects[num].maxSpd};
+	fObjects[num].x+=fObjects[num].dx;
+	fObjects[num].y+=fObjects[num].dy;
+	with ($('box'+num).style)
+	{
+		left=fObjects[num].x+"px";
+		top=fObjects[num].y+"px";
+	};
+};
+
+fObjects.animate=function()
+{
+	fDate=new Date().getTime();
+	if (!fObjects.animateStartDate) {fObjects.animateStartDate=fDate};
+	if (!fObjects.fpsRefreshStartDate) {fObjects.fpsRefreshStartDate=fDate};
+	if (!fObjects.fpsEstimateStart) {fObjects.fpsEstimateStart=fDate};
+	if (!fObjects.animationRefresh) {fObjects.animationRefresh=1};
+	for (var i=0; i<fObjects.len; i++)
+	{
+		fObjects.move(i);
+	};
+	if (!fObjects.fps) {fObjects.fps=0};
+	if (!fObjects.minFps&&!fObjects.frames) {fObjects.minFps=Infinity};
+	if (!fObjects.maxFps) {fObjects.maxFps=0};
+	if (!fObjects.avgFps) {fObjects.avgFps=0};
+	if (!fObjects.fpsMethod) {fObjects.fpsMethod=1};
+	if (!fObjects.fpsRefresh) {fObjects.fpsRefresh=fObjects.fpsMethod==1?1000:fObjects.fpsMethod==2?1:1000};
+	if (!fObjects.frames) {fObjects.frames=0};
+	fDate=new Date().getTime();
+	fObjects.animateTimeElapsed=fDate-fObjects.animateStartDate;
+	fObjects.fpsEstimateStop=fDate;
+	fObjects.fpsEstimateTime=fObjects.fpsEstimateStop-fObjects.fpsEstimateStart;
+	if (fObjects.fpsEstimateTime==0) {fObjects.fpsEstimateTime=1};
+	fObjects.fps=1000/fObjects.fpsEstimateTime;
+	if (fObjects.animateTimeElapsed>5000)
+	{
+		if (fObjects.fps<fObjects.minFps) {fObjects.minFps=fObjects.fps};
+		if (fObjects.fps>fObjects.maxFps) {fObjects.maxFps=fObjects.fps};
+	};
+	fObjects.frames+=1;
+	fObjects.avgFps=fObjects.frames/(fObjects.animateTimeElapsed/1000);
+	fObjects.fpsRefreshDate=fDate;
+	if (fObjects.fpsRefreshDate-fObjects.fpsRefreshStartDate>fObjects.fpsRefresh)
+	{
+		fObjects.log="FPS: "+Math.floor(fObjects.fps);
+		fObjects.log+="<br>Targ. FPS: "+Math.floor(1000/fObjects.animationRefresh);
+		fObjects.log+="<br>Min. FPS: "+(fObjects.minFps==Infinity?0:Math.floor(fObjects.minFps));
+		fObjects.log+="<br>Avg. FPS: "+Math.floor(fObjects.avgFps);
+		fObjects.log+="<br>Max. FPS: "+Math.floor(fObjects.maxFps);
+		fObjects.log+="<br>Frames: "+fObjects.frames;
+		fObjects.log+="<br>Time: "+fObjects.animateTimeElapsed/1000+"s";
+		$("logWindow").innerHTML=fObjects.log;
+		fObjects.fpsRefreshStartDate=fObjects.fpsRefreshDate;
+	};
+	fDate=new Date().getTime();
+	fObjects.fpsEstimateStart=fObjects.fpsEstimateStop;
+	fObjects.timer=setTimeout("fObjects.animate()",fObjects.animationRefresh);
+};
+
+fObjects.pause=function()
+{
+	if (fObjects.timer)
+	{
+		fObjects.pauseDate=new Date().getTime();
+		clearTimeout(fObjects.timer);
+		delete(fObjects.timer);
+	}
+	else
+	{
+		fObjects.animateStartDate+=new Date().getTime()-fObjects.pauseDate;
+		fObjects.timer=setTimeout("fObjects.animate()",fObjects.time);
+	};
+};
+
+fObjects.animate();
+
+/* ]]> */
+</script>
+</body>
+</html>

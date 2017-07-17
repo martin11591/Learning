@@ -1,0 +1,49 @@
+<html><title>Krajobraz</title><script>
+newwin=window.open();
+newwin.focus();
+newwin.document.write('<html><style>img{position:absolute}</style>');
+i=0;
+r=1;
+sx=512;
+sy=292;
+x1=sx+r*Math.sin(0);
+y1=sy-r*Math.cos(0);
+obrazek();
+function line(pk1,pw1,pk2,pw2) {
+this.df=1;
+this.pk1=pk1;
+this.pw1=pw1;
+this.pk2=pk2;
+this.pw2=pw2;
+qw=Math.abs(pk2-pk1);
+er=Math.abs(pw2-pw1);
+if (qw<er) {qw=er}
+ty=(pk2-pk1)/qw;
+ui=(pw2-pw1)/qw;
+this.op=pk1;
+this.as=pw1;
+this.qw=qw;
+this.ty=ty;
+this.ui=ui;
+kropka="\"img/tt.bmp\"";
+rysuj();
+}
+function rysuj() {
+newwin.document.write('<img src='+kropka+' style="left:'+Math.round(op)+'px;top:'+Math.round(as)+'px"></img>');
+op=op+ty;
+as=as+ui;
+this.df=df+1;
+if (df<qw+1) {setTimeout("rysuj()",1)}
+}
+function obrazek() {
+x2=sx+r*Math.sin(i);
+y2=sy-r*Math.cos(i);
+line(x1,y1,x2,y2);
+x1=x2;
+y1=y2;
+i+=0.05;
+r+=0.075;
+newwin.window.status="I:"+i+"    R:"+r;
+setTimeout("obrazek()",1);
+}
+</script>

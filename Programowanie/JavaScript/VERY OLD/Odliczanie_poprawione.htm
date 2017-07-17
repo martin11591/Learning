@@ -1,0 +1,91 @@
+<html>
+<body scroll=auto>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+div{
+</style>
+<div id="stat">&nbsp;</div>
+<script src="Skrypty\Liczebniki.js"></script>
+<script>
+odliczaj();
+function odliczaj() {
+data=new Date();
+dzienTygodnia=data.getDay();
+dzien=data.getDate();
+miesiac=data.getMonth()+1;
+rok=data.getYear();
+sekundy=data.getSeconds();
+minuty=data.getMinutes();
+godziny=data.getHours();
+milisekundy=data.getTime()%999;
+txt="Jest godzina "+godziny+":"+zera(minuty,2)+":"+zera(sekundy,2)+"."+zera(milisekundy,3)+".<br>Dzisiaj jest ";
+if (dzienTygodnia==0) {txt+="niedziela"}
+if (dzienTygodnia==1) {txt+="poniedzia³ek"}
+if (dzienTygodnia==2) {txt+="wtorek"}
+if (dzienTygodnia==3) {txt+="œroda"}
+if (dzienTygodnia==4) {txt+="czwartek"}
+if (dzienTygodnia==5) {txt+="pi¹tek"}
+if (dzienTygodnia==6) {txt+="sobota"}
+txt+=", "+dzien+"."+zera(miesiac,2)+"."+zera(rok,4)+".<br><br>";
+godzin=24-godziny-1;
+if (godziny<0) {godzin+=24}
+minut=60-minuty-1;
+if (minut<0) {minut+=60}
+sekund=60-sekundy-1;
+if (sekund<0) {sekund+=60}
+milisekund=1000-milisekundy-1;
+if (milisekund<0) {milisekund+=1000}
+txt+="Do nastêpnej sekundy zosta³o "+zera(milisekund,3)+"ms.<br>";
+txt+="Do nastêpnej minuty zosta³o ";
+if (sekund!=0) {txt+=sekund+"s "}
+txt+=zera(milisekund,3)+"ms, czyli ";
+txt+=zera((sekund*1000+milisekund),5)+"ms.<br>";
+txt+="Do nastêpnej godziny zosta³o ";
+if (minut!=0) {txt+=minut+"m "}
+if (sekund!=0) {txt+=sekund+"s "}
+txt+=zera(milisekund,3)+"ms, czyli ";
+if (minut*60+sekund!=0) {txt+=(minut*60+sekund)+"s "}
+txt+=zera(milisekund,3)+"ms, czyli "+zera((minut*60+sekund)*1000+milisekund,7)+"ms.<br>";
+txt+="Do nastêpnego dnia zosta³o ";
+if (godzin!=0) {txt+=godzin+"h "}
+if (minut!=0) {txt+=minut+"m "}
+if (sekund!=0) {txt+=sekund+"s "}
+txt+=zera(milisekund,3)+"ms, czyli ";
+if (godzin*60+minut!=0) {txt+=(godzin*60+minut)+"m "}
+if (sekund!=0) {txt+=sekund+"s "}
+txt+=zera(milisekund,3)+"ms, czyli ";
+if (godzin*3600+minut*60+sekund!=0) {txt+=(godzin*3600+minut*60+sekund)+"s "}
+txt+=zera(milisekund,3)+"ms, czyli "+((godzin*3600+minut*60+sekund)*1000+milisekund)+"ms.<br>";
+nastepnyMiesiac=new Date(rok,miesiac+1,1,0,0,0);
+if(miesiac+1==12){nastepnyMiesiac=new Date(rok+1,0,1,0,0,0)}
+ileDni=nastepnyMiesiac.getTime()-data.getTime();
+milisekNaDzien=24*60*60*1000;
+liczbaDni=Math.floor(ileDni/milisekNaDzien);
+liczbaGodzin=Math.floor(ileDni/1000/60/60)%24;
+liczbaMinut=Math.floor(ileDni/1000/60)%60;
+liczbaSekund=Math.floor(ileDni/1000)%60;
+liczbaMilisekund=ileDni%1000;
+txt+="Do pocz¹tku nastêpnego miesi¹ca zosta³o ";
+if (liczbaDni!=0) {txt+=liczbaDni+" "+liczebnik(liczbaDni,"d","zieñ","ni","ni")+" "}
+if (liczbaGodzin!=0) {txt+=liczbaGodzin+"h "}
+if (liczbaMinut!=0) {txt+=liczbaMinut+"m "}
+if (liczbaSekund!=0) {txt+=liczbaSekund+"s "}
+txt+=zera(liczbaMilisekund,3)+"ms, czyli ";
+if (liczbaDni*24+liczbaGodzin!=0) {txt+=(liczbaDni*24+liczbaGodzin)+"h "}
+if (liczbaMinut!=0) {txt+=liczbaMinut+"m "}
+if (liczbaSekund!=0) {txt+=liczbaSekund+"s "}
+txt+=zera(liczbaMilisekund,3)+"ms, czyli ";
+if (liczbaDni*24*60+liczbaGodzin*3600+liczbaMinut!=0) {txt+=(liczbaDni*24*60+liczbaGodzin*3600+liczbaMinut)+"m "}
+if (liczbaSekund!=0) {txt+=liczbaSekund+"s "}
+txt+=zera(liczbaMilisekund,3)+"ms, czyli ";
+if (liczbaDni*24*60*60+liczbaGodzin*3600*60+liczbaMinut*60+liczbaSekund!=0) {txt+=(liczbaDni*24*60*60+liczbaGodzin*3600*60+liczbaMinut*60+liczbaSekund)+"s "}
+txt+=zera(liczbaMilisekund,3)+"ms, czyli "+zera(liczbaDni*24*60*60*1000+liczbaGodzin*3600*60*1000+liczbaMinut*60*1000+liczbaSekund*1000+liczbaMilisekund,10)+"ms.<br>";
+document.all.stat.innerHTML=txt;
+setTimeout("odliczaj()",1);
+}
+function zera(liczba,ile) {
+zer="0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+lic=liczba.toString();
+return zer.substring(0,ile-lic.length)+lic;
+}
+</script>

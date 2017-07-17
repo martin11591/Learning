@@ -1,0 +1,59 @@
+<html><body scroll=no onload="kwadr()" bgcolor="#000000"><style>
+body {font-family: Verdana}
+</style><table border=0 cellspacing=0 cellpadding=0><td bgcolor=#000000 width=15 height=15 id="pa" style="left: 1px; top: 1px; position: absolute"></td></table><table border=0 cellspacing=0 cellpadding=0><td bgcolor=#ffffff width=15 height=15 id="pb" style="left: 640px; top: 1px; position: absolute"></td></table><table border=0><td style="position: absolute; left: 657px; top: 2px" id="xx">X : </td><td style="position: absolute; left: 657px; top: 16px" id="yy">Y : </td><td style="position: absolute; left: 745px; top: 2px" id="kk">X : </td><td style="position: absolute; left: 745px; top: 16px" id="ww">Y : </td></table><script language="JavaScript">
+self.moveTo(0,0)
+self.resizeTo(screen.availWidth,screen.availHeight)
+k1=0
+k2=15
+kr1=1
+kr2=1
+x=0
+y=0
+k=document.body.clientWidth-15
+w=0
+dx=1
+dy=1
+dk=-0.5
+dw=0.5
+kolory=new Array ('#0000ff','#1111ff','#2222ff','#3333ff','#4444ff','#5555ff','#6666ff','#7777ff','#8888ff','#9999ff','#aaaaff','#bbbbff','#ccccff','#ddddff','#eeeeff','#ffffff')
+tlo=new Array ('#ff0000','#ff1111','#ff2222','#ff3333','#ff4444','#ff5555','#ff6666','#ff7777','#ff8888','#ff9999','#ffaaaa','#ffbbbb','#ffcccc','#ffdddd','#ffeeee','#ffffff')
+function kwadr() {
+document.all.pa.style.left=x;
+document.all.pb.style.left=k;
+document.all.pa.style.top=y;
+document.all.pb.style.top=w;
+document.all.pa.bgColor=kolory[k1];
+document.all.pb.bgColor=tlo[k2];
+xx.innerHTML="<font color='"+kolory[k1]+"'>X : "+Math.round(x)+"</font>";
+yy.innerHTML="<font color='"+kolory[k1]+"'>Y : "+Math.round(y)+"<br>SX : "+document.body.clientWidth+"</font>";
+kk.innerHTML="<font color='"+tlo[k2]+"'>X : "+Math.round(k)+"</font>";
+ww.innerHTML="<font color='"+tlo[k2]+"'>Y : "+Math.round(w)+"<br>SY : "+document.body.clientHeight+"</font>";
+s1=k1+kr1;
+s2=k2+kr2;
+if (s1<1||s1>15) {kr1=-kr1}
+if (s2<1||s2>15) {kr2=-kr2}
+k1=k1+kr1;
+k2=k2+kr2;
+sx=x+dx;
+sy=y+dy;
+sk=k+dk;
+sw=w+dw;
+if (x<0) {x=0}
+if (y<0) {y=0}
+if (k<0) {k=0}
+if (w<0) {w=0}
+if (x+15>document.body.clientWidth) {x=document.body.clientWidth-15}
+if (y+15>document.body.clientHeight) {y=document.body.clientHeight-15}
+if (k+15>document.body.clientWidth) {k=document.body.clientWidth-15}
+if (w+15>document.body.clientHeight) {w=document.body.clientHeight-15}
+if (sx<0||sx>document.body.clientWidth-15) {dx=-dx}
+if (sy<0||sy>document.body.clientHeight-15) {dy=-dy}
+x=x+dx;
+y=y+dy;
+if (sk<0||sk>document.body.clientWidth-15) {dk=-dk}
+if (sw<0||sw>document.body.clientHeight-15) {dw=-dw}
+k=k+dk;
+w=w+dw;
+setTimeout("kwadr()",0);
+}
+</script></body></html>

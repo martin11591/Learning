@@ -1,0 +1,22 @@
+<html><body scroll=no><input type=file name="plik" onchange="document.all.obraz.src=document.all.plik.value"><br><button onclick="show()">Uruchom animacjê</button><img src="" id="obraz" style="position:absolute;display:none"></img><script>
+i=0;
+function show() {
+document.all.obraz.style.width=320;
+document.all.obraz.style.height=240;
+document.all.obraz.style.left=document.body.clientWidth/2-160;
+document.all.obraz.style.top=document.body.clientHeight/2-120;
+document.all.obraz.src=document.all.plik.value;
+document.all.obraz.style.display="block";
+ruch();
+}
+function ruch() {
+document.all.obraz.style.pixelLeft-=i/2;
+document.all.obraz.style.pixelTop-=i/2;
+document.all.obraz.style.width=document.all.obraz.width+i;
+document.all.obraz.style.height=document.all.obraz.height+i;
+i=i+1;
+window.status=i;
+if (i>120) {document.all.obraz.style.display="none";i=0;clearTimeout(timer);return}
+timer=setTimeout("ruch()",1);
+}
+</script>

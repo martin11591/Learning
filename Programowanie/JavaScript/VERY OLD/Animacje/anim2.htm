@@ -1,0 +1,33 @@
+<html><body onload="obroty();aobroty()">
+<style>
+body{font-family:Verdana;font-size:12}
+input{font-family:Courier New}
+img{width:320;height:320}
+</style>
+<center><img src="anim/a1.bmp" name="kolo1" alt="Ko³o z lini¹ w œrodku, która siê obraca">&nbsp<img src="anim/a1.bmp" name="kolo2" alt="Ko³o z lini¹ w œrodku, która siê obraca"></center><br>Prêdkoœæ, z jak¹ ma siê obracaæ pierwsze ko³o:<input type="text" name="speed1" size=4 maxlength=4 value=1><br>Prêdkoœæ, z jak¹ ma siê obracaæ drugie ko³o:<input type="text" name="speed2" size=4 maxlength=4 value=20><br>Liczba klatek w pierwszym kole:<input type="text" name="fps1" size=4 maxlength=2 value=1><br>Liczba klatek w drugim kole:<input type="text" name="fps2" size=4 maxlength=2 value=1><script>
+kratka1=1;fr1=40;kratka2=1;fr2=1
+function obroty() {
+sp1=document.all.speed1.value;
+eval('kolo1.src="anim/a'+kratka1+'.bmp"');
+fp1=Math.floor(parseFloat(document.all.fps1.value));
+if (fp1==null||fp1==""||isNaN(fp1)) {fp1=1}
+if (fp1<-39) {fp1=-39}
+if (fp1>39) {fp1=39}
+kratka1=kratka1+fp1;
+while (kratka1<1) {kratka1+=40}
+while (kratka1>40) {kratka1-=40}
+setTimeout("obroty()",sp1);
+}
+function aobroty() {
+sp2=document.all.speed2.value;
+eval('kolo2.src="anim/a'+kratka2+'.bmp"');
+fp2=Math.floor(parseFloat(document.all.fps2.value));
+if (fp2==null||fp2==""||isNaN(fp2)) {fp2=1}
+if (fp2<-39) {fp2=-39}
+if (fp2>39) {fp2=39}
+kratka2=kratka2+fp2;
+while (kratka2<1) {kratka2+=40}
+while (kratka2>40) {kratka2-=40}
+setTimeout("aobroty()",sp2);
+}
+</script>

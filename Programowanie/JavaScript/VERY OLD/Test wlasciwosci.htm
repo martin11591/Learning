@@ -1,0 +1,42 @@
+<html><title>Test w³aœciwoœci</title><body style="background-color:black;color:yellow;font-family:Palatino Linotype;font-size:14pt">
+<input id="szukaj" type=text size=72></input><div id="wlasne">&nbsp;</div>
+<SCRIPT LANGUAGE="JavaScript">
+document.body.appendChild(document.createTextNode("Próba"));
+document.body.appendChild(document.createElement("br"));
+pokazZaznaczone();
+for (i in document) {
+if(eval("document."+i)=="[object]"){document.write("<font color=red>document."+i+" = "+eval("document."+i)+"</font><br>")
+ii="document."+i;
+for (j in eval(ii)) {
+document.write("<font color=orange>"+ii+"."+j+"</font><br>");
+if(ii=="document.all"){break}
+}
+}
+else{document.write("document."+i+" = "+eval("document."+i)+"<br>")}
+}
+for (i in location) document.write("location."+i+" = "+eval("location."+i)+"<br>");
+for (i in navigator) document.write("navigator."+i+" = "+eval("navigator."+i)+"<br>");
+for (i in window) document.write("window."+i+" = "+eval("window."+i)+"<br>");
+for (i in document.body.style) document.write("document.body.style."+i+" = "+eval("document.body.style."+i)+"<br>");
+for (i in document.all.szukaj) {
+if(eval("document.all.szukaj."+i)=="[object]"){document.write("<font color=red>document.all.szukaj."+i+" = "+eval("document.all.szukaj."+i)+"</font><br>")
+ii="document.all.szukaj."+i;
+for (j in eval(ii)) {
+document.write("<font color=orange>"+ii+"."+j+"</font><br>");
+}
+}
+else{document.write("document.all.szukaj."+i+" = "+eval("document.all.szukaj."+i)+"<br>")}
+}
+document.all.szukaj.onkeyup=szuk;
+function szuk() {
+aa="";
+ab=document.all.szukaj.value;
+window.status=ab;
+for (i in ab) aa+=ab+"."+i+" = "+eval(ab+"."+i)+"<br>";
+document.all.wlasne.innerHTML=aa;
+}
+function pokazZaznaczone() {
+document.all.wlasne.innerHTML=document.onselectionchange;
+setTimeout("pokazZaznaczone()",1);
+}
+</SCRIPT></body></html>

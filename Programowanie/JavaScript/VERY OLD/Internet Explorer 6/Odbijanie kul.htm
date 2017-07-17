@@ -1,0 +1,95 @@
+<html>
+<body scroll=no>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<script>
+dc=document.all;
+document.oncontextmenu=anuluj;
+document.ondragstart=anuluj;
+document.ondrop=anuluj;
+obiekt=new Array();
+dodajObiekt(0,"Kula2.gif",0,0,0,0,Math.random()+1);
+liczbaObiektow=3;
+for (var i=1; i<=liczbaObiektow; i++) {
+dodajObiekt(i,"Kula1.gif",36+i*26,36+i*26,0,0,Math.random()+1);
+}
+gX1=0;
+gY1=0;
+document.onmousemove=mysz;
+kolizja=0;
+setInterval("ruchObiektow()",1);
+function dodajObiekt(numer,obrazek,x,y,dx,dy,masa) {
+document.write("<img id=\"obiekt"+numer+"\" src=\""+obrazek+"\" style=\"position:absolute\"></img>");
+eval("obiekt["+numer+"]=new przypiszObiektowi("+numer+","+x+","+y+","+dx+","+dy+","+masa+")");
+with (dc["obiekt"+numer].style) {left=obiekt[numer].X;top=obiekt[numer].Y}
+}
+function przypiszObiektowi(numer,x,y,dx,dy,masa) {
+eval("this.W=dc.obiekt"+numer+".width");
+eval("this.H=dc.obiekt"+numer+".height");
+if (x<this.W) {x=this.W}
+if (y<this.H) {y=this.H}
+if (x>document.body.clientWidth-this.W) {x=document.body.clientWidth-this.W}
+if (y>document.body.clientHeight-this.H) {y=document.body.clientHeight-this.H}
+this.X=x-this.W/2;
+this.Y=y-this.H/2;
+this.DX=dx;
+this.DY=dy;
+this.Masa=masa;
+}
+function ruchObiektow() {
+for (var i=0; i<=liczbaObiektow; i++) {
+if (obiekt[i].DX<-20) {obiekt[i].DX=-20}
+if (obiekt[i].DX>20) {obiekt[i].DX=20}
+if (obiekt[i].DY<-20) {obiekt[i].DY=-20}
+if (obiekt[i].DY>20) {obiekt[i].DY=20}
+zderzenie();
+obiekt[0].DX=0;
+obiekt[0].DY=0;
+sx=obiekt[i].X+obiekt[i].DX;
+sy=obiekt[i].Y+obiekt[i].DY;
+if (sx<obiekt[i].W/2||sx>document.body.clientWidth-obiekt[i].W/2) {obiekt[i].DX=-obiekt[i].DX}
+if (sy<obiekt[i].H/2||sy>document.body.clientHeight-obiekt[i].H/2) {obiekt[i].DY=-obiekt[i].DY}
+obiekt[i].X+=obiekt[i].DX;
+obiekt[i].Y+=obiekt[i].DY;
+with (dc["obiekt"+i].style) {left=obiekt[i].X-obiekt[i].W/2;top=obiekt[i].Y-obiekt[i].H/2}
+obiekt[i].DX/=1.005;
+obiekt[i].DY/=1.005;
+}
+}
+function mysz() {
+obiekt[0].X=event.clientX;
+obiekt[0].Y=event.clientY;
+if (obiekt[0].X<obiekt[0].W/2) {obiekt[0].X=obiekt[0].W/2}
+if (obiekt[0].X>document.body.clientWidth-obiekt[0].W/2) {obiekt[0].X=document.body.clientWidth-obiekt[0].W/2}
+if (obiekt[0].Y<obiekt[0].H/2) {obiekt[0].Y=obiekt[0].H/2}
+if (obiekt[0].Y>document.body.clientHeight-obiekt[0].H/2) {obiekt[0].Y=document.body.clientHeight-obiekt[0].H/2}
+}
+function zderzenie() {
+for (var j=0; j<=liczbaObiektow; j++) {
+colR=obiekt[j].W;
+for (var z=0; z<=20; z++) {
+colX1=obiekt[j].X+Math.sin(z)*colR;
+colY1=obiekt[j].Y-Math.cos(z)*colR;
+colX2=obiekt[j].X-Math.sin(z)*colR;
+colY2=obiekt[j].Y+Math.cos(z)*colR;
+for (var i=0; i<=liczbaObiektow; i++) {
+if (i==j) {continue}
+if (obiekt[i].X>=colX1&&obiekt[i].Y>=colY1&&obiekt[i].X<=colX2&&obiekt[i].Y<=colY2) {kolizja=1}
+if (kolizja==1) {
+kolizja=0;
+qw=Math.abs(obiekt[i].X-obiekt[j].X);
+er=Math.abs(obiekt[i].Y-obiekt[j].Y);
+if (qw<er) {qw=er}
+colDX=(obiekt[i].X-obiekt[j].X)/qw;
+colDY=(obiekt[i].Y-obiekt[j].Y)/qw;
+deg=Math.atan2(colDY,colDX)*180/Math.PI+90;
+obiekt[i].DX+=Math.sin(deg*Math.PI/180)*obiekt[j].Masa;
+obiekt[i].DY-=Math.cos(deg*Math.PI/180)*obiekt[j].Masa;
+}
+}
+}
+}
+}
+function anuluj() {return false}
+</script>

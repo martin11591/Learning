@@ -1,0 +1,13 @@
+<html><body onLoad="baner()"><style>
+body{font-family:Verdana}
+input{cursor:default;border-color:transparent;color:invert;font-family:Courier;border:solid black}
+</style><form name="banner"><center><input type="text" name="tekst" size=120 maxlength=120 value="  Jakiœ tam tekst  Jakiœ tam tekst  Jakiœ tam tekst  Jakiœ tam tekst  Jakiœ tam tekst  Jakiœ tam tekst  Jakiœ tam tekst  "></center><br><input name="chars" size=3 maxlength=3 value=1>Liczba przesuwanych znaków<br><input name="speed" size=4 maxlength=4 value=100>Prêdkoœc w milisekundach (1000=1 sekunda)</form>
+<script>
+function baner() {
+ban=document.banner.tekst.value;
+sp=document.banner.speed.value;
+ch=document.banner.chars.value;
+document.banner.tekst.value=ban.substring(ch)+ban.substring(0,ch);
+setTimeout("baner()",sp);
+}
+</script>

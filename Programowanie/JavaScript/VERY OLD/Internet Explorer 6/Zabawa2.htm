@@ -1,0 +1,43 @@
+<html><body scroll=no onload="ruch()"><bgsound src="" loop=1 id="a2"></bgsound><img src="E:\MARTIN\Obrazy\Kolo.gif" id="a1" style="position:absolute"></img>
+<script>
+rx=document.all.a1.width;
+ry=document.all.a1.height;
+dx=0;
+dy=0;
+x=0;
+y=0;
+x1=0;
+y1=0;
+a=1;
+document.onmousemove=sterowanie;
+document.onmousedown=sterowanie;
+document.onkeydown=sterowanie;
+function sterowanie() {
+if (event.keyCode==107) {a=-1;document.all.a1.style.width=document.all.a1.width+1;document.all.a1.style.height=document.all.a1.height+1}
+if (event.keyCode==109) {a=-1;document.all.a1.style.width=document.all.a1.width-1;document.all.a1.style.height=document.all.a1.height-1}
+if (event.keyCode==13) {document.all.a1.style.width=rx;document.all.a1.style.height=ry}
+if (event.button==1) {dx=0;dy=0}
+if (a==1) {
+x2=event.clientX-document.all.a1.width/2;
+y2=event.clientY-document.all.a1.height/2;
+}
+if (x2<x1) {dx=dx-0.25}
+if (x2>x1) {dx=dx+0.25}
+if (y2<y1) {dy=dy-0.25}
+if (y2>y1) {dy=dy+0.25}
+x1=x2;
+y1=y2;
+a=1
+}
+function ruch() {
+sx=x+dx;
+sy=y+dy;
+if (sx<0||sx>document.body.clientWidth-document.all.a1.width) {dx=-dx}
+if (sy<0||sy>document.body.clientHeight-document.all.a1.height) {dy=-dy}
+x=x+dx;
+y=y+dy;
+document.all.a1.style.left=x;
+document.all.a1.style.top=y;
+setTimeout("ruch()",1);
+}
+</script>

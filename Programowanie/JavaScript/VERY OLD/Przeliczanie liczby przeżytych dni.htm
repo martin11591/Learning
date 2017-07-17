@@ -1,0 +1,128 @@
+<html><body scroll=auto><title>Przeliczanie liczby prze¿ytych dni, godzin, minut, sekund i milisekund</title>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+input.num2{width:20px;border:none;cursor:default}
+input.num4{width:40px;border:none;cursor:default}
+</style>
+<div>Data urodzenia:<input id="dzien" value=15 maxlength=2 class=num2>.<input id="miesiac" value=10 maxlength=2 class=num2>.<input id="rok" value=1991 maxlength=4 class=num4>  Godzina urodzenia:<input id="godzina" value=15 maxlength=2 class=num2>:<input id="minuta" value=00 maxlength=2 class=num2>:<input id="sekunda" value=00 maxlength=2 class=num2></div>
+<div id="znakZodiaku">Znak zodiaku:</div>
+<div id="wiek">Prze¿y³aœ/eœ ju¿ </div>
+<script src="Skrypty\Liczebniki.js"></script>
+<script>
+zodiak();
+function zodiak() {
+doc=document.all;
+d=doc.dzien.value;
+m=doc.miesiac.value;
+r=doc.rok.value;
+if (m<1) {m=1}
+if (m>12) {m=12}
+if (r<1) {r=1}
+prz=parseInt(r%4);
+if (prz==0) {prz=1} else {prz=0}
+dniMiesiecy=new Array(31,28+prz,31,30,31,30,31,31,30,31,30,31,30,31);
+ug=doc.godzina.value;
+um=doc.minuta.value;
+us=doc.sekunda.value;
+if (d<1) {d=1}
+if (d>dniMiesiecy[m-1]) {d=dniMiesiecy[m-1]}
+if (ug<0) {ug=0}
+if (ug>23) {ug=23}
+if (um<0) {um=0}
+if (um>59) {um=59}
+if (us<0) {us=0}
+if (us>59) {us=59}
+if (d<1) {d=1}
+if (m<1) {m=1}
+if (m>12) {m=12}
+if (d>dniMiesiecy[m-1]) {d=dniMiesiecy[m-1]}
+data=new Date();
+dz=data.getDate();
+mies=data.getMonth()+1;
+ro=data.getYear();
+if (m==1) {
+if (d<=20) {doc.znakZodiaku.innerText="Znak zodiaku:Kozioro¿ec"}
+if (d>=21) {doc.znakZodiaku.innerText="Znak zodiaku:Wodnik"}
+}
+if (m==2) {
+if (d<=19) {doc.znakZodiaku.innerText="Znak zodiaku:Wodnik"}
+if (d>=20) {doc.znakZodiaku.innerText="Znak zodiaku:Ryby"}
+}
+if (m==3) {
+if (d<=20) {doc.znakZodiaku.innerText="Znak zodiaku:Ryby"}
+if (d>=21) {doc.znakZodiaku.innerText="Znak zodiaku:Baran"}
+}
+if (m==4) {
+if (d<=20) {doc.znakZodiaku.innerText="Znak zodiaku:Baran"}
+if (d>=21) {doc.znakZodiaku.innerText="Znak zodiaku:Byk"}
+}
+if (m==5) {
+if (d<=21) {doc.znakZodiaku.innerText="Znak zodiaku:Byk"}
+if (d>=22) {doc.znakZodiaku.innerText="Znak zodiaku:BliŸniêta"}
+}
+if (m==6) {
+if (d<=21) {doc.znakZodiaku.innerText="Znak zodiaku:BliŸniêta"}
+if (d>=22) {doc.znakZodiaku.innerText="Znak zodiaku:Rak"}
+}
+if (m==7) {
+if (d<=22) {doc.znakZodiaku.innerText="Znak zodiaku:Rak"}
+if (d>=23) {doc.znakZodiaku.innerText="Znak zodiaku:Lew"}
+}
+if (m==8) {
+if (d<=23) {doc.znakZodiaku.innerText="Znak zodiaku:Lew"}
+if (d>=24) {doc.znakZodiaku.innerText="Znak zodiaku:Panna"}
+}
+if (m==9) {
+if (d<=23) {doc.znakZodiaku.innerText="Znak zodiaku:Panna"}
+if (d>=24) {doc.znakZodiaku.innerText="Znak zodiaku:Waga"}
+}
+if (m==10) {
+if (d<=23) {doc.znakZodiaku.innerText="Znak zodiaku:Waga"}
+if (d>=24) {doc.znakZodiaku.innerText="Znak zodiaku:Skorpion"}
+}
+if (m==11) {
+if (d<=22) {doc.znakZodiaku.innerText="Znak zodiaku:Skorpion"}
+if (d>=23) {doc.znakZodiaku.innerText="Znak zodiaku:Strzelec"}
+}
+if (m==12) {
+if (d<=22) {doc.znakZodiaku.innerText="Znak zodiaku:Strzelec"}
+if (d>=23) {doc.znakZodiaku.innerText="Znak zodiaku:Kozioro¿ec"}
+}
+doc.znakZodiaku.innerText+=".";
+dataUrodzenia=new Date(r,m-1,d,ug,um,us);
+uplynietyCzas=data.getTime()-dataUrodzenia.getTime();
+milisekundyNaDzien=24*60*60*1000;
+uplynietychDni=Math.floor(uplynietyCzas/milisekundyNaDzien);
+uplynietychLat=Math.floor(uplynietychDni/365.25);
+uplynietychDni-=uplynietychLat*365.25;
+uplynietychMiesiecy=Math.floor(uplynietychDni/30.4375);
+uplynietychDni-=uplynietychMiesiecy*30.4375;
+uplynietychTygodni=Math.floor(uplynietychDni/7);
+uplynietychDni-=uplynietychTygodni*7;
+uplynietychDni=Math.floor(uplynietychDni);
+uplynietychGodzin=Math.floor(uplynietyCzas/1000/60/60)%24;
+uplynietychMinut=Math.floor(uplynietyCzas/1000/60)%60;
+uplynietychSekund=Math.floor(uplynietyCzas/1000)%60;
+uplynietychMilisekund=uplynietyCzas%1000;
+if (uplynietychGodzin<0) {uplynietychGodzin+=24}
+if (uplynietychGodzin>23) {uplynietychGodzin-=24}
+godziny=data.getHours();
+minuty=data.getMinutes();
+sekundy=data.getSeconds();
+milisekundy=data.getTime();
+lata=ro-r;
+if (mies<=m) {lata-=1;miesiace=12-(m-mies)} else {miesiace=mies-m}
+if (miesiace==12) {lata+=1;miesiace=0}
+doc.wiek.innerText="Prze¿y³aœ/eœ ju¿";
+if (uplynietychLat!=0) {doc.wiek.innerText+=" "+uplynietychLat+" "+liczebnik(uplynietychLat,"","rok","lata","lat")}
+if (uplynietychMiesiecy!=0) {doc.wiek.innerText+=" "+uplynietychMiesiecy+" "+liczebnik(uplynietychMiesiecy,"miesi","¹c","¹ce","êcy")}
+if (uplynietychTygodni!=0) {doc.wiek.innerText+=" "+uplynietychTygodni+" "+liczebnik(uplynietychTygodni,"ty","dzieñ","godnie","godni")}
+if (uplynietychDni!=0) {doc.wiek.innerText+=" "+uplynietychDni+" "+liczebnik(uplynietychDni,"d","zieñ","ni","ni")}
+if (uplynietychGodzin!=0) {doc.wiek.innerText+=" "+uplynietychGodzin+" "+liczebnik(uplynietychGodzin,"godzin","ê","y","")}
+if (uplynietychMinut!=0) {doc.wiek.innerText+=" "+uplynietychMinut+" "+liczebnik(uplynietychMinut,"minut","ê","y","")}
+if (uplynietychSekund!=0) {doc.wiek.innerText+=" "+uplynietychSekund+" "+liczebnik(uplynietychSekund,"sekund","ê","y","")}
+if (uplynietychMilisekund!=0) {doc.wiek.innerText+=" "+uplynietychMilisekund+" "+liczebnik(uplynietychMilisekund,"milisekund","ê","y","")}
+doc.wiek.innerText+=".";
+setTimeout("zodiak()",1);
+}
+</script>

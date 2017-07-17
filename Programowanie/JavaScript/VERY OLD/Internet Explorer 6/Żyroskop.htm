@@ -1,0 +1,43 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<body scroll=no>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+b\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:url(..\..\Obrazy\clearCursor.cur)}
+</style>
+<v:rect id="kursor" style="position:absolute;left:0px;top:0px;width:30px;height:66px" stroked="f" filled="f" fillcolor="white [7]">
+<v:imagedata src="Kursor.gif" />
+</v:rect>
+<script>
+dc=document.all;
+mX1=0;
+mY1=0;
+deg=0;
+deg1=0;
+deg2=0;
+document.onmousemove=mysz;
+function mysz() {
+mX2=event.clientX;
+mY2=event.clientY;
+qw=Math.abs(mX2-mX1);
+er=Math.abs(mY2-mY1);
+if (qw<er) {qw=er}
+dx=(mX2-mX1)/qw;
+dy=(mY2-mY1)/qw;
+if (isNaN(dx)) {dx=0}
+if (isNaN(dy)) {dy=0}
+deg1=Math.atan2(dy,dx)*180/Math.PI-90;
+deg2=360-deg1;
+if (deg1<deg2) {deg+=5}
+if (deg1>deg2) {deg-=5}
+with (dc.kursor.style) {left=event.clientX-15;top=event.clientY-33}
+dc.kursor.rotation=deg1+180;
+window.status=deg1;
+mX1=mX2;
+mY1=mY2;
+}
+</script>

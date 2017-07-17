@@ -1,0 +1,102 @@
+<html>
+<body scroll=no>
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+</style>
+<script>
+dc=document.all;
+document.oncontextmenu=anuluj;
+document.ondragstart=anuluj;
+document.ondrop=anuluj;
+obiekt=new Array();
+dodajObiekt(0,"Kula1.gif",36,36,54*Math.random()+18,0,0,1);
+liczbaObiektow=14;
+for (var i=1; i<=liczbaObiektow; i++) {
+dodajObiekt(i,"Kula2.gif",36+i*36,36+i*36,54*Math.random()+18,0,0,2*Math.random()+1);
+}
+gX1=0+obiekt[0].R/2;
+gY1=0+obiekt[0].R/2;
+document.onmousemove=mysz;
+document.ondrag=mysz;
+document.onclick=mysz;
+kolizja=0;
+setInterval("ruchObiektow()",1);
+function dodajObiekt(numer,obrazek,x,y,r,dx,dy,masa) {
+document.write("<img id=\"obiekt"+numer+"\" src=\""+obrazek+"\" style=\"position:absolute;width:"+r+"px;height:"+r+"px\"></img>");
+eval("obiekt["+numer+"]=new przypiszObiektowi("+numer+","+x+","+y+","+r+","+dx+","+dy+","+masa+")");
+with (dc["obiekt"+numer].style) {left=obiekt[numer].X;top=obiekt[numer].Y}
+}
+function przypiszObiektowi(numer,x,y,r,dx,dy,masa) {
+this.R=r;
+if (x>document.body.clientWidth-this.R) {x=document.body.clientWidth-this.R}
+if (y>document.body.clientHeight-this.R) {y=document.body.clientHeight-this.R}
+this.X=x-this.R/2;
+this.Y=y-this.R/2;
+this.DX=dx;
+this.DY=dy;
+this.Masa=masa;
+}
+function ruchObiektow() {
+for (var kolejny=0; kolejny<=liczbaObiektow; kolejny++) {
+this.i=eval(kolejny);
+/*
+if (obiekt[i].DX<-20) {obiekt[i].DX=-20}
+if (obiekt[i].DX>20) {obiekt[i].DX=20}
+if (obiekt[i].DY<-20) {obiekt[i].DY=-20}
+if (obiekt[i].DY>20) {obiekt[i].DY=20}
+*/
+zderzenie();
+sx=obiekt[i].X+obiekt[i].DX;
+sy=obiekt[i].Y+obiekt[i].DY;
+if (sx<obiekt[i].R/2||sx>document.body.clientWidth-obiekt[i].R/2) {obiekt[i].DX=-obiekt[i].DX}
+if (sy<obiekt[i].R/2||sy>document.body.clientHeight-obiekt[i].R/2) {obiekt[i].DY=-obiekt[i].DY}
+obiekt[i].X+=obiekt[i].DX;
+obiekt[i].Y+=obiekt[i].DY;
+if (obiekt[i].X-obiekt[i].R/2<0) {obiekt[i].X=obiekt[i].R/2}
+if (obiekt[i].Y-obiekt[i].R/2<0) {obiekt[i].Y=obiekt[i].R/2}
+if (obiekt[i].X-obiekt[i].R/2>document.body.clientWidth-obiekt[i].R/2) {obiekt[i].X=document.body.clientWidth-obiekt[i].R/2}
+if (obiekt[i].Y-obiekt[i].R/2>document.body.clientHeight-obiekt[i].R/2) {obiekt[i].Y=document.body.clientHeight-obiekt[i].R/2}
+with (dc["obiekt"+i].style) {left=obiekt[i].X-obiekt[i].R/2;top=obiekt[i].Y-obiekt[i].R/2}
+obiekt[i].DX/=1.005;
+obiekt[i].DY/=1.005;
+}
+}
+function mysz() {
+gX2=event.clientX-obiekt[0].R/2;
+gY2=event.clientY-obiekt[0].R/2;
+if (gX1<gX2) {obiekt[0].DX+=0.25}
+if (gX1>gX2) {obiekt[0].DX-=0.25}
+if (gY1<gY2) {obiekt[0].DY+=0.25}
+if (gY1>gY2) {obiekt[0].DY-=0.25}
+gX1=gX2;
+gY1=gY2;
+if (event.button==1) {obiekt[0].DX=0;obiekt[0].DY=0}
+}
+function zderzenie() {
+for (var j=0; j<=liczbaObiektow; j++) {
+if (i!=j) {
+rI=obiekt[i].R/2;
+rJ=obiekt[j].R/2;
+sR=rI+rJ;
+if ((obiekt[i].X-rI)+obiekt[i].DX>=obiekt[j].X+rI+obiekt[i].DX||(obiekt[i].X-rJ)+obiekt[i].DX<=obiekt[j].X+rJ+obiekt[i].DX) {
+if ((obiekt[i].Y-rI)+obiekt[i].DY>=obiekt[j].Y+rI+obiekt[i].DY||(obiekt[i].Y-rJ)+obiekt[i].DY<=obiekt[j].Y+rJ+obiekt[i].DY) {
+odl=Math.sqrt(Math.pow((obiekt[i].X-obiekt[j].X),2)+Math.pow((obiekt[i].Y-obiekt[j].Y),2));
+if (odl<=sR) {
+qw=Math.abs(obiekt[i].X-obiekt[j].X);
+er=Math.abs(obiekt[i].Y-obiekt[j].Y);
+if (qw<er) {qw=er}
+dx=(obiekt[i].X-obiekt[j].X)/qw;
+dy=(obiekt[i].Y-obiekt[j].Y)/qw;
+kat=Math.atan2(dy,dx)*180/Math.PI+90;
+obiekt[i].DX+=Math.sin(kat*Math.PI/180)/obiekt[j].Masa;
+obiekt[i].DY-=Math.cos(kat*Math.PI/180)/obiekt[j].Masa;
+obiekt[j].DX-=Math.sin(kat*Math.PI/180)*obiekt[i].Masa;
+obiekt[j].DY+=Math.cos(kat*Math.PI/180)*obiekt[i].Masa;
+}
+}
+}
+}
+}
+}
+function anuluj() {return false}
+</script>

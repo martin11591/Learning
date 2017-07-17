@@ -1,0 +1,124 @@
+<html>
+<style>
+body{background-color:black;color:white;font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+input{cursor:default}
+</style>
+<div>&copy; Extreme Studio. Wszelkie prawa zastrze¿one.<br>Skrypt utworzony przez Marcina Podraza.</div>
+<div id="test">Twoja przegl¹darka ma w³¹czon¹ obs³ugê JavaScript.</div>
+<form name="dane">
+Dnia <input size=2 maxlength=2 id="dzien" value=20>.<input size=2 maxlength=2 id="miesiac" value=3>.<input size=2 maxlength=4 id="rok" value=2007> mia³eœ <input size=2 maxlength=2 id="zmiana" style="text-transform:uppercase" value="1D">.<br><br>
+Dnia <input size=2 maxlength=2 id="dzien2">.<input size=2 maxlength=2 id="miesiac2">.<input size=2 maxlength=4 id="rok2"> bêdziesz mieæ <input id="nastepna_zmiana" size=2 maxlength=2 style="border:none;background-color:black;color:white;font-weight:bold" readonly><br>
+<button id="pokaz_ukryj_skroty" onclick="pokazUkryjSkroty()">Poka¿ skróty</button>
+<div id="skroty" style="display:none">
+1D - pierwsza dniówka<br>
+2D - druga dniówka<br>
+3D - trzecia dniówka<br>
+4D - czwarta dniówka<br>
+1W - pierwsze wolne<br>
+1P - pierwsza popo³udniówka<br>
+2P - druga popo³udniówka<br>
+3P - trzecia popo³udniówka<br>
+4P - czwarta popo³udniówka<br>
+2W - drugie wolne<br>
+1N - pierwsza nocka<br>
+2N - druga nocka<br>
+3N - trzecia nocka<br>
+4N - czwarta nocka<br>
+3W - trzecie wolne<br>
+4W - czwarte wolne</div>
+</div>
+</form>
+<script>
+setTimeout("document.all.test.style.visibility=\"hidden\"",2000);
+dnimies=new Array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
+skr=-1;
+a=new Date();
+document.dane.dzien2.value=a.getDate();
+document.dane.miesiac2.value=a.getMonth()+1;
+document.dane.rok2.value=a.getYear();
+licz_zmiane();
+function pokazUkryjSkroty() {
+skr=-skr;
+if (skr==1) {document.dane.pokaz_ukryj_skroty.value="Ukryj skróty";document.all.skroty.style.display="block"}
+if (skr==-1) {document.dane.pokaz_ukryj_skroty.value="Poka¿ skróty";document.all.skroty.style.display="none"}
+}
+function licz_zmiane() {
+z="";
+a=new Date();
+d=document.dane.dzien.value;
+m=document.dane.miesiac.value;
+r=document.dane.rok.value;
+dd=document.dane.dzien2.value;
+dm=document.dane.miesiac2.value;
+dr=document.dane.rok2.value;
+az=document.dane.zmiana.value;
+lmies=new Array(31,przestepny(dm),31,30,31,30,31,31,30,31,30,31);
+if (dd<1) {dd=1}
+if (dd>lmies[dm-1]) {dd=lmies[dm-1]}
+if (az=="1D") {zostalo=0}
+if (az=="2D") {zostalo=1}
+if (az=="3D") {zostalo=2}
+if (az=="4D") {zostalo=3}
+if (az=="1W") {zostalo=4}
+if (az=="1P") {zostalo=5}
+if (az=="2P") {zostalo=6}
+if (az=="3P") {zostalo=7}
+if (az=="4P") {zostalo=8}
+if (az=="2W") {zostalo=9}
+if (az=="1N") {zostalo=10}
+if (az=="2N") {zostalo=11}
+if (az=="3N") {zostalo=12}
+if (az=="4N") {zostalo=13}
+if (az=="3W") {zostalo=14}
+if (az=="4W") {zostalo=15}
+nz=document.dane.nastepna_zmiana;
+if (isNaN(dd)) {dd=d}
+if (isNaN(dm)) {dm=m}
+if (isNaN(dr)) {dr=r}
+var bylostring=dnimies[m-1]+" "+d+", "+r;
+var bedziestring=dnimies[dm-1]+" "+dd+", "+dr;
+var zostalo=(zostalo+(Math.round((Date.parse(bedziestring)-Date.parse(bylostring))/(24*60*60*1000))*1))%16;
+if (zostalo<0) {zostalo+=16}
+if (d==dd&&m==dm&&r==dr) {z=az;nz.innerText=z}
+else {
+if (zostalo==0) {nz.innerText="1D"}
+if (zostalo==1) {nz.innerText="2D"}
+if (zostalo==2) {nz.innerText="3D"}
+if (zostalo==3) {nz.innerText="4D"}
+if (zostalo==4) {nz.innerText="1W"}
+if (zostalo==5) {nz.innerText="1P"}
+if (zostalo==6) {nz.innerText="2P"}
+if (zostalo==7) {nz.innerText="3P"}
+if (zostalo==8) {nz.innerText="4P"}
+if (zostalo==9) {nz.innerText="2W"}
+if (zostalo==10) {nz.innerText="1N"}
+if (zostalo==11) {nz.innerText="2N"}
+if (zostalo==12) {nz.innerText="3N"}
+if (zostalo==13) {nz.innerText="4N"}
+if (zostalo==14) {nz.innerText="3W"}
+if (zostalo==15) {nz.innerText="4W"}
+}
+setTimeout("licz_zmiane()",1);
+}
+function przestepny(rok2) {
+if (rok2%4==1) {return 1} else {return 0}
+}
+function podaj_zmiane(zz) {
+if (zz==0) {return "1D"}
+if (zz==1) {return "2D"}
+if (zz==2) {return "3D"}
+if (zz==3) {return "4D"}
+if (zz==4) {return "1W"}
+if (zz==5) {return "1P"}
+if (zz==6) {return "2P"}
+if (zz==7) {return "3P"}
+if (zz==8) {return "4P"}
+if (zz==9) {return "2W"}
+if (zz==10) {return "1N"}
+if (zz==11) {return "2N"}
+if (zz==12) {return "3N"}
+if (zz==13) {return "4N"}
+if (zz==14) {return "3W"}
+if (zz==15) {return "4W"}
+}
+</script>

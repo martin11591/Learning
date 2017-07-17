@@ -1,0 +1,26 @@
+<html><body scroll=no><input style="background:transparent" type=text name="text1" value="Tekst"><button onclick="show()">Uruchom animacjê</button><span id="text2" style="position:absolute;z-index:-1"></span><script>
+var i=1;
+var a=1;
+function show() {
+i=1;
+a=1;
+document.all.text2.style.display="block";
+text();
+}
+function text() {
+tekst='<font style="font-size:'+a+'px" face="Verdana">'+document.all.text1.value+'</font>';
+text2.innerHTML=tekst;
+document.all.text2.style.left=document.body.clientWidth/2-document.all.text2.clientWidth/2;
+document.all.text2.style.top=document.body.clientHeight/2-document.all.text2.clientHeight/2;
+a=a+i;
+i+=0.1;
+if (a>1500) {koniec()}
+aa=setTimeout("text()",1);
+}
+function koniec() {
+document.all.text2.style.display="none";
+clearTimeout(aa);
+i=0;
+a=1;
+}
+</script>

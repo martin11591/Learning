@@ -1,0 +1,55 @@
+<html><body scroll=no style="font=family:Trebuchet MS;font-size:10pt;font-weight:bold"><bgsound src="" id="s1"></bgsound><input type=file size=72 id="p1" onchange="plik=document.all.p1.value;rx=prompt('Rx','54');ry=prompt('Ry','54')"><script>
+rx=32;
+ry=32;
+aa=window.open();
+aa.document.write('<html><body scroll=no><style>img{position:absolute;width:'+rx+'px;height:'+ry+'px}</style>');
+aa.focus();
+plik="E:\\MARTIN\\Obrazy\\WINWORD.bmp";
+aImgIle=25;
+grawitacja=1;
+for (var i=1; i<=aImgIle; i++) {
+aa.document.write("<img id=\"obraz"+i+"\" src=\""+plik+"\"></img>");
+}
+iImg=1;
+jImg=0;
+init();
+function init() {
+dk=3*Math.round(10*Math.random()-5);
+dw=-Math.round(10*Math.random());
+mx=document.body.clientWidth;
+my=document.body.clientHeight;
+x=Math.round((mx-rx)*Math.random());
+y=1;
+dziel=Math.round(10*Math.random()+125)/100;
+skok();
+}
+function skok() {
+if (dk==0) {dkzero()}
+mx=aa.document.body.clientWidth;
+my=aa.document.body.clientHeight;
+with(aa.document.all["obraz"+iImg]) {
+src=plik;
+style.left=Math.round(x);
+style.top=Math.round(y);
+style.zIndex=jImg;
+}
+sx=x+dk;
+sy=y+dw;
+if(sx<-1-rx||sx>mx+rx) {init();return}
+if(sy>my-ry) {y=my-ry;dw=-dw/dziel;document.all.s1.src="E:/MARTIN/Sample/Every Extend/explode1.wav"}
+x=x+dk;
+y=y+dw;
+aa.document.title="DK:"+Math.round(dk)+"    DW:"+Math.round(dw)+"    X:"+Math.round(x)+"    Y:"+Math.round(y);
+iImg+=1;
+jImg+=1;
+if (iImg>aImgIle) {iImg-=aImgIle}
+dw+=grawitacja;
+setTimeout("skok()",1);
+}
+function dkzero() {
+z=Math.round(4*Math.random()+1);
+zz=Math.round(Math.random()+1);
+if (zz==1) {z=-z}
+dk=z;
+}
+</script>

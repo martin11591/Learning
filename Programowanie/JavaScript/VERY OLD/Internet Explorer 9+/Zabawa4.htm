@@ -1,0 +1,122 @@
+<html>
+<head>
+<meta http-equiv="content" type="text/html" charset="windows-1250">
+<style>
+body{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;cursor:default}
+td.ob{position:absolute;width:8px;height:10px;background-color:red;z-index:-500}
+</style>
+</head>
+<body scroll=no>
+<table>
+<tr><td>Liczba obiektów:</td><td><input id="liczba" value=3></td><td rowspan=3><button onclick="init1()">Ustaw<br>dane</button><br><input id="odbijanie" type=checkbox checked>Odbijaj od krawędzi ekranu</td></tr>
+<tr><td>Odstęp czasu między kolejnym przesunięciem:</td><td><input id="spf" value=1></td></tr>
+<tr><td>Maksymalna szybkość obiektu:</td><td><input id="saf" value=10></td></tr>
+</table>
+<div id="obiekty">&nbsp;</div>
+<script>
+var timer,kM,wM,x,y,dx,dy;
+kM=0;
+wM=0;
+bench=new Object();
+bench.fps=0;
+bench.decFPS=function() {bench.fps=bench.fps<0?0:bench.fps-1};
+function $(id) {
+  return document.all?document.all[id]:document.getElementById(id);
+}
+document.body.onload=init1;
+function przypisz(ii) {
+  this.hob=8;
+  this.wob=10;
+  mx=document.body.clientWidth-this.hob-2;
+  my=document.body.clientHeight-this.wob-1;
+  this.x=mx*Math.random();
+  this.y=my*Math.random();
+  x=this.x;
+  y=this.y;
+  ustalKrok1(kM,wM);
+  this.dx=dx;
+  this.dy=dy;
+}
+function init1() {
+  clearTimeout(timer);
+  //pozycje(event);
+  init($('liczba').value,$('spf').value,$('saf').value);
+}
+function init(ile,sp,sa) {
+  this.sp=eval(sp);
+  this.sa=eval(sa);
+  this.ile=eval(ile);
+  Obiekty=new Array();
+  obHTML="<table><tr>";
+  for (var i=0; i<ile; i++) {
+    obHTML+="<td id=\"obiekt"+i+"\" class=ob></td>";
+    $('obiekty').innerHTML=obHTML;
+    Obiekty[i]=new przypisz(i);
+  }
+  obHTML+="</tr></table>";
+  document.onmousemove=function(e)
+  {
+    kM=e.clientX;
+    wM=e.clientY;
+  };
+  document.oncontextmenu=anuluj;
+  ruch();
+}
+function anuluj() {return false}
+function ruch() {
+  for (var i=0; i<ile; i++) {
+    x=Obiekty[i].x;
+    y=Obiekty[i].y;
+    dx=Obiekty[i].dx;
+    dy=Obiekty[i].dy;
+    ustalKrok2(kM,wM);
+    hob=Obiekty[i].hob;
+    wob=Obiekty[i].wob;
+    mx=(document.body.clientWidth-hob/2)-2;
+    my=(document.body.clientHeight-wob/2)-1;
+    sx=x+(dx+(i+1)/5);
+    sy=y+(dy+(i+1)/5);
+    odb=$('odbijanie').checked;
+    if (odb) {
+      if (sx<hob/2||sx>mx) {dx=-dx*2}
+      if (sy<wob/2||sy>my) {dy=-dy*2}
+    }
+    x+=dx+(i+1)/5;
+    y+=dy+(i+1)/5;
+    dco=$("obiekt"+i);
+    if (odb) {
+      if (x<hob/2) {x=hob/2}
+      if (x>mx) {x=mx}
+      if (y<wob/2) {y=wob/2}
+      if (y>my) {y=my}
+    }
+    with (dco.style) {left=x-hob/2;top=y-wob/2}
+    Obiekty[i].x=x;
+    Obiekty[i].y=y;
+    Obiekty[i].dx=dx;
+    Obiekty[i].dy=dy;
+  }
+  bench.fps+=1;
+  document.title="FPS: "+bench.fps;
+  setTimeout("bench.decFPS()",1000);
+  timer=setTimeout("ruch()",sp);
+}
+function ustalKrok1(k,w) {
+  qw=Math.abs(k-x);
+  er=Math.abs(w-y);
+  if (qw<er) {qw=er}
+  dx=(k-x)/qw;
+  dy=(w-y)/qw;
+}
+function ustalKrok2(k,w) {
+  qw=Math.abs(k-x);
+  er=Math.abs(w-y);
+  if (qw<er) {qw=er}
+  dx=dx+((k-x)/qw);
+  dy=dy+((w-y)/qw);
+  if (dx<-sa) {dx=-sa}
+  if (dx>sa) {dx=sa}
+  if (dy<-sa) {dy=-sa}
+  if (dy>sa) {dy=sa}
+}
+</script>

@@ -1,0 +1,44 @@
+<html><body onload="pos()" scroll=auto><title>Stereo by M.A.R.T.I.N.</title><bgsound src="..\Muzyka\Inne\Eiffel 65 - MoveYourBody.mp3" id="music" loop=infinite></bgsound><table border=0><td style="position:absolute" bgcolor=black width=16 height=16 id="kw"></td></table><input type=file size=145 style="position:absolute" id="plik" onchange="document.all.music.src=document.all.plik.value;document.title=document.all.plik.value;setTimeout('document.title=Stereo',2000)"><script>
+Stereo="Stereo by M.A.R.T.I.N.";
+self.moveTo(-4,0);
+self.resizeTo(1032,738);
+setInterval("pos()",1);
+glos=0;
+x=0;
+function pos() {
+document.all.kw.style.left=document.body.clientWidth/2-8
+document.all.kw.offsetWidth/2
+document.all.kw.style.top=document.body.clientHeight/2-8
+document.all.kw.offsetHeight/2
+this.mx=document.body.clientWidth;
+this.x=Math.round(1.5+mx/2);
+this.mn=19941/mx;
+}
+function balans() {
+k=10+(event.clientX-x)*mn;
+if (k<-10000) {k=-10000}
+if (k>10000) {k=10000}
+pl=document.all.plik.value;
+document.all.music.balance=k;
+window.status="Plik muzyczny:"+pl+"        Balans:"+Math.round(k)+"        G³oœnoœæ:"+(10000+glos);
+}
+function glosnosc() {
+if (event.keyCode==107) {
+glos=glos+20;
+if (glos>0) {glos=0}
+}
+if (event.keyCode==109) {
+glos=glos-20;
+if (glos<-10000) {glos=-10000}
+}
+if (event.keyCode==13) {glos=0}
+if (event.keyCode==77) {glos=-10000}
+document.all.music.volume=glos;
+window.status="Plik muzyczny:"+pl+"        Balans:"+Math.round(k)+"        G³oœnoœæ:"+(10000+glos);
+}
+function anuluj() {return false}
+document.oncontextmenu=anuluj
+document.ondragstart=anuluj
+document.onmousemove=balans
+document.onkeydown=glosnosc
+</script></body></html>

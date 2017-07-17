@@ -1,0 +1,29 @@
+<html><body onload="tekst()"><script>
+text=prompt('Tekst','Przyk³ad')
+rozm=1
+kolor=0
+dkolor=15
+krok=1
+dkrok=1
+ddkrok=1
+kolory=new Array ('#000000','#000011','#000022','#000033','#000044','#000055','#000066','#000077','#000088','#000099','#0000aa','#0000bb','#0000cc','#0000dd','#0000ee','#0000ff','#1111ff','#2222ff','#3333ff','#4444ff','#5555ff','#6666ff','#7777ff','#8888ff','#9999ff','#aaaaff','#bbbbff','#ccccff','#ddddff','#eeeeff','#ffffff')
+tlo=new Array ('#000000','#001100','#002200','#003300','#004400','#005500','#006600','#007700','#008800','#009900','#00aa00','#00bb00','#00cc00','#00dd00','#00ee00','#00ff00','#11ff11','#22ff22','#33ff33','#44ff44','#55ff55','#66ff66','#77ff77','#88ff88','#99ff99','#aaffaa','#bbffbb','#ccffcc','#ddffdd','#eeffee','#ffffff')
+function tekst()
+{
+txthtml='<center><font size='+rozm+' color=black>'+text+'</font>';
+kolhtml='<font size=72pt color="'+kolory[kolor]+'">'+text+'</font>';
+info.innerHTML=txthtml;
+kol.innerHTML=kolhtml;
+document.bgColor=tlo[dkolor];
+suma=rozm+krok;
+dsuma=kolor+dkrok;
+ddsuma=dkolor+ddkrok;
+if (suma<1||suma>7) {krok=-krok}
+if (dsuma<1||dsuma>30) {dkrok=-dkrok}
+if (ddsuma<1||ddsuma>30) {ddkrok=-ddkrok}
+rozm=rozm+krok;
+kolor=kolor+dkrok;
+dkolor=dkolor+ddkrok;
+setTimeout("tekst()",30);
+}
+</script></body><center><table border=0><tr><td height=50 valign=center id="info"></td></tr><tr><td height=50 id="kol"></td></tr></table></html>

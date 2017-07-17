@@ -1,0 +1,80 @@
+<html>Próby obiektów<div id="stat"></div><script>
+function Tabl() {
+this.lista=new Array();
+this.wywolaj=pokazElement;
+this.wywolajLosowy=pokazLosowyElement;
+this.wywolajWszystkie=pokazElementy;
+this.dodaj=dodajElement;
+this.dodajLosowaWartosc=dodajLosowaWartoscElementu;
+this.usunPierwszy=usunPierwszyElement;
+this.usunElementX=usunXElement;
+this.usunOstatni=usunOstatniElement;
+this.dlugoscTablicy=tableLength;
+}
+function pokazElement(liczba,gdzie) {
+if (gdzie==undefined) {gdzie="wartosc"}
+if (gdzie.toLowerCase()=="okno") {alert ("Element "+liczba+" wynosi "+this.lista[liczba])}
+else {document.getElementById(gdzie).innerText="Element "+liczba+" wynosi "+this.lista[liczba]}
+if (gdzie.toLowerCase()=="wartoœæ"||gdzie.toLowerCase()=="wartosc") {return this.lista[liczba]}
+}
+function pokazLosowyElement(gdzie) {
+if (gdzie==undefined) {gdzie="okno"}
+if (gdzie.toLowerCase()=="okno") {alert ("Losowy element wynosi "+this.lista[Math.round((this.lista.length-1)*Math.random())])}
+else {document.getElementById(gdzie).innerText="Losowy element wynosi "+this.lista[Math.round((this.lista.length-1)*Math.random())]}
+}
+function pokazElementy(gdzie) {
+if (gdzie==undefined) {gdzie="okno"}
+if (gdzie.toLowerCase()=="okno") {alert (this.lista)}
+else {document.getElementById(gdzie).innerText=this.lista}
+}
+function dodajElement(liczba) {this.lista.push(liczba)}
+function dodajLosowaWartoscElementu(liczba) {this.lista.push(Math.round(liczba*Math.random()))}
+function usunPierwszyElement() {
+tablica2=new Array();
+for (i in this.lista) {
+if (i!=0) {tablica2.push(this.lista[i])}
+}
+this.lista=tablica2;
+}
+function usunXElement(x) {
+if (x<0) {x=0}
+if (x>(this.lista.length-1)) {x=(this.lista.length-1)}
+tablica2=new Array();
+for (i in this.lista) {
+if (i!=x) {tablica2.push(this.lista[i])}
+}
+this.lista=tablica2;
+}
+function usunOstatniElement() {
+tablica2=new Array();
+for (i in this.lista) {
+if (i!=(this.lista.length-1)) {tablica2.push(this.lista[i])}
+}
+this.lista=tablica2;
+}
+function tableLength() {return this.lista.length}
+tablica=new Tabl();
+tablica.dodajLosowaWartosc(100);
+tablica.wywolaj(0,"stat");
+tablica.wywolaj(0);
+tablica.dodajLosowaWartosc(100);
+tablica.dodajLosowaWartosc(100);
+tablica.dodajLosowaWartosc(100);
+tablica.dodajLosowaWartosc(100);
+tablica.dodajLosowaWartosc(100);
+tablica.dodajLosowaWartosc(100);
+tablica.dodajLosowaWartosc(100);
+tablica.wywolajWszystkie("stat");
+tablica.wywolajWszystkie();
+tablica.usunPierwszy();
+tablica.wywolajWszystkie("stat");
+tablica.wywolajWszystkie();
+tablica.usunOstatni();
+tablica.wywolajWszystkie("stat");
+tablica.wywolajWszystkie();
+tablica.usunElementX(Math.round(tablica.dlugoscTablicy()*Math.random()));
+tablica.wywolajWszystkie("stat");
+tablica.wywolajWszystkie();
+tablica.wywolajLosowy("stat");
+tablica.wywolajLosowy();
+</script>

@@ -1,0 +1,31 @@
+<html><body scroll=no style="font=family:Trebuchet MS;font-size:10pt;font-weight:bold"><div id="a1" style="position:absolute">M.A.R.T.I.N.</div><script>
+init();
+function init() {
+dk=3*Math.round(10*Math.random()-5);
+dw=0;
+rx=50;
+ry=11;
+mx=document.body.clientWidth;
+my=document.body.clientHeight;
+x=Math.round((mx-rx)*Math.random());
+y=1;
+skok();
+}
+function skok() {
+if (dk==0) {dk+=3*Math.round(10*Math.random()-5)}
+rx=50;
+ry=11;
+mx=document.body.clientWidth;
+my=document.body.clientHeight;
+with(document.all.a1.style) {left=x;top=y}
+sx=x+dk;
+sy=y+dw;
+if(sx<-1-rx||sx>mx+rx) {clearTimeout(s);init();return}
+if(sy<0||sy>my-ry) {dw=-dw/1.25}
+x=x+dk;
+y=y+dw;
+window.status="DK:"+Math.round(dk)+"    DW:"+Math.round(dw)+"    X:"+Math.round(x)+"    Y:"+Math.round(y);
+dw+=0.5;
+s=setTimeout("skok()",1);
+}
+</script>

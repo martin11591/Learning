@@ -1,0 +1,86 @@
+<html>Próby obiektów<bgsound src="" id="music" loop=infinite></bgsound><img src="" id="obrazek"></img>
+<script>
+function bgm() {
+this.Bgm=document.all.music;
+this.ustaw=ustawBgm;
+this.wycisz=wyciszBgm;
+this.podglosnij=podglosnijBgm;
+this.stop=stopBgm;
+this.lewy=lewyBgm;
+this.prawy=prawyBgm;
+this.srodek=srodekBgm;
+this.dowolne=dowolneBgm;
+}
+function Tlo() {
+this.tlo=document.body.style;
+this.czcionka=ustawCzcionke;
+this.kolorTla=ustawTlo;
+this.kolorTxt=ustawTxt;
+this.czcionkaRozmiar=ustawRozmiar;
+this.czcionkaGrubosc=ustawGrubosc;
+}
+function Obrazek() {
+this.obraz=document.all.obrazek;
+this.obrazek=document.all.obrazek.style;
+this.ustaw=ustawPlikImg;
+this.rozmiar=ustawRozmiarImg;
+this.typPozycji=ustawTypPozycjiImg;
+this.pozycja=ustawPozycjeImg;
+this.gruboscObramowania=ustawGruboscObramowaniaImg;
+this.kolorObramowania=ustawKolorObramowaniaImg;
+this.typObramowania=ustawTypObramowaniaImg;
+this.kursor=ustawKursorImg;
+this.stos=ustawStosImg;
+}
+function ustawBgm(plik) {this.Bgm.src=plik}
+function wyciszBgm() {this.Bgm.volume=-10000}
+function podglosnijBgm() {this.Bgm.volume=0}
+function stopBgm() {this.Bgm.src=""}
+function lewyBgm() {this.Bgm.balance=-10000}
+function srodekBgm() {this.Bgm.balance=0}
+function prawyBgm() {this.Bgm.balance=10000}
+function dowolneBgm(x,y) {this.Bgm.volume=x;this.Bgm.balance=y}
+function ustawCzcionke(x) {this.tlo.fontFamily=x}
+function ustawTlo(x) {this.tlo.backgroundColor=x}
+function ustawTxt(x) {this.tlo.color=x}
+function ustawRozmiar(x) {this.tlo.fontSize=x}
+function ustawGrubosc(x) {this.tlo.fontWeight=x}
+function ustawPlikImg(x) {this.obraz.src=x}
+function ustawRozmiarImg(x,y) {this.obrazek.width=x;this.obrazek.height=y}
+function ustawTypPozycjiImg(x) {this.obrazek.position=x}
+function ustawPozycjeImg(x,y) {this.obrazek.left=x;this.obrazek.top=y}
+function ustawGruboscObramowaniaImg(x) {this.obrazek.borderWidth=x}
+function ustawKolorObramowaniaImg(x) {this.obrazek.borderColor=x}
+function ustawTypObramowaniaImg(x) {this.obrazek.borderStyle=x}
+function ustawKursorImg(x) {this.obrazek.cursor=x}
+function ustawStosImg(x) {this.obrazek.zIndex=x}
+muzyka=new bgm();
+btlo=new Tlo();
+obr=new Obrazek();
+muzyka.ustaw("");
+btlo.kolorTla("black");
+btlo.kolorTxt("white");
+btlo.czcionka("Trebuchet MS");
+btlo.czcionkaRozmiar("12px");
+btlo.czcionkaGrubosc("bold");
+obr.ustaw("..\\..\\Tapety\\z gier\\Gothic II 1024x768x32-2.jpg");
+obr.rozmiar(640,480);
+obr.typPozycji("absolute");
+obr.pozycja(50,50);
+obr.gruboscObramowania("12px");
+obr.kolorObramowania("Highlight");
+obr.typObramowania("double");
+obr.kursor("crosshair");
+document.all.obrazek.onmouseover=setin;
+document.all.obrazek.onmouseout=setout;
+function setin() {obr.typObramowania("inset")}
+function setout() {obr.typObramowania("outset")}
+</script><br>
+<a href="javascript:obr.kursor('help')">obr.kursor("help")</a><br>
+<a href="javascript:obr.kursor('crosshair')">obr.kursor("crosshair")</a><br>
+<a href="javascript:obr.typObramowania('inset')">obr.typObramowania("inset")</a><br>
+<a href="javascript:obr.typObramowania('outset')">obr.typObramowania("outset")</a><br>
+<a href="javascript:muzyka.ustaw('..\\..\\Gry\\BomberFUN\\Media\\Music\\Arabic.lsf')">muzyka.ustaw("..\\..\\Gry\\BomberFUN\\Media\\Music\\Arabic.lsf")</a><br>
+<a href="javascript:obr.stos(-5)">obr.stos(-5)</a><br>
+<a href="javascript:obr.stos(5)">obr.stos(5)</a><br>
+</html>

@@ -1,0 +1,391 @@
+<html><style>
+body{background-color:#0000F1;color:#CCCCFF;margin:10px;cursor:default}
+body,table{font-family:Trebuchet MS;font-size:10pt;font-weight:bold;line-height:95%}
+hr{width:100%}
+img{position:relative;left:-5px;top:-18px}
+img.bialy{left:694px}
+td{vertical-align:middle}
+</style>
+<table frame=void rules=none cellspacing=10>
+<tr>
+<td id="bginfo">Kolor t³a:</td>
+<td style="width:75%"><hr id="linia"><img src="..\Obrazy\Slide.ico" id="bgcr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="bgcg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="bgcb"></img></td>
+<td rowspan=8><textarea cols=15 name="proba" style="height:100%">Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...
+Jakiœ tekst...</textarea></tr><tr>
+<td id="txtinfo">Kolor napisów:</td>
+<td><hr><img src="..\Obrazy\Slide.ico" id="txtcr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="txtcg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="txtcb"></img></td></tr><tr>
+<td id="baseinfo">scrollbar-base-color:&nbsp;</td>
+<td><hr><img src="..\Obrazy\Slide.ico" id="basecr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="basecg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="basecb"></img></td></tr><tr>
+<td id="faceinfo">scrollbar-face-color:&nbsp;</td>
+<td><hr><img src="..\Obrazy\Slide.ico" id="facecr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="facecg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="facecb"></img></td></tr><tr>
+<td id="arrowinfo">scrollbar-arrow-color:&nbsp;</td>
+<td><hr><img src="..\Obrazy\Slide.ico" id="arrowcr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="arrowcg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="arrowcb"></img></td></tr><tr>
+<td id="highlightinfo">scrollbar-highlight-color:&nbsp;</td>
+<td><hr><img src="..\Obrazy\Slide.ico" id="highlightcr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="highlightcg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="highlightcb"></img></td></tr><tr>
+<td id="shadowinfo">scrollbar-shadow-color:&nbsp;</td>
+<td><hr><img src="..\Obrazy\Slide.ico" id="shadowcr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="shadowcg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="shadowcb"></img></td></tr><tr>
+<td id="darkshadowinfo">scrollbar-dark-shadow-color:&nbsp;</td>
+<td><hr><img src="..\Obrazy\Slide.ico" id="darkshadowcr"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="darkshadowcg"></img><br>
+<hr><img src="..\Obrazy\Slide.ico" id="darkshadowcb"></img></td></tr>
+</table>
+
+<script src="skrypty\hex_1.js"></script>
+<script>
+sw=screen.width;
+sh=screen.height
+lw=document.all.linia.clientWidth;
+scrW=document.all.bgcr.width;
+offset=document.all.bgcr.offsetLeft+scrW;
+window.onresize=function() {
+lw=document.all.linia.clientWidth;
+setcolors1();
+}
+bgccr=Math.round(255*Math.random());
+bgccg=Math.round(255*Math.random());
+bgccb=Math.round(255*Math.random());
+txtccr=Math.round(255*Math.random());
+txtccg=Math.round(255*Math.random());
+txtccb=Math.round(255*Math.random());
+baseccr=Math.round(255*Math.random());
+baseccg=Math.round(255*Math.random());
+baseccb=Math.round(255*Math.random());
+faceccr=Math.round(255*Math.random());
+faceccg=Math.round(255*Math.random());
+faceccb=Math.round(255*Math.random());
+arrowccr=Math.round(255*Math.random());
+arrowccg=Math.round(255*Math.random());
+arrowccb=Math.round(255*Math.random());
+highlightccr=Math.round(255*Math.random());
+highlightccg=Math.round(255*Math.random());
+highlightccb=Math.round(255*Math.random());
+shadowccr=Math.round(255*Math.random());
+shadowccg=Math.round(255*Math.random());
+shadowccb=Math.round(255*Math.random());
+darkshadowccr=Math.round(255*Math.random());
+darkshadowccg=Math.round(255*Math.random());
+darkshadowccb=Math.round(255*Math.random());
+setcolors1();
+setcolors();
+document.all.bgcr.ondrag=bgcrscroll;
+document.all.bgcg.ondrag=bgcgscroll;
+document.all.bgcb.ondrag=bgcbscroll;
+document.all.txtcr.ondrag=txtcrscroll;
+document.all.txtcg.ondrag=txtcgscroll;
+document.all.txtcb.ondrag=txtcbscroll;
+document.all.basecr.ondrag=basecrscroll;
+document.all.basecg.ondrag=basecgscroll;
+document.all.basecb.ondrag=basecbscroll;
+document.all.facecr.ondrag=facecrscroll;
+document.all.facecg.ondrag=facecgscroll;
+document.all.facecb.ondrag=facecbscroll;
+document.all.arrowcr.ondrag=arrowcrscroll;
+document.all.arrowcg.ondrag=arrowcgscroll;
+document.all.arrowcb.ondrag=arrowcbscroll;
+document.all.highlightcr.ondrag=highlightcrscroll;
+document.all.highlightcg.ondrag=highlightcgscroll;
+document.all.highlightcb.ondrag=highlightcbscroll;
+document.all.shadowcr.ondrag=shadowcrscroll;
+document.all.shadowcg.ondrag=shadowcgscroll;
+document.all.shadowcb.ondrag=shadowcbscroll;
+document.all.darkshadowcr.ondrag=darkshadowcrscroll;
+document.all.darkshadowcg.ondrag=darkshadowcgscroll;
+document.all.darkshadowcb.ondrag=darkshadowcbscroll;
+function setcolors1() {
+with(document.all){
+bgcr.style.left=(lw-scrW/2)*bgccr/255;
+bgcg.style.left=(lw-scrW/2)*bgccg/255;
+bgcb.style.left=(lw-scrW/2)*bgccb/255;
+txtcr.style.left=(lw-scrW/2)*txtccr/255;
+txtcg.style.left=(lw-scrW/2)*txtccg/255;
+txtcb.style.left=(lw-scrW/2)*txtccb/255;
+basecr.style.left=(lw-scrW/2)*baseccr/255;
+basecg.style.left=(lw-scrW/2)*baseccg/255;
+basecb.style.left=(lw-scrW/2)*baseccb/255;
+facecr.style.left=(lw-scrW/2)*faceccr/255;
+facecg.style.left=(lw-scrW/2)*faceccg/255;
+facecb.style.left=(lw-scrW/2)*faceccb/255;
+arrowcr.style.left=(lw-scrW/2)*arrowccr/255;
+arrowcg.style.left=(lw-scrW/2)*arrowccg/255;
+arrowcb.style.left=(lw-scrW/2)*arrowccb/255;
+highlightcr.style.left=(lw-scrW/2)*highlightccr/255;
+highlightcg.style.left=(lw-scrW/2)*highlightccg/255;
+highlightcb.style.left=(lw-scrW/2)*highlightccb/255;
+shadowcr.style.left=(lw-scrW/2)*shadowccr/255;
+shadowcg.style.left=(lw-scrW/2)*shadowccg/255;
+shadowcb.style.left=(lw-scrW/2)*shadowccb/255;
+darkshadowcr.style.left=(lw-scrW/2)*darkshadowccr/255;
+darkshadowcg.style.left=(lw-scrW/2)*darkshadowccg/255;
+darkshadowcb.style.left=(lw-scrW/2)*darkshadowccb/255;
+}
+}
+function bgcrscroll() {
+pozycja();
+document.all.bgcr.style.left=x;
+bgccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function bgcgscroll() {
+pozycja();
+document.all.bgcg.style.left=x;
+bgccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function bgcbscroll() {
+pozycja();
+document.all.bgcb.style.left=x;
+bgccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function txtcrscroll() {
+pozycja();
+document.all.txtcr.style.left=x;
+txtccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function txtcgscroll() {
+pozycja();
+document.all.txtcg.style.left=x;
+txtccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function txtcbscroll() {
+pozycja();
+document.all.txtcb.style.left=x;
+txtccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function basecrscroll() {
+pozycja();
+document.all.basecr.style.left=x;
+baseccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function basecgscroll() {
+pozycja();
+document.all.basecg.style.left=x;
+baseccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function basecbscroll() {
+pozycja();
+document.all.basecb.style.left=x;
+baseccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function facecrscroll() {
+pozycja();
+document.all.facecr.style.left=x;
+faceccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function facecgscroll() {
+pozycja();
+document.all.facecg.style.left=x;
+faceccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function facecbscroll() {
+pozycja();
+document.all.facecb.style.left=x;
+faceccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function arrowcrscroll() {
+pozycja();
+document.all.arrowcr.style.left=x;
+arrowccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function arrowcgscroll() {
+pozycja();
+document.all.arrowcg.style.left=x;
+arrowccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function arrowcbscroll() {
+pozycja();
+document.all.arrowcb.style.left=x;
+arrowccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function highlightcrscroll() {
+pozycja();
+document.all.highlightcr.style.left=x;
+highlightccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function highlightcgscroll() {
+pozycja();
+document.all.highlightcg.style.left=x;
+highlightccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function highlightcbscroll() {
+pozycja();
+document.all.highlightcb.style.left=x;
+highlightccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function shadowcrscroll() {
+pozycja();
+document.all.shadowcr.style.left=x;
+shadowccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function shadowcgscroll() {
+pozycja();
+document.all.shadowcg.style.left=x;
+shadowccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function shadowcbscroll() {
+pozycja();
+document.all.shadowcb.style.left=x;
+shadowccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function darkshadowcrscroll() {
+pozycja();
+document.all.darkshadowcr.style.left=x;
+darkshadowccr=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function darkshadowcgscroll() {
+pozycja();
+document.all.darkshadowcg.style.left=x;
+darkshadowccg=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function darkshadowcbscroll() {
+pozycja();
+document.all.darkshadowcb.style.left=x;
+darkshadowccb=Math.round((x+scrW/2)*255/lw);
+setcolors();
+}
+function pozycja() {
+x=event.clientX-offset;
+if(x<-scrW/2){x=-scrW/2}
+if(x>lw-scrW/2){x=lw-scrW/2}
+}
+function setcolors() {
+bgc="#"+licz(bgccr)+licz(bgccg)+licz(bgccb);
+txtc="#"+licz(txtccr)+licz(txtccg)+licz(txtccb);
+basec="#"+licz(baseccr)+licz(baseccg)+licz(baseccb);
+facec="#"+licz(faceccr)+licz(faceccg)+licz(faceccb);
+arrowc="#"+licz(arrowccr)+licz(arrowccg)+licz(arrowccb);
+highlightc="#"+licz(highlightccr)+licz(highlightccg)+licz(highlightccb);
+shadowc="#"+licz(shadowccr)+licz(shadowccg)+licz(shadowccb);
+darkshadowc="#"+licz(darkshadowccr)+licz(darkshadowccg)+licz(darkshadowccb);
+with(document.all.proba.style){
+backgroundColor=bgc;
+color=txtc;
+scrollbarBaseColor=basec;
+scrollbarFaceColor=facec;
+scrollbarArrowColor=arrowc;
+scrollbarHighlightColor=highlightc;
+scrollbarShadowColor=shadowc;
+scrollbarDarkShadowColor=darkshadowc;
+with(document.all){
+bginfo.innerText="Kolor t³a:\nRGB("+bgccr+","+bgccg+","+bgccb+")\n"+bgc;
+txtinfo.innerText="Kolor napisów:\nRGB("+txtccr+","+txtccg+","+txtccb+")\n"+txtc;
+baseinfo.innerText="scrollbar-base-color:\nRGB("+baseccr+","+baseccg+","+baseccb+")\n"+basec;
+faceinfo.innerText="scrollbar-face-color:\nRGB("+faceccr+","+faceccg+","+faceccb+")\n"+facec;
+arrowinfo.innerText="scrollbar-arrow-color:\nRGB("+arrowccr+","+arrowccg+","+arrowccb+")\n"+arrowc;
+highlightinfo.innerText="scrollbar-highlight-color:\nRGB("+highlightccr+","+highlightccg+","+highlightccb+")\n"+highlightc;
+shadowinfo.innerText="scrollbar-shadow-color:\nRGB("+shadowccr+","+shadowccg+","+shadowccb+")\n"+shadowc;
+darkshadowinfo.innerText="scrollbar-dark-shadow-color:\nRGB("+darkshadowccr+","+darkshadowccg+","+darkshadowccb+")\n"+darkshadowc;
+}
+}
+}
+</script>
